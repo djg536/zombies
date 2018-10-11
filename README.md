@@ -1,1 +1,1 @@
-# zombies
+# Issa zombie game
