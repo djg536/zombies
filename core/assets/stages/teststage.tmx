@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="10">
+ <tileset firstgid="1" source="tileset_gutter.tsx"/>
+ <tileset firstgid="925" source="block.tsx"/>
+ <layer id="1" name="background" width="40" height="40">
+  <data encoding="base64" compression="zlib">
+   eJztwwEJAAAMA6DBc61/rfU4CvaSqqqqqqqqPjpLdJAQ
+  </data>
+ </layer>
+ <layer id="3" name="graphics" width="40" height="40">
+  <data encoding="base64" compression="zlib">
+   eJztzsEJACAQwLAD9x/BXd3BfhQS6L97zWzlXuOv8df4a/w1/hp/jb/GX+Ov8df4a/w1/hp/jb/GX+Ov+e1Pdx0ct74B
+  </data>
+ </layer>
+ <objectgroup id="4" name="border">
+  <object id="1" x="16" y="608" width="624" height="16"/>
+  <object id="2" x="0" y="608" width="647" height="44"/>
+  <object id="3" x="-16" y="0" width="48" height="352"/>
+  <object id="4" x="-16" y="352" width="46" height="254"/>
+  <object id="6" x="608" y="16" width="48" height="624"/>
+  <object id="7" x="740" y="409"/>
+  <object id="8" x="0" y="-16" width="640" height="48"/>
+ </objectgroup>
+</map>
