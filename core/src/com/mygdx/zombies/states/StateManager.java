@@ -5,7 +5,7 @@ public class StateManager {
 	private State currentState;
 	
 	public StateManager() {
-		currentState = new Stage("stage1.txt");
+		currentState = new Stage("teststage");
 	}
 	
 	public void loadState(State newState) {
