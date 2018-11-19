@@ -1,11 +1,13 @@
 package com.mygdx.zombies.states;
 
 import java.io.BufferedReader;
+
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.zombies.Entity;
+import com.mygdx.zombies.Player;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -17,6 +19,9 @@ public class Stage extends State {
 	private String mapFile;
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
+	
+	private Player player;
+	
 	
 	/**Constructor for the stage
 	 * @param path - name of .tmx file for tiled grid
@@ -34,10 +39,15 @@ public class Stage extends State {
 			camera = new OrthographicCamera();
 			camera.setToOrtho(false, 40, 40);
 			camera.update();
+						
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		 player = new Player(spriteBatch, 100, 100);
+		 
+		 		 
 	}
 	
 	/**
@@ -47,5 +57,16 @@ public class Stage extends State {
 	public void render() {
 		renderer.setView(camera);
 		renderer.render();
+		
+		spriteBatch.begin();
+		player.render();
+		spriteBatch.end();
+		
+	}
+		
+	@Override 
+	public void update() {
+	
+		player.update();
 	}
 }
