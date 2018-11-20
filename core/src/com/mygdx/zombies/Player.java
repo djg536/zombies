@@ -1,6 +1,10 @@
 package com.mygdx.zombies;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Player {
 
@@ -13,11 +17,31 @@ public class Player {
     private int positionX;
     private int positionY;
 
-    public Player(Sprite sprite, int x, int y){
+    private SpriteBatch spriteBatch;
 
+    public Player(SpriteBatch spriteBatch, int x, int y){
+        this.spriteBatch = spriteBatch;
+        sprite = new Sprite(new Texture(Gdx.files.internal("block.png")));
+        this.positionX = x;
+        this.positionY = y;
     }
 
     private void move(){
+        if(Gdx.input.isKeyPressed(Input.Keys.W)) {
+            positionY += 10;
+        }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.S)) {
+            positionY -= 10;
+        }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.A)) {
+            positionX -= 10;
+        }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.D)) {
+            positionX += 10;
+        }
 
     }
 
@@ -26,11 +50,12 @@ public class Player {
     }
 
     public void update(){
-
+        move();
     }
 
     public void render(){
-
+        sprite.setPosition(positionX, positionY);
+        sprite.draw(spriteBatch);
     }
 
     public int getPositionX(){
