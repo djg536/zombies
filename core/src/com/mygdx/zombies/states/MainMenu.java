@@ -1,5 +1,8 @@
 package com.mygdx.zombies.states;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+
 public class MainMenu extends State {
 	private Button play;
 	private Button exit;
@@ -12,5 +15,13 @@ public class MainMenu extends State {
 		play.render();
 		exit.render();
 		spriteBatch.end();
+	}
+	@Override
+	public void update() {
+		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+			if (exit.isHover()) {
+				Gdx.app.exit();
+			}
+		}
 	}
 }
