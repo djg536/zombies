@@ -13,7 +13,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
-public class Stage extends State {
+public class Level extends State {
 	
 	private TiledMap map;
 	private String mapFile;
@@ -26,7 +26,7 @@ public class Stage extends State {
 	/**Constructor for the stage
 	 * @param path - name of .tmx file for tiled grid
 	 */
-	public Stage(String path) {
+	public Level(String path) {
 		super();
 		String p;
 		try {
@@ -67,6 +67,6 @@ public class Stage extends State {
 	@Override 
 	public void update() {
 	
-		player.update();
+		//player.update();
 	}
 }

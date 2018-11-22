@@ -1,13 +1,8 @@
 package com.mygdx.zombies;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.zombies.states.Stage;
 
 public class Zombie extends Sprite {
     private int speed;

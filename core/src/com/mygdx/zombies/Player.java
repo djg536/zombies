@@ -1,13 +1,16 @@
 package com.mygdx.zombies;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import java.lang.Math;
 
-public class Player {
+public class Player extends PhysicsActor {
 
     private String name;
     private int speed;
@@ -28,6 +31,12 @@ public class Player {
     private float nuAngle;
     
     private SpriteBatch spriteBatch;
+
+    public Player(Texture texture) {
+        super();
+        setTexture(texture);
+        setEllipseBoundary();
+    }
     
     public Player(SpriteBatch spriteBatch, int x, int y){
     	
@@ -38,10 +47,10 @@ public class Player {
     	
     }
     
-    private void move(){
+    private void move(float dt){
     
     	mouseX = Gdx.input.getX();
-    	mouseY =  -(Gdx.input.getY() - Gdx.graphics.getHeight());	
+    	mouseY =  -(Gdx.input.getY() - Gdx.graphics.getHeight());
     		
     	directionX = mouseX - positionX;
     	directionY = mouseY - positionY;
@@ -55,11 +64,11 @@ public class Player {
     		normalY = positionY-10;
     	}
     	
-    	double dotproduct = ((normalX*directionX)+(normalY*directionY));
+    	double dotProduct = ((normalX*directionX)+(normalY*directionY));
     	double sizeA = (Math.sqrt((normalX*normalX)+(normalY*normalY)));
     	double sizeB = (Math.sqrt((directionX*directionX)+(directionY*directionY)));
     	
-    	angle = Math.acos((dotproduct)/((sizeA)*(sizeB)));
+    	angle = Math.acos((dotProduct)/((sizeA)*(sizeB)));
     	  	
     	angle = Math.toDegrees(angle);
     	
@@ -68,7 +77,20 @@ public class Player {
     	}
     	
     	nuAngle = (float)angle;
-    	  	
+    	this.setRotation(nuAngle);
+
+    	float playerSpeed = 500;
+        this.setVelocityXY(0,0);
+
+    	if (Gdx.input.isKeyPressed(Input.Keys.W))
+            this.setVelocityXY(0, playerSpeed);
+        if (Gdx.input.isKeyPressed(Input.Keys.A))
+            this.setVelocityXY(-playerSpeed, 0);
+        if (Gdx.input.isKeyPressed(Input.Keys.S))
+            this.setVelocityXY(-0, -playerSpeed);
+        if (Gdx.input.isKeyPressed(Input.Keys.D))
+            this.setVelocityXY(playerSpeed, 0);
+
     	if(Gdx.input.isKeyPressed(Keys.W)) {
         	
         	positionY+=10;  	
@@ -95,17 +117,17 @@ public class Player {
 
     }
 
-    public void update(){
+    public void update(float dt) {
     	
-    	move();
+    	move(dt);
     	
     }
 
     public void render(){
     	  	
-    	sprite.setPosition(positionX, positionY);	
-    	sprite.setRotation(nuAngle);
-    	sprite.draw(spriteBatch);
+    	//sprite.setPosition(positionX, positionY);
+    	//sprite.setRotation(nuAngle);
+    	//sprite.draw(spriteBatch);
     	
     }
 
