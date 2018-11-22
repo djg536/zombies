@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class Button {
 	private SpriteBatch spriteBatch;
@@ -15,6 +17,7 @@ public class Button {
 	private BitmapFont font12;
 	private String draw;
 	private boolean isHover;
+	
 	
 	public Button(SpriteBatch spriteBatch, int x, int y, String draw) {
 		this.spriteBatch = spriteBatch;
@@ -26,8 +29,8 @@ public class Button {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("NESCyrillic.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 75;
-		font12 = generator.generateFont(parameter); // font size 12 pixels
-		generator.dispose(); // don't forget to dispose to avoid memory leaks!
+		font12 = generator.generateFont(parameter); 
+		generator.dispose(); 
 	}
 	public void render() {
 		spriteBatch.draw(texture, positionX, positionY);
@@ -36,5 +39,8 @@ public class Button {
 	public void update() {
 		Gdx.input.getX();
 		Gdx.input.getY();
+	}
+	public void ClickListener(int button) {
+		
 	}
 }
