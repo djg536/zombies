@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector3;
 
 import java.lang.Math;
 
@@ -23,35 +24,37 @@ public class Player extends PhysicsActor {
     
     private int mouseX;
     private int mouseY;
-    private int directionX;
-    private int directionY;
-    private int normalX;
-    private int normalY;
+    private float directionX;
+    private float directionY;
+    private float normalX;
+    private float normalY;
     private double angle;
     private float nuAngle;
     
-    private SpriteBatch spriteBatch;
-
+    private Vector3 mousePos;
+    
     public Player(Texture texture) {
         super();
         setTexture(texture);
         setEllipseBoundary();
+        //positionX = x;
+    	//positionY = y;
     }
     
-    public Player(SpriteBatch spriteBatch, int x, int y){
+    /*public Player(SpriteBatch spriteBatch, int x, int y){
     	
     	this.spriteBatch = spriteBatch;
     	sprite = new Sprite(new Texture(Gdx.files.internal("block.png")));
     	positionX = x;
     	positionY = y;
     	
-    }
+    }*/
     
-    private void move(float dt){
-    
-    	mouseX = Gdx.input.getX();
-    	mouseY =  -(Gdx.input.getY() - Gdx.graphics.getHeight());
-    		
+    private void move(/*float dt*/){
+    	
+    	mouseX = (int)Math.round(mousePos.x);
+    	mouseY =  (int)Math.round(mousePos.y);
+    			
     	directionX = mouseX - positionX;
     	directionY = mouseY - positionY;
     	
@@ -75,9 +78,11 @@ public class Player extends PhysicsActor {
     	if(mouseX > positionX) {
     		angle = -angle;
     	}
-    	
+    	   	
     	nuAngle = (float)angle;
     	this.setRotation(nuAngle);
+    	
+    	System.out.println(positionX + ", " + positionY + " : " + mouseX + ", " + mouseY + " : " + nuAngle);
 
     	float playerSpeed = 500;
         this.setVelocityXY(0,0);
@@ -90,8 +95,9 @@ public class Player extends PhysicsActor {
             this.setVelocityXY(-0, -playerSpeed);
         if (Gdx.input.isKeyPressed(Input.Keys.D))
             this.setVelocityXY(playerSpeed, 0);
-
-    	if(Gdx.input.isKeyPressed(Keys.W)) {
+        
+         
+       /*if(Gdx.input.isKeyPressed(Keys.W)) {
         	
         	positionY+=10;  	
         } 
@@ -109,7 +115,7 @@ public class Player extends PhysicsActor {
     	if(Gdx.input.isKeyPressed(Keys.D)) {
         	
         	positionX+=10;	
-        } 
+        } */
     
     }
 
@@ -117,9 +123,11 @@ public class Player extends PhysicsActor {
 
     }
 
-    public void update(float dt) {
-    	
-    	move(dt);
+    public void update(/*float dt,*/ float x, float y, Vector3 mousePos) {
+    	positionX = (int)x;
+    	positionY = (int)y;
+    	this.mousePos = mousePos;
+    	move(/*dt*/);
     	
     }
 

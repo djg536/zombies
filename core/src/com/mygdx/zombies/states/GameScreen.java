@@ -15,6 +15,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.mygdx.zombies.BaseActor;
 import com.mygdx.zombies.PhysicsActor;
 import com.mygdx.zombies.Player;
@@ -33,19 +34,22 @@ public class GameScreen extends BaseScreen {
 
     final int mapWidth = tileSize * tileCountWidth;
     final int mapHeight = tileSize * tileCountHeight;
-
+    
     private TiledMap tiledMap;
     private OrthographicCamera tiledCamera;
     private OrthogonalTiledMapRenderer tiledMapRenderer;
     private int[] backgroundLayers = {0, 1};
     private int[] foregroundLayers = {2};
-
+    
+    private Vector3 mousePos;
+      
     public GameScreen(Game g) {
         super(g);
     }
 
     public void create() {
         player = new Player(new Texture(Gdx.files.internal("block.png")));
+        player.setOrigin(player.getWidth()/2, player.getHeight()/2);
         mainStage.addActor(player);
 
         wallList = new ArrayList<BaseActor>();
@@ -54,6 +58,7 @@ public class GameScreen extends BaseScreen {
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         tiledCamera = new OrthographicCamera();
         tiledCamera.setToOrtho(false, viewWidth, viewHeight);
+        
         tiledCamera.update();
 
         MapObjects objects = tiledMap.getLayers().get(3).getObjects();
@@ -76,8 +81,7 @@ public class GameScreen extends BaseScreen {
             solid.setRectangleBoundary();
             wallList.add(solid);
         }
-
-
+       
     }
 
     public void update(float dt) {
@@ -92,13 +96,19 @@ public class GameScreen extends BaseScreen {
 //            player.setVelocityXY(-0, -playerSpeed);
 //        if (Gdx.input.isKeyPressed(Input.Keys.D))
 //            player.setVelocityXY(playerSpeed, 0);
-
-        player.update(dt);
-
+    	
+    	
+    	mousePos = tiledCamera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+    	
+        player.update(/*dt,*/ player.getX(), player.getY(), mousePos);
+        
+        System.out.println(mapWidth + ", " + Gdx.graphics.getWidth());
+              
         for (BaseActor wall : wallList) {
             player.overlaps(wall, true);
+                      
         }
-
+            
         Camera mainCamera = mainStage.getCamera();
         // centre camera on player
         mainCamera.position.x = player.getX() + player.getOriginX();
@@ -107,7 +117,7 @@ public class GameScreen extends BaseScreen {
         mainCamera.position.x = MathUtils.clamp(mainCamera.position.x, viewWidth/2, mapWidth - viewWidth/2);
         mainCamera.position.y = MathUtils.clamp(mainCamera.position.y, viewHeight/2, mapHeight - viewHeight/2);
         mainCamera.update();
-
+         
         tiledCamera.position.x = mainCamera.position.x;
         tiledCamera.position.y = mainCamera.position.y;
         tiledCamera.update();
@@ -128,5 +138,7 @@ public class GameScreen extends BaseScreen {
         mainStage.draw();
         tiledMapRenderer.render(foregroundLayers);
         uiStage.draw();
+        
+        
     }
 }
