@@ -12,7 +12,7 @@ public class Player {
     private String name;
     private int speed;
     private int health;
-    private int points;
+    private float points = 18110;
     private Sprite sprite;
     private int rotation;
     private int positionX;
@@ -27,6 +27,10 @@ public class Player {
     private double angle;
     private float nuAngle;
     
+    private float time;
+    private int timer;
+    private int last;
+    
     private SpriteBatch spriteBatch;
     
     public Player(SpriteBatch spriteBatch, int x, int y){
@@ -34,7 +38,27 @@ public class Player {
     	this.spriteBatch = spriteBatch;
     	sprite = new Sprite(new Texture(Gdx.files.internal("block.png")));
     	positionX = x;
-    	positionY = y;
+    	positionY = y;    	
+    }
+    
+    private void points() {
+    	
+    	time += Gdx.graphics.getDeltaTime();
+    	timer = Math.round(time);
+    	   			
+    	if(timer % 2 == 0 && timer != last) {	
+    		points -= Math.round(Math.random()*10);
+    		last = timer;
+    	}
+    	
+    	System.out.println(points);
+    	
+    	
+    	
+    }
+    
+    private void health() {
+    	
     	
     }
     
@@ -98,7 +122,7 @@ public class Player {
     public void update(){
     	
     	move();
-    	
+    	points();
     }
 
     public void render(){
