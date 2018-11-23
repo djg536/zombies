@@ -5,6 +5,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.zombies.states.Stage;
+import com.mygdx.zombies.states.State;
+import com.mygdx.zombies.states.StateManager;
+
 import java.lang.Math;
 
 public class Player {
@@ -32,17 +36,18 @@ public class Player {
     private int last;
     
     private SpriteBatch spriteBatch;
-    
-    public Player(SpriteBatch spriteBatch, int x, int y){
+      
+    public Player(SpriteBatch spriteBatch, int x, int y, int h){
     	
     	this.spriteBatch = spriteBatch;
     	sprite = new Sprite(new Texture(Gdx.files.internal("block.png")));
     	positionX = x;
-    	positionY = y;    	
+    	positionY = y;
+    	health = h;
     }
     
     private void points() {
-    	
+    	 
     	time += Gdx.graphics.getDeltaTime();
     	timer = Math.round(time);
     	   			
@@ -51,15 +56,23 @@ public class Player {
     		last = timer;
     	}
     	
-    	System.out.println(points);
-    	
-    	
-    	
+    	//System.out.println(points);  		
     }
     
-    private void health() {
+    public boolean health() {
     	
-    	
+    	if(Gdx.input.isKeyPressed(Keys.SPACE)) {
+    		health -= 1;	
+    		
+    		System.out.println(health);
+    	} 	
+    	if(health == 0) {
+			System.out.println("RESTART");
+			return true;
+		} 	
+    	else {
+    		return false;
+    	}
     }
     
     private void move(){
@@ -119,10 +132,14 @@ public class Player {
 
     }
 
-    public void update(){
+    public boolean update(){
     	
     	move();
     	points();
+    	if(health() == true) {
+    		return true;
+    	}
+    	else return false;
     }
 
     public void render(){

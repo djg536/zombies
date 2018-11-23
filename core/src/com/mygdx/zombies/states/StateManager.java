@@ -5,8 +5,8 @@ public class StateManager {
 	private State currentState;
 	
 	public StateManager() {
-		//currentState = new Stage("teststage");
-		currentState = new MainMenu();//new Stage("stage1.txt"); 
+		currentState = new Stage("teststage");
+		//currentState = new MainMenu();//new Stage("stage1.txt"); 
 	}
 	
 	public void loadState(State newState) {
@@ -15,7 +15,9 @@ public class StateManager {
 	}
 	
 	public void gameLoop() {
-		currentState.update();
+		if(currentState.update() == true) {
+			currentState = new Stage("teststage");
+		}
 	}
 	
 	public void render() {

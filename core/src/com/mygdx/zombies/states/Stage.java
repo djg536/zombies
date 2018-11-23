@@ -22,7 +22,8 @@ public class Stage extends State {
 	
 	private Player player;
 	
-	
+	private State currentState;
+
 	/**Constructor for the stage
 	 * @param path - name of .tmx file for tiled grid
 	 */
@@ -45,7 +46,7 @@ public class Stage extends State {
 			e.printStackTrace();
 		}
 		
-		 player = new Player(spriteBatch, 100, 100);
+		 player = new Player(spriteBatch, 100, 100, 3);
 		 
 		 		 
 	}
@@ -65,8 +66,13 @@ public class Stage extends State {
 	}
 		
 	@Override 
-	public void update() {
+	public boolean update() {
 	
-		player.update();
+		if(player.update() == true) {
+			return true;
+		}	
+		else {
+			return false;
+		}
 	}
 }

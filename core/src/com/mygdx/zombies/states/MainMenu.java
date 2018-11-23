@@ -17,11 +17,12 @@ public class MainMenu extends State {
 		spriteBatch.end();
 	}
 	@Override
-	public void update() {
+	public boolean update() {
 		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
 			if (exit.isHover()) {
 				Gdx.app.exit();
 			}
-		}
+		}		
+		return false;
 	}
 }

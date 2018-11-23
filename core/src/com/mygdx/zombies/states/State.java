@@ -14,8 +14,8 @@ public class State {
 		
 	}
 	
-	public void update() {
-		
+	public boolean update() {
+		return false;
 	}
 	
 	public void dispose() {
