@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class State {
 	
-	protected SpriteBatch spriteBatch;
+	public SpriteBatch spriteBatch;
 	
 	public State() {
 		spriteBatch = new SpriteBatch();

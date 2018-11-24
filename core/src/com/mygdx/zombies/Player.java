@@ -1,19 +1,19 @@
 package com.mygdx.zombies;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.zombies.states.Stage;
-import com.mygdx.zombies.states.State;
-import com.mygdx.zombies.states.StateManager;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.mygdx.zombies.states.Level;
+
 import java.lang.Math;
 
-public class Player extends PhysicsActor {
+public class Player {
 
     private String name;
     private int speed;
@@ -21,8 +21,6 @@ public class Player extends PhysicsActor {
     private float points = 18110;
     private Sprite sprite;
     private int rotation;
-    private int positionX;
-    private int positionY;
     
     private int mouseX;
     private int mouseY;
@@ -36,18 +34,24 @@ public class Player extends PhysicsActor {
     private float time;
     private int timer;
     private int last;
+    private Body body;
     
     private SpriteBatch spriteBatch;
       
-    public Player(SpriteBatch spriteBatch, int x, int y, int h){
+    public Player(Level level, int x, int y, int h){
     	
-    	this.spriteBatch = spriteBatch;
+    	spriteBatch = level.spriteBatch;    	
     	sprite = new Sprite(new Texture(Gdx.files.internal("block.png")));
-    	positionX = x;
-    	positionY = y;
     	health = h;
-    	setTexture(texture);
-        setEllipseBoundary();
+    	
+    	body = level.box2dWorld.createBody(level.mob);
+    	final PolygonShape polyShape = new PolygonShape();
+    	polyShape.setAsBox(sprite.getWidth()/(Level.tileSize*2), sprite.getHeight()/(Level.tileSize*2));
+    	FixtureDef fixtureDef = new FixtureDef() {{shape = polyShape; density = 1f; }};
+    	body.createFixture(fixtureDef);
+    	body.setTransform(x/Level.tileSize, y/Level.tileSize, 0);
+    	
+    	polyShape.dispose();
     }
     
     private void points() {
@@ -79,73 +83,62 @@ public class Player extends PhysicsActor {
     	}
     }
     
-    private void move(){
-    
+    private void look() {
+    	
     	mouseX = Gdx.input.getX();
-    	mouseY =  -(Gdx.input.getY() - Gdx.graphics.getHeight());	
+    	mouseY =  -Gdx.input.getY() + Gdx.graphics.getHeight();	
     		
-    	directionX = mouseX - positionX;
-    	directionY = mouseY - positionY;
+    	directionX = mouseX - getPositionX();
+    	directionY = mouseY - getPositionY();
     	
     	normalX = 0;
     	
-    	if(mouseY > positionY) {
-    		normalY = positionY+10;
+    	if(mouseY > getPositionY()) {
+    		normalY = getPositionY()+10;
     	}
-    	else if(mouseY < positionY) {
-    		normalY = positionY-10;
+    	else if(mouseY < getPositionY()) {
+    		normalY = getPositionY()-10;
     	}
     	
-    	double dotProduct = ((normalX*directionX)+(normalY*directionY));
-    	double sizeA = (Math.sqrt((normalX*normalX)+(normalY*normalY)));
-    	double sizeB = (Math.sqrt((directionX*directionX)+(directionY*directionY)));
+    	double dotProduct = normalX*directionX + normalY*directionY;
+    	double sizeA = (Math.sqrt(normalX*normalX + normalY*normalY));
+    	double sizeB = (Math.sqrt(directionX*directionX + directionY*directionY));
     	
-    	angle = Math.acos((dotProduct)/((sizeA)*(sizeB)));
+    	angle = Math.acos(dotProduct/(sizeA*sizeB));
     	  	
     	angle = Math.toDegrees(angle);
     	
-    	if(mouseX > positionX) {
+    	if(mouseX > getPositionX()) {
     		angle = -angle;
     	}
     	   	
     	nuAngle = (float)angle;
-    	this.setRotation(nuAngle);
+    	sprite.setRotation(nuAngle);
     	
-    	System.out.println(positionX + ", " + positionY + " : " + mouseX + ", " + mouseY + " : " + nuAngle);
-
-    	float playerSpeed = 500;
-        this.setVelocityXY(0,0);
-
-    	if (Gdx.input.isKeyPressed(Input.Keys.W))
-            this.setVelocityXY(0, playerSpeed);
-        if (Gdx.input.isKeyPressed(Input.Keys.A))
-            this.setVelocityXY(-playerSpeed, 0);
-        if (Gdx.input.isKeyPressed(Input.Keys.S))
-            this.setVelocityXY(-0, -playerSpeed);
-        if (Gdx.input.isKeyPressed(Input.Keys.D))
-            this.setVelocityXY(playerSpeed, 0);
-        
-         
-       /*if(Gdx.input.isKeyPressed(Keys.W)) {
-        	
-        	positionY+=10;  	
+    	//System.out.println(positionX + ", " + positionY + " : " + mouseX + ", " + mouseY + " : " + nuAngle);
+    }
+    
+    private void move(){
+           
+       if(Gdx.input.isKeyPressed(Keys.W)) {    	
+        	//positionY+=10;  	
+    	    body.setLinearVelocity(0f, 10f);
         } 
         
-    	if(Gdx.input.isKeyPressed(Keys.S)) {
-    	
-    		positionY-=10;
+    	if(Gdx.input.isKeyPressed(Keys.S)) { 	
+    		//positionY-=10;
+    		body.setLinearVelocity(0f, -10f);
     	} 
     	
-    	if(Gdx.input.isKeyPressed(Keys.A)) {
-        	
-        	positionX-=10;  	
+    	if(Gdx.input.isKeyPressed(Keys.A)) {       	
+        	//positionX-=10;  
+        	body.setLinearVelocity(-10f, 0f);
         } 
     	
-    	if(Gdx.input.isKeyPressed(Keys.D)) {
-        	
-        	positionX+=10;	
-        } */
-    
+    	if(Gdx.input.isKeyPressed(Keys.D)) {        	
+        	//positionX+=10;	
+    		body.setLinearVelocity(10f, 0f);
+        } 
     }
 
     private void attack(){
@@ -153,28 +146,27 @@ public class Player extends PhysicsActor {
     }
 
     public boolean update(){
-    	
+    	//System.out.println(body.getPosition());
     	move();
+    	look();
+    	sprite.setPosition(getPositionX(), getPositionY());
+    	sprite.setRotation(nuAngle);
     	points();
     	return health();
     }
 
     public void render(){
-    	  	
-    	//sprite.setPosition(positionX, positionY);
-    	//sprite.setRotation(nuAngle);
-    	//sprite.draw(spriteBatch);
-    	
+    	  	  	
+    	sprite.draw(spriteBatch);	
     }
 
     public int getPositionX(){
-        return positionX;
+        return (int) (body.getPosition().x * Level.tileSize);
     }
 
     public int getPositionY(){
-        return positionY;
+        return (int) (body.getPosition().y * Level.tileSize);
     }
-
 
     public void setPowerUp(PowerUp powerUp){
 

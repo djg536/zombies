@@ -12,7 +12,7 @@
    eJztzsEJACAQwLAD9x/BXd3BfhQS6L97zWzlXuOv8df4a/w1/hp/jb/GX+Ov8df4a/w1/hp/jb/GX+Ov+e1Pdx0ct74B
   </data>
  </layer>
- <objectgroup id="4" name="border">
+ <objectgroup id="4" name="Obstacles">
   <object id="10" name="border" x="0" y="0" width="640" height="32"/>
   <object id="11" name="border" x="608" y="32" width="32" height="576"/>
   <object id="12" name="border" x="0" y="32" width="32" height="576"/>
