@@ -15,8 +15,9 @@ public class StateManager {
 	}
 	
 	public void gameLoop() {
-		if(currentState.update() == true) {
-			currentState = new Stage("teststage");
+		if(currentState.update()) {
+			//currentState = 
+			loadState(new Stage("teststage"));
 		}
 	}
 	

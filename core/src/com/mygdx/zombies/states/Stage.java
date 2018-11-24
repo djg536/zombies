@@ -46,9 +46,7 @@ public class Stage extends State {
 			e.printStackTrace();
 		}
 		
-		 player = new Player(spriteBatch, 100, 100, 3);
-		 
-		 		 
+		 player = new Player(spriteBatch, 100, 100, 3);				 		 
 	}
 	
 	/**
@@ -68,11 +66,6 @@ public class Stage extends State {
 	@Override 
 	public boolean update() {
 	
-		if(player.update() == true) {
-			return true;
-		}	
-		else {
-			return false;
-		}
+		return player.update();
 	}
 }

@@ -136,10 +136,7 @@ public class Player {
     	
     	move();
     	points();
-    	if(health() == true) {
-    		return true;
-    	}
-    	else return false;
+    	return health();
     }
 
     public void render(){
