@@ -68,6 +68,7 @@ public class Level extends State {
 		//spriteBatch.setProjectionMatrix(camera.combined);
 		spriteBatch.begin();		
 		player.render();
+		player.hudRender();
 		spriteBatch.end();
 		
 		box2dDebugRenderer.render(box2dWorld, camera.combined);

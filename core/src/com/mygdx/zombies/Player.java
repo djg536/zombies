@@ -3,8 +3,11 @@ package com.mygdx.zombies;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -19,6 +22,7 @@ public class Player {
     private int speed;
     private int health;
     private float points = 18110;
+    private String pointDisplay = "18110.0";
     private Sprite sprite;
     private int rotation;
     
@@ -36,12 +40,17 @@ public class Player {
     private int last;
     private Body body;
     
+    private Sprite hud;
     private SpriteBatch spriteBatch;
-      
+    
+    private BitmapFont pointsFont;
+   
+    
     public Player(Level level, int x, int y, int h){
     	
     	spriteBatch = level.spriteBatch;    	
     	sprite = new Sprite(new Texture(Gdx.files.internal("block.png")));
+    	hud = new Sprite(new Texture(Gdx.files.internal("block.png")));
     	health = h;
     	
     	body = level.box2dWorld.createBody(level.mob);
@@ -52,6 +61,12 @@ public class Player {
     	body.setTransform(x/Level.tileSize, y/Level.tileSize, 0);
     	
     	polyShape.dispose();
+    	
+    	FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("NESCyrillic.ttf"));
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = 50;
+		pointsFont = generator.generateFont(parameter); 
+		generator.dispose(); 
     }
     
     private void points() {
@@ -61,6 +76,8 @@ public class Player {
     	   			
     	if(timer % 2 == 0 && timer != last) {	
     		points -= Math.round(Math.random()*10);
+    		pointDisplay = Float.toString(points);
+    		
     		last = timer;
     	}
     	
@@ -158,6 +175,24 @@ public class Player {
     public void render(){
     	  	  	
     	sprite.draw(spriteBatch);	
+    }
+    
+    public void hudRender() {
+    	
+    	pointsFont.draw(spriteBatch, pointDisplay, 100, 590);
+    	
+    	if(health == 3) {
+    		hud.setPosition(100, 620);
+        	hud.draw(spriteBatch);
+    	}
+    	if(health >= 2) {
+    		hud.setPosition(150, 620);
+        	hud.draw(spriteBatch);
+    	}
+    	if(health >= 1) {
+    		hud.setPosition(200, 620);
+        	hud.draw(spriteBatch);
+    	}	
     }
 
     public int getPositionX(){
