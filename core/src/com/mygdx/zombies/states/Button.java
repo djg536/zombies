@@ -16,9 +16,11 @@ public class Button {
 	private Texture texture;
 	private int positionX;
 	private int positionY;
-	private BitmapFont font12;
-	private String draw;
+	private BitmapFont font;
+	private String text;
 	private Texture hoverTexture;
+	private BitmapFont titleFont;
+	
 	
 	
 	public Button(SpriteBatch spriteBatch, int x, int y, String draw) {
@@ -27,12 +29,17 @@ public class Button {
 		hoverTexture = new Texture("hover_button.jpg");
 		positionX = x;
 		positionY = y;
-		this.draw = draw;
+		text = draw;
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("NESCyrillic.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 75;
-		font12 = generator.generateFont(parameter); 
+		font = generator.generateFont(parameter); 
 		generator.dispose(); 
+		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("Amatic-Bold.ttf"));
+		FreeTypeFontParameter par = new FreeTypeFontParameter();
+		par.size = 150;
+		titleFont = gen.generateFont(par); 
+		gen.dispose(); 
 	}
 	public boolean isHover() {
 		return new Rectangle(positionX, positionY, texture.getWidth(), texture.getHeight()).contains(Gdx.input.getX(),Gdx.graphics.getHeight() - Gdx.input.getY());
@@ -40,13 +47,14 @@ public class Button {
 
 	}
 	public void render() {
+		titleFont.draw(spriteBatch, "Silence Of The Lamberts", 225, 650);
 		if (isHover() == true) {
 			spriteBatch.draw(hoverTexture, positionX, positionY);
 		}
 		else {
 		spriteBatch.draw(texture, positionX, positionY);
 		}
-		font12.draw(spriteBatch, draw, positionX + 65, positionY + 70);
+		font.draw(spriteBatch, text, (float) ((positionX + 140) - (text.length() * 17.5))  , (float) (positionY + 70));
 	}
 	public void update() {
 		Gdx.input.getX();
