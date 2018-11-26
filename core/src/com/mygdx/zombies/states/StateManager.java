@@ -5,8 +5,12 @@ public class StateManager {
 	private State currentState;
 	
 	public StateManager() {
-		currentState = new Level("teststage");
-		//currentState = new MainMenu();//new Stage("stage1.txt"); 
+		//currentState = new Level("teststage");
+		currentState = new MainMenu();//new Stage("stage1.txt"); 
+	}
+	
+	public void resize(int width, int height) {
+		currentState.resize(width, height);
 	}
 	
 	public void loadState(State newState) {

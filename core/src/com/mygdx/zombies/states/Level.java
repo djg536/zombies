@@ -1,6 +1,7 @@
 package com.mygdx.zombies.states;
 
 import com.mygdx.zombies.Player;
+import com.mygdx.zombies.Zombies;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class Level extends State {
@@ -22,9 +24,7 @@ public class Level extends State {
 	private Box2DDebugRenderer box2dDebugRenderer;
 	public BodyDef mob;
 	public BodyDef solid;
-	public static float tileSize = 16f;
-	
-	
+
 	/**Constructor for the stage
 	 * @param path - name of .tmx file for tiled grid
 	 */
@@ -36,10 +36,9 @@ public class Level extends State {
 			p = String.format("stages/%s", mapFile);
 			
 			map = new TmxMapLoader().load(p);
-			renderer = new OrthogonalTiledMapRenderer(map, 1 / tileSize);
+			renderer = new OrthogonalTiledMapRenderer(map, Zombies.WorldScale);
 			
-			camera = new OrthographicCamera(120, 120);
-			camera.setToOrtho(false, 40, 40);
+			camera = new OrthographicCamera(Zombies.InitialViewportWidth, Zombies.InitialViewportHeight);
 			camera.update();
 						
 			box2dWorld = new World(new Vector2(0, 0), true);
@@ -48,13 +47,20 @@ public class Level extends State {
 			mob = new BodyDef() { { type = BodyDef.BodyType.DynamicBody; } };			
 			//solid = new BodyDef() { { type = BodyDef.BodyType.StaticBody; } };
 			
-			MapBodyBuilder.buildShapes(map, tileSize, box2dWorld);
+			MapBodyBuilder.buildShapes(map, 1/Zombies.WorldScale, box2dWorld);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		 player = new Player(this, 400, 400, 3);				 		 
+	}
+	
+	@Override
+	public void resize(int width, int height) {
+		camera.viewportWidth = width;
+		camera.viewportHeight = height;
+		camera.update();
 	}
 	
 	/**
@@ -65,24 +71,25 @@ public class Level extends State {
 		renderer.setView(camera);
 		renderer.render();
 		
-		//spriteBatch.setProjectionMatrix(camera.combined);
-		spriteBatch.begin();		
+		worldBatch.setProjectionMatrix(camera.combined);
+		worldBatch.begin();		
 		player.render();
+		worldBatch.end();
+		
+    	UIBatch.begin();
 		player.hudRender();
-		spriteBatch.end();
+    	UIBatch.end();
 		
 		box2dDebugRenderer.render(box2dWorld, camera.combined);
 	}
 		
 	@Override 
 	public boolean update() {	
-		
-		//mousePos = tiledCamera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-    
-		//camera.position.set(player.getPositionX(), player.getPositionY(), 0);
+		   
+		camera.position.set(player.getPositionX(), player.getPositionY(), 0);
 		camera.update();
 		box2dWorld.step(1/60f, 6, 2);
-		return player.update();
+		return player.update(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0)));
 	}
 	
 	@Override

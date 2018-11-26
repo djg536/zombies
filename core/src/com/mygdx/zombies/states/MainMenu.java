@@ -13,19 +13,19 @@ public class MainMenu extends State {
 	
 	public MainMenu() {
 		backround = new Texture("backround.jpg");
-		play = new Button(spriteBatch, 325, 350, "Play");
-		exit = new Button(spriteBatch, 675, 150 , "Exit");
-		options = new Button(spriteBatch, 675, 350 , "Options");
-		credits = new Button(spriteBatch, 325, 150 , "Credits");
+		play = new Button(UIBatch, 325, 350, "Play");
+		exit = new Button(UIBatch, 675, 150 , "Exit");
+		options = new Button(UIBatch, 675, 350 , "Options");
+		credits = new Button(UIBatch, 325, 150 , "Credits");
 	}
 	public void render() {
-		spriteBatch.begin();
-		spriteBatch.draw(backround, 0, 0);
+		UIBatch.begin();
+		UIBatch.draw(backround, 0, 0);
 		play.render();
 		exit.render();
 		options.render();
 		credits.render();
-		spriteBatch.end();
+		UIBatch.end();
 	}
 	@Override
 	public boolean update() {

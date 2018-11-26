@@ -4,12 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mygdx.zombies.Zombies;
 
 public class Button {
 	private SpriteBatch spriteBatch;
@@ -30,21 +26,19 @@ public class Button {
 		positionX = x;
 		positionY = y;
 		text = draw;
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("NESCyrillic.ttf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = 75;
-		font = generator.generateFont(parameter); 
-		generator.dispose(); 
-		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("Amatic-Bold.ttf"));
-		FreeTypeFontParameter par = new FreeTypeFontParameter();
-		par.size = 150;
-		titleFont = gen.generateFont(par); 
-		gen.dispose(); 
+		
+		font = Zombies.GenerateFont("NESCyrillic.ttf", 75);
+		titleFont = Zombies.GenerateFont("Amatic-Bold.ttf", 150);	
 	}
+	
 	public boolean isHover() {
-		return new Rectangle(positionX, positionY, texture.getWidth(), texture.getHeight()).contains(Gdx.input.getX(),Gdx.graphics.getHeight() - Gdx.input.getY());
-			
-
+		return new Rectangle(positionX,
+							 positionY,
+							 texture.getWidth(),
+							 texture.getHeight())
+				
+							.contains(Gdx.input.getX()*(Gdx.graphics.getWidth()/Zombies.InitialWindowWidth),
+									  Gdx.graphics.getHeight() - Gdx.input.getY()*(Gdx.graphics.getHeight()/Zombies.InitialWindowHeight));			
 	}
 	public void render() {
 		titleFont.draw(spriteBatch, "Silence Of The Lamberts", 225, 650);

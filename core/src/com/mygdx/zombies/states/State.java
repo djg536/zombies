@@ -4,10 +4,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class State {
 	
-	public SpriteBatch spriteBatch;
+	public SpriteBatch worldBatch;
+	public SpriteBatch UIBatch;
 	
 	public State() {
-		spriteBatch = new SpriteBatch();
+		worldBatch = new SpriteBatch();
+		UIBatch = new SpriteBatch();
 	}
 	
 	public void render() {
@@ -18,7 +20,12 @@ public class State {
 		return false;
 	}
 	
+	public void resize(int width, int height) {
+		
+	}
+	
 	public void dispose() {
-		spriteBatch.dispose();
+		worldBatch.dispose();
+		UIBatch.dispose();
 	}
 }
