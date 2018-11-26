@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mygdx.zombies.states.Level;
@@ -56,9 +56,10 @@ public class Player {
     	body = level.box2dWorld.createBody(level.mob);
     	final PolygonShape polyShape = new PolygonShape();
     	polyShape.setAsBox(sprite.getWidth()/(Level.tileSize*2), sprite.getHeight()/(Level.tileSize*2));
-    	FixtureDef fixtureDef = new FixtureDef() {{shape = polyShape; density = 1f; }};
+    	FixtureDef fixtureDef = new FixtureDef() {{shape = polyShape; density = 0.04f; friction = 0.5f; restitution = 0f; }};
     	body.createFixture(fixtureDef);
     	body.setTransform(x/Level.tileSize, y/Level.tileSize, 0);
+    	body.setLinearDamping(10f);
     	
     	polyShape.dispose();
     	
@@ -138,23 +139,19 @@ public class Player {
     private void move(){
            
        if(Gdx.input.isKeyPressed(Keys.W)) {    	
-        	//positionY+=10;  	
-    	    body.setLinearVelocity(0f, 10f);
+    	    body.applyLinearImpulse(new Vector2(0, 0.5f), body.getPosition(), true);
         } 
         
     	if(Gdx.input.isKeyPressed(Keys.S)) { 	
-    		//positionY-=10;
-    		body.setLinearVelocity(0f, -10f);
+    		body.applyLinearImpulse(new Vector2(0, -0.5f), body.getPosition(), true);
     	} 
     	
     	if(Gdx.input.isKeyPressed(Keys.A)) {       	
-        	//positionX-=10;  
-        	body.setLinearVelocity(-10f, 0f);
+    		body.applyLinearImpulse(new Vector2(-0.5f, 0), body.getPosition(), true);
         } 
     	
     	if(Gdx.input.isKeyPressed(Keys.D)) {        	
-        	//positionX+=10;	
-    		body.setLinearVelocity(10f, 0f);
+    		body.applyLinearImpulse(new Vector2(0.5f, 0), body.getPosition(), true);
         } 
     }
 
