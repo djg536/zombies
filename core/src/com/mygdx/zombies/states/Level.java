@@ -7,6 +7,7 @@ import com.mygdx.zombies.Zombies;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.Gdx;
@@ -14,8 +15,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class Level extends State {
 	
-	private TiledMap map;
-	private String mapFile;
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
 
@@ -25,7 +24,8 @@ public class Level extends State {
 	public World box2dWorld;
 	private Box2DDebugRenderer box2dDebugRenderer;
 	public BodyDef mob;
-	public BodyDef solid;
+	private TiledMap map;
+	//public static BodyDef solid;
 
 	/**Constructor for the stage
 	 * @param path - name of .tmx file for tiled grid
@@ -34,22 +34,27 @@ public class Level extends State {
 		super();
 		String p;
 		try {
-			mapFile = String.format("%s.tmx", path);
+			String mapFile = String.format("%s.tmx", path);
 			p = String.format("stages/%s", mapFile);
 			
 			map = new TmxMapLoader().load(p);
 			renderer = new OrthogonalTiledMapRenderer(map, Zombies.WorldScale);
-			
-			camera = new OrthographicCamera(Zombies.InitialViewportWidth, Zombies.InitialViewportHeight);
-			camera.update();
-						
+								
 			box2dWorld = new World(new Vector2(0, 0), true);
 
 			box2dDebugRenderer = new Box2DDebugRenderer();
 			
 			mob = new BodyDef() { { type = BodyDef.BodyType.DynamicBody; } };			
+<<<<<<< HEAD
 			//solid = new BodyDef() { { type = BodyDef.BodyType.StaticBody; } };
+=======
+			//solid = new BodyDef() { { type = BodyDef.BodyType.StaticBody; } };		
+			
+>>>>>>> origin/master
 			MapBodyBuilder.buildShapes(map, 1/Zombies.WorldScale, box2dWorld);
+			
+			camera = new OrthographicCamera();
+			resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -62,7 +67,7 @@ public class Level extends State {
 	
 	@Override
 	public void resize(int width, int height) {
-		camera.viewportWidth = width;
+		camera.viewportWidth = width*Zombies.InitialViewportWidth/(float)Zombies.InitialViewportWidth;
 		camera.viewportHeight = height;
 		camera.update();
 	}
@@ -115,5 +120,7 @@ public class Level extends State {
 		super.dispose();
 		box2dDebugRenderer.dispose();
 		box2dWorld.dispose();
+		renderer.dispose();
+		map.dispose();
 	}
 }

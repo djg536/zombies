@@ -3,7 +3,6 @@ package com.mygdx.zombies;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -39,12 +38,9 @@ public class Player {
     
     private Sprite hud;
     private SpriteBatch spriteBatch;
-    private SpriteBatch UIBatch;
-   
-    private BitmapFont pointsFont;
-   
+    private SpriteBatch UIBatch;   
     
-    public Player(Level level, int x, int y, int h){
+    public Player(Level level, int x, int y, int h) {
     	
     	spriteBatch = level.worldBatch;    	
     	UIBatch = level.UIBatch;
@@ -60,11 +56,16 @@ public class Player {
     		shape = polyShape; density = 0.04f; friction = 0.5f; restitution = 0f; }};
     	body.createFixture(fixtureDef);
     	body.setTransform(x, y, 0);
+<<<<<<< HEAD
     	body.setLinearDamping(4);
     	body.setFixedRotation(true);
     	polyShape.dispose();
     	
     	pointsFont = Zombies.GenerateFont("NESCyrillic.ttf", 50);
+=======
+    	body.setLinearDamping(4); 	
+    	polyShape.dispose();   
+>>>>>>> origin/master
     }
     
     private void points() {
@@ -77,9 +78,7 @@ public class Player {
     		pointDisplay = Float.toString(points);
     		
     		last = timer;
-    	}
-    	
-    	//System.out.println(points);  		
+    	}		
     }
     
     public boolean health() {
@@ -133,7 +132,7 @@ public class Player {
     	//System.out.println(positionX + ", " + positionY + " : " + mouseX + ", " + mouseY + " : " + nuAngle);
     }
     
-    private void move(){
+    private void move() {
            
        if(Gdx.input.isKeyPressed(Keys.W)) {    	
     	    body.applyLinearImpulse(new Vector2(0, 10000), body.getPosition(), true);
@@ -152,11 +151,11 @@ public class Player {
         } 
     }
 
-    private void attack(){
+    private void attack() {
 
     }
 
-    public boolean update(Vector3 mouseCoords){
+    public boolean update(Vector3 mouseCoords) {
     	move();
     	look(mouseCoords);
     	sprite.setPosition(getPositionX()-sprite.getWidth()/2, getPositionY()-sprite.getHeight()/2);
@@ -165,34 +164,27 @@ public class Player {
     	return health();
     }
 
-    public void render(){
+    public void render() {
     	  	  	
     	sprite.draw(spriteBatch);	
     }
     
     public void hudRender() {
     	
-    	pointsFont.draw(UIBatch, pointDisplay, 100, 590);
+    	Zombies.pointsFont.draw(UIBatch, pointDisplay, 100, 590);
     	
-    	if(health == 3) {
-    		hud.setPosition(100, 620);
-        	hud.draw(UIBatch);
-    	}
-    	if(health >= 2) {
-    		hud.setPosition(150, 620);
-        	hud.draw(UIBatch);
-    	}
-    	if(health >= 1) {
-    		hud.setPosition(200, 620);
-        	hud.draw(UIBatch);
+    	for(int i = 0; i < health; i++)
+    	{
+    		hud.setPosition(100 + i*50, 620);
+    		hud.draw(UIBatch);
     	}	
     }
 
-    public int getPositionX(){
+    public int getPositionX() {
         return (int) body.getPosition().x;
     }
 
-    public int getPositionY(){
+    public int getPositionY() {
         return (int) body.getPosition().y;
     }
 
