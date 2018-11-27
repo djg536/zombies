@@ -13,9 +13,13 @@ public class Zombies extends Game {
 		
 	public static int InitialWindowWidth = 1280;
 	public static int InitialWindowHeight = 720;
-	public static int InitialViewportWidth = 640;
-	public static int InitialViewportHeight = 360;
-	public static float WorldScale = 1.5f;
+	public static int InitialViewportWidth = 1280;
+	public static int InitialViewportHeight = 720;
+	public static float WorldScale = 1.5f;	
+	public static BitmapFont mainFont; 
+	public static BitmapFont titleFont; 
+	public static BitmapFont pointsFont;
+	private StateManager sm;
 	
 	public static BitmapFont GenerateFont(String name, int size) {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(name));
@@ -26,12 +30,13 @@ public class Zombies extends Game {
 		return font;
 	}
 	
-	private StateManager sm;
-	
 	@Override
 	public void create () {		
 		Box2D.init();
 		sm = new StateManager();
+		mainFont = Zombies.GenerateFont("NESCyrillic.ttf", 75);		
+		titleFont = Zombies.GenerateFont("Amatic-Bold.ttf", 150);	
+		pointsFont = Zombies.GenerateFont("NESCyrillic.ttf", 50);
 	}
 
 	@Override
@@ -45,12 +50,13 @@ public class Zombies extends Game {
 	@Override
 	public void dispose () {
 		sm.dispose();
+		mainFont.dispose();
+		titleFont.dispose();
+		pointsFont.dispose();
 	}
 	
 	@Override
 	public void resize(int width, int height) {
 		sm.resize(width, height);
 	}
-	
-
 }
