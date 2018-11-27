@@ -32,13 +32,12 @@ public class Button {
 	}
 	
 	public boolean isHover() {
-		return new Rectangle(positionX,
-							 positionY,
-							 texture.getWidth(),
-							 texture.getHeight())
-				
-							.contains(Gdx.input.getX()*(Gdx.graphics.getWidth()/Zombies.InitialWindowWidth),
-									  Gdx.graphics.getHeight() - Gdx.input.getY()*(Gdx.graphics.getHeight()/Zombies.InitialWindowHeight));			
+		//Adjust mouse coordinates in case the window is resized
+		float adjustedMouseX = Gdx.input.getX()*Zombies.InitialWindowWidth/(float)Gdx.graphics.getWidth();
+		float adjustedMouseY = (Gdx.graphics.getHeight() - Gdx.input.getY())*Zombies.InitialWindowHeight/(float)Gdx.graphics.getHeight();
+		
+		return new Rectangle(positionX, positionY, texture.getWidth(), texture.getHeight())
+						.contains(adjustedMouseX, adjustedMouseY);			
 	}
 	public void render() {
 		titleFont.draw(spriteBatch, "Silence Of The Lamberts", 225, 650);
@@ -49,6 +48,7 @@ public class Button {
 		spriteBatch.draw(texture, positionX, positionY);
 		}
 		font.draw(spriteBatch, text, (float) ((positionX + 140) - (text.length() * 17.5))  , (float) (positionY + 70));
+		System.out.println(Gdx.input.getX()*(Gdx.graphics.getWidth()/(float)Zombies.InitialWindowWidth));
 	}
 	public void update() {
 		Gdx.input.getX();
