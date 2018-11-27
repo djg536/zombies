@@ -56,10 +56,12 @@ public class Player {
     	body = level.box2dWorld.createBody(level.mob);
     	final PolygonShape polyShape = new PolygonShape();
     	polyShape.setAsBox(sprite.getWidth()/2, sprite.getHeight()/2);
-    	FixtureDef fixtureDef = new FixtureDef() {{shape = polyShape; density = 0.04f; friction = 0.5f; restitution = 0f; }};
+    	FixtureDef fixtureDef = new FixtureDef() {{
+    		shape = polyShape; density = 0.04f; friction = 0.5f; restitution = 0f; }};
     	body.createFixture(fixtureDef);
     	body.setTransform(x, y, 0);
-    	body.setLinearDamping(4); 	
+    	body.setLinearDamping(4);
+    	body.setFixedRotation(true);
     	polyShape.dispose();
     	
     	pointsFont = Zombies.GenerateFont("NESCyrillic.ttf", 50);

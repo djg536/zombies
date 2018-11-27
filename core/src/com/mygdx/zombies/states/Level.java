@@ -1,15 +1,14 @@
 package com.mygdx.zombies.states;
 
+import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.zombies.Player;
+import com.mygdx.zombies.Zombie;
 import com.mygdx.zombies.Zombies;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
@@ -19,7 +18,10 @@ public class Level extends State {
 	private String mapFile;
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
+
 	private Player player;
+	private Zombie zombie;
+
 	public World box2dWorld;
 	private Box2DDebugRenderer box2dDebugRenderer;
 	public BodyDef mob;
@@ -42,18 +44,20 @@ public class Level extends State {
 			camera.update();
 						
 			box2dWorld = new World(new Vector2(0, 0), true);
+
 			box2dDebugRenderer = new Box2DDebugRenderer();
 			
 			mob = new BodyDef() { { type = BodyDef.BodyType.DynamicBody; } };			
 			//solid = new BodyDef() { { type = BodyDef.BodyType.StaticBody; } };
-			
 			MapBodyBuilder.buildShapes(map, 1/Zombies.WorldScale, box2dWorld);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		 player = new Player(this, 400, 400, 3);				 		 
+		player = new Player(this, 400, 400, 3);
+		zombie = new Zombie(this, 600, 200, 3);
+
 	}
 	
 	@Override
@@ -72,8 +76,20 @@ public class Level extends State {
 		renderer.render();
 		
 		worldBatch.setProjectionMatrix(camera.combined);
-		worldBatch.begin();		
+		worldBatch.begin();
+        box2dWorld.setContactListener(new LevelContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                Fixture fixA = contact.getFixtureA();
+                Fixture fixB = contact.getFixtureB();
+                if (fixA.getBody().getUserData() == "zombie" || fixB.getBody().getUserData() == "zombie") {
+                    zombie.reverseVelocity();
+                }
+
+            }
+        });
 		player.render();
+		zombie.render();
 		worldBatch.end();
 		
     	UIBatch.begin();
@@ -89,6 +105,7 @@ public class Level extends State {
 		camera.position.set(player.getPositionX(), player.getPositionY(), 0);
 		camera.update();
 		box2dWorld.step(1/60f, 6, 2);
+		zombie.update();
 		return player.update(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0)));
 	}
 	

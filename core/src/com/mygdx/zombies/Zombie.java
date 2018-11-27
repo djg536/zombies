@@ -1,10 +1,15 @@
 package com.mygdx.zombies;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.zombies.states.Level;
+import com.mygdx.zombies.states.LevelContactListener;
 
-public class Zombie extends Sprite {
+public class Zombie {
     private int speed;
     private int strength;
     private int health;
@@ -15,51 +20,57 @@ public class Zombie extends Sprite {
 
     private SpriteBatch spriteBatch;
 
-    public World world;
-    public Body b2body;
+    private Level level;
+    private Body body;
+    private Vector2 velocity;
 
+    public Zombie(Level level, int x, int y, int h) {
+        spriteBatch = level.worldBatch;
+        sprite = new Sprite(new Texture(Gdx.files.internal("zombie/zombie.png")));
 
-    public Zombie(World world) {
-//        this.spriteBatch = spriteBatch;
-//        sprite = new Sprite(new Texture(Gdx.files.internal("zombie/zombie.png")));
-//        this.positionX = x;
-//        this.positionY = y;
-        this.world = world;
-        defineZombie();
-    }
-
-    public void defineZombie() {
-        BodyDef bdef = new BodyDef();
-        bdef.position.set(200,200);
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
-
-        FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius(5);
-        fdef.shape = shape;
-        b2body.createFixture(fdef);
+        body = level.box2dWorld.createBody(level.mob);
+        final PolygonShape polyShape = new PolygonShape();
+        polyShape.setAsBox(sprite.getWidth()/2, sprite.getHeight()/2);
+        FixtureDef fixtureDef = new FixtureDef() {{
+            shape = polyShape; density = 0.04f; friction = 0.5f; restitution = 0f; }};
+        body.createFixture(fixtureDef);
+        body.setTransform(x, y, 0);
+        body.setLinearDamping(4);
+        body.setUserData("zombie");
+        velocity = new Vector2(10000,0);
+        polyShape.dispose();
     }
 
     protected void attack() {
 
     }
 
+
+
     protected void move() {
-        positionX += 5;
+        body.applyLinearImpulse(new Vector2(velocity.x, velocity.y), body.getPosition(), true);
+
+    }
+
+    public void reverseVelocity() {
+        velocity.x = -velocity.x;
+        velocity.y = -velocity.y;
     }
 
     public void update() {
-        world.step(1/60f, 6,2);
-        //move();
+        move();
+        sprite.setPosition(getPositionX()-sprite.getWidth()/2, getPositionY()-sprite.getHeight()/2);
+    }
+
+    public int getPositionX(){
+        return (int) body.getPosition().x;
+    }
+
+    public int getPositionY(){
+        return (int) body.getPosition().y;
     }
 
     public void render() {
-        sprite.setPosition(positionX, positionY);
         sprite.draw(spriteBatch);
-    }
-
-    public void dispose() {
-        spriteBatch.dispose();
     }
 }
