@@ -44,13 +44,9 @@ public class Level extends State {
 
 			box2dDebugRenderer = new Box2DDebugRenderer();
 			
-			mob = new BodyDef() { { type = BodyDef.BodyType.DynamicBody; } };			
-<<<<<<< HEAD
+			mob = new BodyDef() { { type = BodyDef.BodyType.DynamicBody; } };
 			//solid = new BodyDef() { { type = BodyDef.BodyType.StaticBody; } };
-=======
-			//solid = new BodyDef() { { type = BodyDef.BodyType.StaticBody; } };		
-			
->>>>>>> origin/master
+			//solid = new BodyDef() { { type = BodyDef.BodyType.StaticBody; } };
 			MapBodyBuilder.buildShapes(map, 1/Zombies.WorldScale, box2dWorld);
 			
 			camera = new OrthographicCamera();
@@ -116,11 +112,12 @@ public class Level extends State {
 	
 	@Override
 	public void dispose() {
-		
 		super.dispose();
 		box2dDebugRenderer.dispose();
 		box2dWorld.dispose();
 		renderer.dispose();
+		player.dispose();
+		zombie.dispose();
 		map.dispose();
 	}
 }

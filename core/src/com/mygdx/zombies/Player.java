@@ -56,16 +56,11 @@ public class Player {
     		shape = polyShape; density = 0.04f; friction = 0.5f; restitution = 0f; }};
     	body.createFixture(fixtureDef);
     	body.setTransform(x, y, 0);
-<<<<<<< HEAD
     	body.setLinearDamping(4);
     	body.setFixedRotation(true);
     	polyShape.dispose();
-    	
-    	pointsFont = Zombies.GenerateFont("NESCyrillic.ttf", 50);
-=======
-    	body.setLinearDamping(4); 	
-    	polyShape.dispose();   
->>>>>>> origin/master
+
+    	body.setLinearDamping(4);
     }
     
     private void points() {
@@ -189,6 +184,12 @@ public class Player {
     }
 
     public void setPowerUp(PowerUp powerUp){
+
+    }
+
+    public void dispose() {
+        spriteBatch.dispose();
+        UIBatch.dispose();
 
     }
 }

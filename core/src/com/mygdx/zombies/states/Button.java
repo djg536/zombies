@@ -52,5 +52,6 @@ public class Button {
 	public void dispose() {
 		hoverTexture.dispose();
 		texture.dispose();
+		spriteBatch.dispose();
 	}
 }

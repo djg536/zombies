@@ -45,8 +45,6 @@ public class Zombie {
 
     }
 
-
-
     protected void move() {
         body.applyLinearImpulse(new Vector2(velocity.x, velocity.y), body.getPosition(), true);
 
@@ -72,5 +70,9 @@ public class Zombie {
 
     public void render() {
         sprite.draw(spriteBatch);
+    }
+
+    public void dispose() {
+        spriteBatch.dispose();
     }
 }

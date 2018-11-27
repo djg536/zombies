@@ -6,11 +6,7 @@ public class StateManager {
 	
 	public StateManager() {
 		currentState = new Level("teststage");
-<<<<<<< HEAD
-		//currentState = new MainMenu();//new Stage("stage1.txt");
-=======
 		//currentState = new MainMenu();
->>>>>>> origin/master
 	}
 	
 	public void resize(int width, int height) {
@@ -24,10 +20,6 @@ public class StateManager {
 	
 	public void gameLoop() {
 		if(currentState.update()) {
-<<<<<<< HEAD
-			//currentState =
-=======
->>>>>>> origin/master
 			loadState(new Level("teststage"));
 		}
 	}
@@ -38,5 +30,6 @@ public class StateManager {
 	
 	public void dispose() {
 		currentState.dispose();
+
 	}
 }
