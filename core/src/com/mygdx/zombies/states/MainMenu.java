@@ -34,21 +34,28 @@ public class MainMenu extends State {
 	}
 	
 	@Override
-	public boolean update() {
+	public int update() {
 		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
 			if (exit.isHover()) {
 				Gdx.app.exit();
 			}
+			if(play.isHover()) {
+				return 1;
+			}
+			if(credits.isHover()) {
+				return 2;
+			}
+			
 		}		
-		return false;
+		return 0;
 	}
 	
 	@Override
 	public void dispose() {
-		play.dispose();
-		exit.dispose();
-		options.dispose();
-		credits.dispose();
-		background.dispose();
+		//play.dispose();
+		//exit.dispose();
+		//options.dispose();
+		//credits.dispose();
+		//background.dispose();
 	}
 }

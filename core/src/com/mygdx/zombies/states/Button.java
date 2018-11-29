@@ -15,6 +15,7 @@ public class Button {
 	private int positionY;
 	private String text;
 	private Texture hoverTexture;
+	private Texture logo;
 		
 	public Button(SpriteBatch spriteBatch, int x, int y, String draw) {
 		this.spriteBatch = spriteBatch;
@@ -23,6 +24,7 @@ public class Button {
 		positionX = x;
 		positionY = y;
 		text = draw;
+		logo = new Texture("logo.png");
 	}
 	
 	public boolean isHover() {
@@ -42,6 +44,7 @@ public class Button {
 		spriteBatch.draw(texture, positionX, positionY);
 		}
 		Zombies.mainFont.draw(spriteBatch, text, (float) ((positionX + 140) - (text.length() * 17.5))  , (float) (positionY + 70));
+		spriteBatch.draw(logo, 1050, 10);
 	}
 	
 	public void update() {

@@ -19,6 +19,7 @@ public class Zombies extends Game {
 	public static BitmapFont mainFont; 
 	public static BitmapFont titleFont; 
 	public static BitmapFont pointsFont;
+	public static BitmapFont creditsFont;
 	private StateManager sm;
 	
 	public static BitmapFont GenerateFont(String name, int size) {
@@ -34,9 +35,10 @@ public class Zombies extends Game {
 	public void create () {		
 		Box2D.init();
 		sm = new StateManager();
-		mainFont = Zombies.GenerateFont("NESCyrillic.ttf", 75);		
+		mainFont = Zombies.GenerateFont("NESCyrillic.ttf", 70);		
 		titleFont = Zombies.GenerateFont("Amatic-Bold.ttf", 150);	
-		pointsFont = Zombies.GenerateFont("NESCyrillic.ttf", 50);
+		pointsFont = Zombies.GenerateFont("KaushanScript-Regular.otf", 50);
+		creditsFont = Zombies.GenerateFont("SourceSansPro-Regular.otf", 50);
 	}
 
 	@Override
@@ -53,6 +55,7 @@ public class Zombies extends Game {
 		mainFont.dispose();
 		titleFont.dispose();
 		pointsFont.dispose();
+		creditsFont.dispose();
 	}
 	
 	@Override

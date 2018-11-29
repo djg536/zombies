@@ -16,8 +16,8 @@ public class State {
 		
 	}
 	
-	public boolean update() {
-		return false;
+	public int update() {
+		return 0;
 	}
 	
 	public void resize(int width, int height) {
