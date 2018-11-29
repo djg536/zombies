@@ -17,6 +17,17 @@ public class Zombie {
     private int rotation;
     private int positionX;
     private int positionY;
+    
+    private Player player;
+    private int playerX;
+    private int playerY;
+    
+    private Vector2 playerVector;
+    private Vector2 zombieVector;
+    private Vector2 directionVector;
+    
+    private int directionX;
+    private int directionY;
 
     private SpriteBatch spriteBatch;
 
@@ -24,7 +35,7 @@ public class Zombie {
     private Body body;
     private Vector2 velocity;
 
-    public Zombie(Level level, int x, int y, int h) {
+    public Zombie(Level level, int x, int y, int h, Player player) {
         spriteBatch = level.worldBatch;
         sprite = new Sprite(new Texture(Gdx.files.internal("zombie/zombie.png")));
 
@@ -39,6 +50,8 @@ public class Zombie {
         body.setUserData("zombie");
         velocity = new Vector2(1,0);
         polyShape.dispose();
+        
+        this.player = player;
     }
 
     protected void attack() {
@@ -46,7 +59,14 @@ public class Zombie {
     }
 
     protected void move() {
-        body.applyLinearImpulse(new Vector2(velocity.x, velocity.y), body.getPosition(), true);
+    	
+    	playerVector = new Vector2(player.getPositionX(), player.getPositionY());
+    	zombieVector = new Vector2(this.getPositionX(), this.getPositionY());	
+    	directionVector = new Vector2((playerVector.x - zombieVector.x), (playerVector.y - zombieVector.y));
+    	
+        body.applyLinearImpulse(new Vector2(directionVector.x/1000, directionVector.y/1000), body.getPosition(), true);
+        
+        //body.applyLinearImpulse(new Vector2(velocity.x, velocity.y), body.getPosition(), true);
     }
 
     public void reverseVelocity() {

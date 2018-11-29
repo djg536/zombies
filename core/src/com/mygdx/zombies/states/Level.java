@@ -56,7 +56,7 @@ public class Level extends State {
 		//solid = new BodyDef() { { type = BodyDef.BodyType.StaticBody; } };
 		
 		player = new Player(this, 400, 400, 3);
-		zombie = new Zombie(this, 600, 200, 3);	
+		zombie = new Zombie(this, 600, 200, 3, player);	
 		camera = new OrthographicCamera();
 		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());	
 		
