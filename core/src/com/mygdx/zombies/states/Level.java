@@ -101,7 +101,7 @@ public class Level extends State {
 	}
 		
 	@Override 
-	public boolean update() {	
+	public int update() {	
 		   
 		camera.position.set(player.getPositionX(), player.getPositionY(), 0);
 		camera.update();

@@ -76,7 +76,7 @@ public class Player {
     	}		
     }
     
-    public boolean health() {
+    public int health() {
     	
     	if(Gdx.input.isKeyPressed(Keys.SPACE)) {
     		health -= 1;	
@@ -85,10 +85,10 @@ public class Player {
     	} 	
     	if(health == 0) {
 			System.out.println("RESTART");
-			return true;
+			return 1;
 		} 	
     	else {
-    		return false;
+    		return 0;
     	}
     }
     
@@ -150,7 +150,7 @@ public class Player {
 
     }
 
-    public boolean update(Vector3 mouseCoords) {
+    public int update(Vector3 mouseCoords) {
     	move();
     	look(mouseCoords);
     	sprite.setPosition(getPositionX()-sprite.getWidth()/2, getPositionY()-sprite.getHeight()/2);
