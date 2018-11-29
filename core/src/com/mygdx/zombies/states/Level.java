@@ -34,10 +34,9 @@ public class Level extends State {
 		super();
 		String p;
 		try {
-			String mapFile = String.format("%s.tmx", path);
-			p = String.format("stages/%s", mapFile);
+			String mapFile = String.format("stages/%s.tmx", path);
 			
-			map = new TmxMapLoader().load(p);
+			map = new TmxMapLoader().load(mapFile);
 			renderer = new OrthogonalTiledMapRenderer(map, Zombies.WorldScale);
 								
 			box2dWorld = new World(new Vector2(0, 0), true);
@@ -113,11 +112,11 @@ public class Level extends State {
 	@Override
 	public void dispose() {
 		super.dispose();
-		box2dDebugRenderer.dispose();
+		//box2dDebugRenderer.dispose();
 		box2dWorld.dispose();
 		renderer.dispose();
-		player.dispose();
-		zombie.dispose();
+		//player.dispose();
+		//zombie.dispose();
 		map.dispose();
 	}
 }

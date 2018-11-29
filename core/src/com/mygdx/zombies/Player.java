@@ -79,17 +79,16 @@ public class Player {
     public int health() {
     	
     	if(Gdx.input.isKeyPressed(Keys.SPACE)) {
-    		health -= 1;	
-    		
+    		health -= 1;		
     		System.out.println(health);
+    		
+    		if(health <= 0) {
+    			System.out.println("RESTART");
+    			return 1;
+    		} 
     	} 	
-    	if(health == 0) {
-			System.out.println("RESTART");
-			return 1;
-		} 	
-    	else {
-    		return 0;
-    	}
+    	
+    	return 0;
     }
     
     private void look(Vector3 mouseCoords) {
@@ -184,12 +183,10 @@ public class Player {
     }
 
     public void setPowerUp(PowerUp powerUp){
-
     }
 
     public void dispose() {
         spriteBatch.dispose();
         UIBatch.dispose();
-
     }
 }

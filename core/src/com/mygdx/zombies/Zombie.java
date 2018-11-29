@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.zombies.states.Level;
-import com.mygdx.zombies.states.LevelContactListener;
 
 public class Zombie {
     private int speed;
@@ -39,6 +38,8 @@ public class Zombie {
         body.setUserData("zombie");
         velocity = new Vector2(10000,0);
         polyShape.dispose();
+        
+        body.setAngularDamping(2);
     }
 
     protected void attack() {

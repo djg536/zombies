@@ -7,7 +7,6 @@ public class StateManager {
 	public StateManager() {
 		//currentState = new Level("teststage");
 		currentState = new MainMenu();
-		//currentState = new CreditsMenu();
 	}
 	
 	public void resize(int width, int height) {

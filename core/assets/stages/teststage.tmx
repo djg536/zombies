@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="20">
- <tileset firstgid="1" source="../../../../../Zombies/zombies/core/assets/stages/tileset.tsx"/>
+<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="16">
+ <tileset firstgid="1" source="tileset_gutter.tsx"/>
+ <tileset firstgid="925" source="block.tsx"/>
  <layer id="1" name="background" width="40" height="40">
   <data encoding="base64" compression="zlib">
-   eJzN2OdvzWEYxvGnPUGN05bGnv9Aa8XWEmJrCWlROrSx5z9QM7aWEFtLiFktIfb8R3hBbC0htpavtFdOIscj3jy5X3zePPcZL86T6/rdJz3iXAb6oh/6YwAGIt0z883jnfs+yzcrwxqsxTqsxwZs/MfMN493/r/fE3XOJaMD0tARndAZXdAV3dAdPdATvQLMe6MPClCIEpRiARZiERZjCZZiGZZjBVYGmK/CatSgFpdxBVdxDddxAzdxC7dxB3dxL8D8Ph6gAY1ITHAughZoiVZIQmu0QVu0QxTJAeYpSEU2cjADM5GLPMzCbMxBPuZiHgpQGGBehGJUogoncBKncBpncBbncB7VuIAa1AaYX8Ql1KEe7/EBH/EJn/EFX/EN3/EDDWgMMP+Z8PvSOZeJLIzBWIzDeEzAREzCZEzBVGQjJ8B8GqajHBXYg73Yh/04gIM4hMM4gqOoRFWA+TEcx0M8wmM8wVM8w3O8wEu8wmu8QR3qA8zf4l1irPPUc9byT/2mDrSWf+o33T9r+ad+0/2zln/qN90/a/mnftP9s5Z/6jc9H1jLP/Wbng+s5Z/6Tc8H1vJP/abnA2v5p37T84G1/FO/KZ+t5V9Z8w6nfLaWf+pf5bO1/FP/Kp+t5Z/6t8Q17b/W8k/9a3X/Vf9a3X/Vv1b3X/Wv1f1X/Wt1/1X/Wt1/1b9W91/1h9X9V/2hfhuEwRiCoRiG4RiBkchEVoD5KIyOxPpD/bYJm7EFW7EN27EDO1GOigDzXdgdifWHfucUpKK9a/pPOt75316b5jn3vcc3U3/ody5CMeY3d/Kf59E4Z3ptqefc9x7fTP3xC6D3PEw=
+   eJztwwEJAAAMA6DBc61/rfU4CvaSqqqqqqqqPjpLdJAQ
   </data>
  </layer>
- <layer id="3" name="Walls" width="40" height="40">
+ <layer id="3" name="graphics" width="40" height="40">
   <data encoding="base64" compression="zlib">
-   eJzt0csKgzAQheGJ6+SdaoX4hvY1vUDddgoOQtq48AjO4nwwBILgkD8nkV7HjEFk0pl1lvD/7pXq314lb3sNaf/f16MRaXWeOl1Tvzu6v4LtlYv386L2fl7YXu8ossa7t/lle7HvOeyLYV8M+2LYF8O+GPbFsC+GfTHsi2FfDPti2BfDvhj2xbAvpuzr9bR39HraO3o9P3hQvMM=
-  </data>
- </layer>
- <layer id="8" name="More Images" width="40" height="40">
-  <data encoding="base64" compression="zlib">
-   eJztzrENgEAMBEEXwLf1dAidQooT93BCM9LJDnevqrO3Q+9zVL29q/975dzpms400zW9aVK7AAAAAAD4hw8Ojivx
+   eJztzsEJACAQwLAD9x/BXd3BfhQS6L97zWzlXuOv8df4a/w1/hp/jb/GX+Ov8df4a/w1/hp/jb/GX+Ov+e1Pdx0ct74B
   </data>
  </layer>
  <objectgroup id="4" name="Obstacles">
