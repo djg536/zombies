@@ -28,7 +28,7 @@ public class Player {
     private float directionY;
     private float normalX;
     private float normalY;
-    private double angle;
+    private double angleRads;
     private float nuAngle;
     
     private float time;
@@ -51,16 +51,14 @@ public class Player {
     	
     	body = level.box2dWorld.createBody(level.mob);
     	final PolygonShape polyShape = new PolygonShape();
-    	polyShape.setAsBox(sprite.getWidth()/2, sprite.getHeight()/2);
+    	polyShape.setAsBox(sprite.getWidth()/2/Zombies.PhysicsDensity, sprite.getHeight()/2/Zombies.PhysicsDensity);
     	FixtureDef fixtureDef = new FixtureDef() {{
-    		shape = polyShape; density = 0.04f; friction = 0.5f; restitution = 0f; }};
+    		shape = polyShape; density = 40; friction = 0.5f; restitution = 0f; filter.maskBits=2; }};
     	body.createFixture(fixtureDef);
-    	body.setTransform(x, y, 0);
-    	body.setLinearDamping(4);
+    	body.setTransform(x/Zombies.PhysicsDensity, y/Zombies.PhysicsDensity, 0);
+    	body.setLinearDamping(6);
     	body.setFixedRotation(true);
     	polyShape.dispose();
-
-    	body.setLinearDamping(4);
     }
     
     private void points() {
@@ -79,15 +77,14 @@ public class Player {
     public int health() {
     	
     	if(Gdx.input.isKeyPressed(Keys.SPACE)) {
-    		health -= 1;		
-    		System.out.println(health);
+    		health -= 1;	
     		
-    		if(health <= 0) {
-    			System.out.println("RESTART");
-    			return 1;
-    		} 
+    		System.out.println(health);
     	} 	
-    	
+    	if(health <= 0) {
+			System.out.println("RESTART");
+			return 1;
+		} 	
     	return 0;
     }
     
@@ -112,41 +109,40 @@ public class Player {
     	double sizeA = (Math.sqrt(normalX*normalX + normalY*normalY));
     	double sizeB = (Math.sqrt(directionX*directionX + directionY*directionY));
     	
-    	angle = Math.acos(dotProduct/(sizeA*sizeB));
-    	  	
-    	angle = Math.toDegrees(angle);
-    	
+    	angleRads = Math.acos(dotProduct/(sizeA*sizeB));
+    	  		
     	if(mouseX > getPositionX()) {
-    		angle = -angle;
+    		angleRads = -angleRads;
     	}
+    	
+    	double angle = Math.toDegrees(angleRads);
     	   	
     	nuAngle = (float)angle;
     	sprite.setRotation(nuAngle);
-    	
     	//System.out.println(positionX + ", " + positionY + " : " + mouseX + ", " + mouseY + " : " + nuAngle);
     }
     
     private void move() {
            
        if(Gdx.input.isKeyPressed(Keys.W)) {    	
-    	    body.applyLinearImpulse(new Vector2(0, 10000), body.getPosition(), true);
+    	    body.applyLinearImpulse(new Vector2(0, 1), body.getPosition(), true);
         } 
         
     	if(Gdx.input.isKeyPressed(Keys.S)) { 	
-    		body.applyLinearImpulse(new Vector2(0, -10000), body.getPosition(), true);
+    		body.applyLinearImpulse(new Vector2(0, -1), body.getPosition(), true);
     	} 
     	
     	if(Gdx.input.isKeyPressed(Keys.A)) {       	
-    		body.applyLinearImpulse(new Vector2(-10000, 0), body.getPosition(), true);
+    		body.applyLinearImpulse(new Vector2(-1, 0), body.getPosition(), true);
         } 
     	
     	if(Gdx.input.isKeyPressed(Keys.D)) {        	
-    		body.applyLinearImpulse(new Vector2(10000, 0), body.getPosition(), true);
+    		body.applyLinearImpulse(new Vector2(1, 0), body.getPosition(), true);
         } 
     }
 
     private void attack() {
-
+    	
     }
 
     public int update(Vector3 mouseCoords) {
@@ -175,18 +171,24 @@ public class Player {
     }
 
     public int getPositionX() {
-        return (int) body.getPosition().x;
+        return (int) (body.getPosition().x*Zombies.PhysicsDensity);
     }
 
     public int getPositionY() {
-        return (int) body.getPosition().y;
+        return (int) (body.getPosition().y*Zombies.PhysicsDensity);
+    }
+    
+    public double getAngleRads() {
+    	return angleRads;
     }
 
     public void setPowerUp(PowerUp powerUp){
+
     }
 
     public void dispose() {
         spriteBatch.dispose();
         UIBatch.dispose();
+
     }
 }

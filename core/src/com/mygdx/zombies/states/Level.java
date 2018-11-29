@@ -4,12 +4,13 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.zombies.Player;
 import com.mygdx.zombies.Zombie;
 import com.mygdx.zombies.Zombies;
+import pickups.Projectile;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
@@ -25,6 +26,7 @@ public class Level extends State {
 	private Box2DDebugRenderer box2dDebugRenderer;
 	public BodyDef mob;
 	private TiledMap map;
+	private ArrayList<Projectile> bulletsList;
 	//public static BodyDef solid;
 
 	/**Constructor for the stage
@@ -43,21 +45,22 @@ public class Level extends State {
 
 			box2dDebugRenderer = new Box2DDebugRenderer();
 			
-			mob = new BodyDef() { { type = BodyDef.BodyType.DynamicBody; } };
-			//solid = new BodyDef() { { type = BodyDef.BodyType.StaticBody; } };
-			//solid = new BodyDef() { { type = BodyDef.BodyType.StaticBody; } };
-			MapBodyBuilder.buildShapes(map, 1/Zombies.WorldScale, box2dWorld);
-			
-			camera = new OrthographicCamera();
-			resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			MapBodyBuilder.buildShapes(map, Zombies.PhysicsDensity/Zombies.WorldScale, box2dWorld);
+
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
+		mob = new BodyDef() { { type = BodyDef.BodyType.DynamicBody; } };
+		//solid = new BodyDef() { { type = BodyDef.BodyType.StaticBody; } };
+		
 		player = new Player(this, 400, 400, 3);
-		zombie = new Zombie(this, 600, 200, 3);
-
+		zombie = new Zombie(this, 600, 200, 3);	
+		camera = new OrthographicCamera();
+		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());	
+		
+		bulletsList = new ArrayList<Projectile>();
 	}
 	
 	@Override
@@ -90,6 +93,9 @@ public class Level extends State {
         });
 		player.render();
 		zombie.render();
+		
+		for(Projectile bullet : bulletsList)
+			bullet.render();
 		worldBatch.end();
 		
     	UIBatch.begin();
@@ -102,6 +108,10 @@ public class Level extends State {
 	@Override 
 	public int update() {	
 		   
+		if(Gdx.input.justTouched()) {
+			bulletsList.add(new Projectile(this, player.getPositionX(), player.getPositionY(), player.getAngleRads()+Math.PI/2));
+		}
+		
 		camera.position.set(player.getPositionX(), player.getPositionY(), 0);
 		camera.update();
 		box2dWorld.step(1/60f, 6, 2);
@@ -113,10 +123,10 @@ public class Level extends State {
 	public void dispose() {
 		super.dispose();
 		//box2dDebugRenderer.dispose();
-		box2dWorld.dispose();
-		renderer.dispose();
+		//box2dWorld.dispose();
+		//renderer.dispose();
 		//player.dispose();
 		//zombie.dispose();
-		map.dispose();
+		//map.dispose();
 	}
 }

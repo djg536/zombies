@@ -16,11 +16,13 @@ public class Zombies extends Game {
 	public static int InitialViewportWidth = 1280;
 	public static int InitialViewportHeight = 720;
 	public static float WorldScale = 1.5f;	
+	public static float PhysicsDensity = 100;
 	public static BitmapFont mainFont; 
 	public static BitmapFont titleFont; 
 	public static BitmapFont pointsFont;
 	public static BitmapFont creditsFont;
 	private StateManager sm;
+	
 	
 	public static BitmapFont GenerateFont(String name, int size) {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(name));
