@@ -23,6 +23,9 @@ public class Zombie {
     private int distanceX;
     private int distanceY;
     
+    private double randomX = 0.3;
+    private double randomY = 0.3;
+    
     private double distance;
     
     private Player player;
@@ -55,7 +58,7 @@ public class Zombie {
     protected void attack() {
 
     }
-
+    
     protected void move() {
     	
     	positionX = this.getPositionX();
@@ -84,18 +87,35 @@ public class Zombie {
     		System.out.println(player.getNoise() + ", " + distance);
     	
 	    	if(playerX > positionX) {		
-	    		body.applyLinearImpulse(new Vector2((float) 0.8, 0), body.getPosition(), true);
+	    		body.applyLinearImpulse(new Vector2((float) 0.5, 0), body.getPosition(), true);
 	    	}
 	    	else if(playerX < positionX) {
-	    		body.applyLinearImpulse(new Vector2((float) -0.8, 0), body.getPosition(), true);
+	    		body.applyLinearImpulse(new Vector2((float) -0.5, 0), body.getPosition(), true);
 	    	}
 	    	
 	    	if(playerY > positionY) {
-	    		body.applyLinearImpulse(new Vector2(0, (float) 0.8), body.getPosition(), true);
+	    		body.applyLinearImpulse(new Vector2(0, (float) 0.5), body.getPosition(), true);
 	    	}
 	    	else if(playerY < positionY) {
-	    		body.applyLinearImpulse(new Vector2(0, (float) -0.8), body.getPosition(), true);
+	    		body.applyLinearImpulse(new Vector2(0, (float) -0.5), body.getPosition(), true);
 	    	}
+    	}
+    	else {  		
+    		if(player.points() % 6 == 0){
+        		
+        		double signX = Math.random();
+        		double signY = Math.random();
+        		
+        		if(signX >= 0.5) {
+        			randomX = -randomX;
+        		}
+        		if(signY >= 0.5) {
+        			randomY = -randomY;
+        		}
+    		}
+    		
+    		System.out.println(randomX + ", " + randomY);
+    		body.applyLinearImpulse(new Vector2((float) randomX, (float) randomY), body.getPosition(), true);
     	}
     }
 

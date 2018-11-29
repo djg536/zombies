@@ -63,7 +63,7 @@ public class Player {
     	polyShape.dispose();
     }
     
-    private void points() {
+    public int points() {
     	 
     	time += Gdx.graphics.getDeltaTime();
     	timer = Math.round(time);
@@ -73,7 +73,9 @@ public class Player {
     		pointDisplay = Float.toString(points);
     		
     		last = timer;
-    	}		
+    	}
+    	
+    	return timer;
     }
     
     public double getNoise() {
