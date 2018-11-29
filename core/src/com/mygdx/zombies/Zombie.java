@@ -18,17 +18,15 @@ public class Zombie {
     private int positionX;
     private int positionY;
     
-    private Player player;
     private int playerX;
     private int playerY;
+    private int distanceX;
+    private int distanceY;
     
-    private Vector2 playerVector;
-    private Vector2 zombieVector;
-    private Vector2 directionVector;
+    private double distance;
     
-    private int directionX;
-    private int directionY;
-
+    private Player player;
+   
     private SpriteBatch spriteBatch;
 
     private Level level;
@@ -60,13 +58,45 @@ public class Zombie {
 
     protected void move() {
     	
-    	playerVector = new Vector2(player.getPositionX(), player.getPositionY());
-    	zombieVector = new Vector2(this.getPositionX(), this.getPositionY());	
-    	directionVector = new Vector2((playerVector.x - zombieVector.x), (playerVector.y - zombieVector.y));
+    	positionX = this.getPositionX();
+    	positionY = this.getPositionY();
     	
-        body.applyLinearImpulse(new Vector2(directionVector.x/1000, directionVector.y/1000), body.getPosition(), true);
-        
-        //body.applyLinearImpulse(new Vector2(velocity.x, velocity.y), body.getPosition(), true);
+    	playerX = player.getPositionX();
+    	playerY = player.getPositionY();
+    	
+    	distanceX = Math.abs(positionX - playerX);
+    	distanceY = Math.abs(positionY - playerY);
+    	
+    	if(playerX != positionX && playerY != positionY) {
+    		distance = Math.sqrt((distanceX*distanceX)+(distanceY*distanceY));
+    	}
+    	else if(distanceX == 0) {
+    		distance = distanceY;
+    	}
+    	else if(distanceY == 0) {
+    		distance = distanceX;
+    	}
+    	
+    	distance = distance*10;
+    	
+    	if(player.getNoise() > distance) {
+    		
+    		System.out.println(player.getNoise() + ", " + distance);
+    	
+	    	if(playerX > positionX) {		
+	    		body.applyLinearImpulse(new Vector2((float) 0.8, 0), body.getPosition(), true);
+	    	}
+	    	else if(playerX < positionX) {
+	    		body.applyLinearImpulse(new Vector2((float) -0.8, 0), body.getPosition(), true);
+	    	}
+	    	
+	    	if(playerY > positionY) {
+	    		body.applyLinearImpulse(new Vector2(0, (float) 0.8), body.getPosition(), true);
+	    	}
+	    	else if(playerY < positionY) {
+	    		body.applyLinearImpulse(new Vector2(0, (float) -0.8), body.getPosition(), true);
+	    	}
+    	}
     }
 
     public void reverseVelocity() {

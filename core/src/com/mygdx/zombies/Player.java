@@ -32,7 +32,6 @@ public class Player {
     private float nuAngle;
     
     private double noise;
-    private int radius;
     
     private float time;
     private int timer;
@@ -77,7 +76,7 @@ public class Player {
     	}		
     }
     
-    public void getNoise() {
+    public double getNoise() {
     	
     	if(body.getLinearVelocity().x == 0) {
     		noise = Math.abs(body.getLinearVelocity().y);
@@ -91,10 +90,10 @@ public class Player {
     	else {
     		noise = 0;
     	}
+    
+    	noise = noise*1000;
     	
-    	radius = (int)noise;
-      	
-    	System.out.println(radius);	
+    	return noise;
     }
  
     public int health() {
