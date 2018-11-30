@@ -45,6 +45,9 @@ public class MainMenu extends State {
 			if(credits.isHover()) {
 				return 2;
 			}
+			if(options.isHover()) {
+				return 4;
+			}
 			
 		}		
 		return 0;

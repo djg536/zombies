@@ -29,6 +29,9 @@ public class StateManager {
 		if(currentState.update() == 3) {
 			loadState(new MainMenu());
 		}
+		if(currentState.update() == 4) {
+			loadState(new OptionsMenu());
+		}
 	}
 	
 	public void render() {
