@@ -84,7 +84,7 @@ public class Zombie {
     	
     	if(player.getNoise() > distance) {
     		
-    		System.out.println(player.getNoise() + ", " + distance);
+    		//System.out.println(player.getNoise() + ", " + distance);
     	
 	    	if(playerX > positionX) {		
 	    		body.applyLinearImpulse(new Vector2((float) 0.5, 0), body.getPosition(), true);
@@ -114,7 +114,7 @@ public class Zombie {
         		}
     		}
     		
-    		System.out.println(randomX + ", " + randomY);
+    		//System.out.println(randomX + ", " + randomY);
     		body.applyLinearImpulse(new Vector2((float) randomX, (float) randomY), body.getPosition(), true);
     	}
     }

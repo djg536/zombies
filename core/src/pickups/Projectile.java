@@ -24,14 +24,17 @@ public class Projectile {
 		body = level.box2dWorld.createBody(level.mob);
 		final PolygonShape polyShape = new PolygonShape();
     	polyShape.setAsBox(sprite.getWidth()/2/Zombies.PhysicsDensity, sprite.getHeight()/2/Zombies.PhysicsDensity);
-    	//Use the maskBits parameter here to set collision mask bits
+    	
     	FixtureDef fixtureDef = new FixtureDef() {{
-    		shape = polyShape; density = 200f; friction = 0; restitution = 1f; filter.maskBits=1; }};
+    		shape = polyShape; density = 200f; friction = 0; restitution = 1f;
+    		filter.categoryBits=Zombies.Player_Filter; }};
+    		
     	body.createFixture(fixtureDef);
     	
     	body.setTransform(x/Zombies.PhysicsDensity, y/Zombies.PhysicsDensity, 0);
     	polyShape.dispose();
     	body.setBullet(true);
+    	body.setFixedRotation(true);
     	
     	final float speed = 10;
     	body.applyLinearImpulse((float)Math.cos(angle)*speed, (float)Math.sin(angle)*speed,
@@ -39,7 +42,8 @@ public class Projectile {
 	}
 	
 	public void render() {
-		sprite.setPosition(body.getPosition().x*Zombies.PhysicsDensity, body.getPosition().y*Zombies.PhysicsDensity);
+		sprite.setPosition(body.getPosition().x*Zombies.PhysicsDensity-sprite.getWidth()/2,
+				body.getPosition().y*Zombies.PhysicsDensity-sprite.getWidth()/2);
 		sprite.draw(spriteBatch);
 	}
 	

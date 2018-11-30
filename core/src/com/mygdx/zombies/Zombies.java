@@ -22,6 +22,12 @@ public class Zombies extends Game {
 	public static BitmapFont pointsFont;
 	public static BitmapFont creditsFont;
 	private StateManager sm;
+   
+	//Collision masks. Can OR these together to combine.
+	//Use categoryBits (1 default) and mask bits (-1 default)
+	//(maskBitsA & categoryBitsB) && (categoryBitsA & maskBitsB);
+    public static short Player_Filter = 2;
+    public static short Projectile_Filter = 1;
 	
 	
 	public static BitmapFont GenerateFont(String name, int size) {

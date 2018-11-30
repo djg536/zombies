@@ -54,8 +54,11 @@ public class Player {
     	body = level.box2dWorld.createBody(level.mob);
     	final PolygonShape polyShape = new PolygonShape();
     	polyShape.setAsBox(sprite.getWidth()/2/Zombies.PhysicsDensity, sprite.getHeight()/2/Zombies.PhysicsDensity);
+    	
     	FixtureDef fixtureDef = new FixtureDef() {{
-    		shape = polyShape; density = 40; friction = 0.5f; restitution = 0f; filter.maskBits=2; }};
+    		shape = polyShape; density = 40; friction = 0.5f; restitution = 0f;
+    		filter.maskBits=Zombies.Projectile_Filter; filter.categoryBits=Zombies.Player_Filter; }};
+    		
     	body.createFixture(fixtureDef);
     	body.setTransform(x/Zombies.PhysicsDensity, y/Zombies.PhysicsDensity, 0);
     	body.setLinearDamping(6);
@@ -70,7 +73,7 @@ public class Player {
     	   			
     	if(timer % 2 == 0 && timer != last) {	
     		points -= Math.round(Math.random()*10);
-    		pointDisplay = Float.toString(points);
+    		pointDisplay = Integer.toString((int)points);
     		
     		last = timer;
     	}

@@ -102,7 +102,7 @@ public class Level extends State {
 		player.hudRender();
     	UIBatch.end();
 		
-		box2dDebugRenderer.render(box2dWorld, camera.combined);
+		box2dDebugRenderer.render(box2dWorld, camera.combined.scl(Zombies.PhysicsDensity));
 	}
 		
 	@Override 
