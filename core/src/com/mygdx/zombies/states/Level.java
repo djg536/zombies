@@ -1,6 +1,9 @@
 package com.mygdx.zombies.states;
 
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.zombies.CustomContactListener;
+import com.mygdx.zombies.Entity;
+import com.mygdx.zombies.InfoContainer;
 import com.mygdx.zombies.Player;
 import com.mygdx.zombies.Zombie;
 import com.mygdx.zombies.Zombies;
@@ -15,61 +18,69 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class Level extends State {
-	
-	private OrthogonalTiledMapRenderer renderer;
-	private OrthographicCamera camera;
+
 
 	private Player player;
-	private Zombie zombie;
-
+	private ArrayList<Zombie> zombiesList;
+	private ArrayList<Projectile> bulletsList;
 	public World box2dWorld;
 	private Box2DDebugRenderer box2dDebugRenderer;
 	public BodyDef mob;
 	private TiledMap map;
-	private ArrayList<Projectile> bulletsList;
-	//public static BodyDef solid;
+	private OrthogonalTiledMapRenderer renderer;
+	private OrthographicCamera camera;
 
-	/**Constructor for the stage
-	 * @param path - name of .tmx file for tiled grid
+
+	/**
+	 * Constructor for the level
+	 * 
+	 * @param path
+	 *            - name of .tmx file for tiled grid
 	 */
 	public Level(String path) {
 		super();
 		String p;
 		try {
 			String mapFile = String.format("stages/%s.tmx", path);
-			
+
 			map = new TmxMapLoader().load(mapFile);
 			renderer = new OrthogonalTiledMapRenderer(map, Zombies.WorldScale);
-								
+
 			box2dWorld = new World(new Vector2(0, 0), true);
 
 			box2dDebugRenderer = new Box2DDebugRenderer();
-			
-			MapBodyBuilder.buildShapes(map, Zombies.PhysicsDensity/Zombies.WorldScale, box2dWorld);
 
-			
+			MapBodyBuilder.buildShapes(map, Zombies.PhysicsDensity / Zombies.WorldScale, box2dWorld);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		mob = new BodyDef() { { type = BodyDef.BodyType.DynamicBody; } };
-		//solid = new BodyDef() { { type = BodyDef.BodyType.StaticBody; } };
+
+		mob = new BodyDef() {
+			{
+				type = BodyDef.BodyType.DynamicBody;
+			}
+		};
+
+
+		bulletsList = new ArrayList<Projectile>();
+		zombiesList = new ArrayList<Zombie>();
 		
 		player = new Player(this, 400, 400, 3);
-		zombie = new Zombie(this, 600, 200, 3, player);	
+		zombiesList.add(new Zombie(this, 600, 200, 3, player));
+		zombiesList.add(new Zombie(this, 300, 200, 3, player));
 		camera = new OrthographicCamera();
-		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());	
-		
-		bulletsList = new ArrayList<Projectile>();
+		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		box2dWorld.setContactListener(new CustomContactListener());
 	}
-	
+
 	@Override
 	public void resize(int width, int height) {
-		camera.viewportWidth = width*Zombies.InitialViewportWidth/(float)Zombies.InitialViewportWidth;
+		camera.viewportWidth = width * Zombies.InitialViewportWidth / (float) Zombies.InitialViewportWidth;
 		camera.viewportHeight = height;
 		camera.update();
 	}
-	
+
 	/**
 	 * Call to draw stage to screen
 	 */
@@ -77,56 +88,55 @@ public class Level extends State {
 	public void render() {
 		renderer.setView(camera);
 		renderer.render();
-		
-		worldBatch.setProjectionMatrix(camera.combined);
-		worldBatch.begin();
-        box2dWorld.setContactListener(new LevelContactListener() {
-            @Override
-            public void beginContact(Contact contact) {
-                Fixture fixA = contact.getFixtureA();
-                Fixture fixB = contact.getFixtureB();
-                if (fixA.getBody().getUserData() == "zombie" || fixB.getBody().getUserData() == "zombie") {
-                    zombie.reverseVelocity();
-                }
 
-            }
-        });
-		player.render();
-		zombie.render();
-		
-		for(Projectile bullet : bulletsList)
+		worldBatch.setProjectionMatrix(camera.combined);
+		worldBatch.begin();		
+		player.render();	
+		for (Zombie zombie : zombiesList)
+			zombie.render();
+
+		for (Projectile bullet : bulletsList)
 			bullet.render();
 		worldBatch.end();
-		
-    	UIBatch.begin();
+
+		UIBatch.begin();
 		player.hudRender();
-    	UIBatch.end();
-		
+		UIBatch.end();
+
 		box2dDebugRenderer.render(box2dWorld, camera.combined.scl(Zombies.PhysicsDensity));
 	}
-		
-	@Override 
-	public int update() {	
-		   
-		if(Gdx.input.justTouched()) {
-			bulletsList.add(new Projectile(this, player.getPositionX(), player.getPositionY(), player.getAngleRads()+Math.PI/2));
+
+	@Override
+	public int update() {
+
+		if (Gdx.input.justTouched()) {
+			bulletsList.add(new Projectile(this, player.getPositionX(), player.getPositionY(),
+					player.getAngleRads() + Math.PI / 2));
 		}
-		
+
 		camera.position.set(player.getPositionX(), player.getPositionY(), 0);
 		camera.update();
-		box2dWorld.step(1/60f, 6, 2);
-		zombie.update();
+		box2dWorld.step(1 / 60f, 6, 2);
+		
+		for(Zombie zombie : zombiesList) {
+			zombie.update();
+		}
+		
+		Entity.removeDeletionFlagged(zombiesList);
+		Entity.removeDeletionFlagged(bulletsList);
+		//Entity.removeDeletionFlagged(player);
+		
 		return player.update(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0)));
 	}
-	
+
 	@Override
 	public void dispose() {
 		super.dispose();
-		//box2dDebugRenderer.dispose();
-		//box2dWorld.dispose();
-		//renderer.dispose();
-		//player.dispose();
-		//zombie.dispose();
-		//map.dispose();
+		// box2dDebugRenderer.dispose();
+		// box2dWorld.dispose();
+		// renderer.dispose();
+		// player.dispose();
+		// zombie.dispose();
+		// map.dispose();
 	}
 }
