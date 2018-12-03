@@ -3,7 +3,6 @@ package com.mygdx.zombies.states;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.zombies.CustomContactListener;
 import com.mygdx.zombies.Entity;
@@ -35,13 +34,9 @@ public class Level extends State {
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
-	
+
 	private RayHandler rayHandler;
 	private ArrayList<PointLight> lightsList;
-	private PointLight p1;
-	private PointLight p2;
-	private PointLight p3;
-	private PointLight p4;
 
 	/**
 	 * Constructor for the level
@@ -100,21 +95,32 @@ public class Level extends State {
 		//set up lights in corners of the screen
 		rayHandler = new RayHandler(box2dWorld);
 		rayHandler.setAmbientLight(.5f);
-		rayHandler.useDiffuseLight(true);
+		//rayHandler.useDiffuseLight(true);
 		lightsList = new ArrayList<PointLight>();
-		lightsList.add(new PointLight(rayHandler, 128, Color.WHITE, 512, 80, 80));
-		lightsList.add(new PointLight(rayHandler, 128, Color.WHITE, 512, 80, 880));
-		lightsList.add(new PointLight(rayHandler, 128, Color.WHITE, 512, 880, 80));
-		lightsList.add(new PointLight(rayHandler, 128, Color.WHITE, 512, 880, 880));
-		//System.out.println(lightsList.get(0).get);
+		lightsList.add(new PointLight(rayHandler, 128, Color.FIREBRICK, 512, 80, 80));
+		lightsList.add(new PointLight(rayHandler, 128, Color.FIREBRICK, 512, 80, 880));
+		lightsList.add(new PointLight(rayHandler, 128, Color.FIREBRICK, 512, 880, 80));
+		lightsList.add(new PointLight(rayHandler, 128, Color.FIREBRICK, 512, 880, 880));
+		System.out.println(lightsList.get(0).getPosition());
+		System.out.println(lightsList.get(0).getDistance());
 	}
 
-	public float getLights() {
-		System.out.println(p1.getDistance());
-		System.out.println(p1.getX());
-		System.out.println(p1.getY());
-		System.out.println(p1.getPosition());
-		return p1.getDistance();
+	public ArrayList<PointLight> getLights() {
+		return lightsList;
+	}
+
+	public boolean inLights() {
+		/*
+		check if the player is within the radius of any of the lights
+		if so, return true
+		*/
+		for (PointLight light : lightsList) {
+			if (Math.pow((player.getPositionX() - light.getX()),2) + Math.pow((player.getPositionY() - light.getY()),2)
+					< Math.pow(light.getDistance(),2)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -157,7 +163,7 @@ public class Level extends State {
 		camera.position.set(player.getPositionX(), player.getPositionY(), 0);
 		camera.update();
 		box2dWorld.step(1 / 60f, 6, 2);
-		
+
 		for(Zombie zombie : zombiesList) {
 			zombie.update();
 		}
@@ -168,7 +174,7 @@ public class Level extends State {
 
 		rayHandler.setCombinedMatrix(camera);
 		rayHandler.update();
-		
+
 		return player.update(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0)));
 	}
 

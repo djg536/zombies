@@ -95,15 +95,15 @@ public class Zombie extends Entity {
 			// System.out.println(player.getNoise() + ", " + distance);
 
 			if (playerX > positionX) {
-				body.applyLinearImpulse(new Vector2((float) 0.5, 0), body.getPosition(), true);
+				body.applyLinearImpulse(new Vector2(0.5f, 0), body.getPosition(), true);
 			} else if (playerX < positionX) {
-				body.applyLinearImpulse(new Vector2((float) -0.5, 0), body.getPosition(), true);
+				body.applyLinearImpulse(new Vector2(0.5f, 0), body.getPosition(), true);
 			}
 
 			if (playerY > positionY) {
-				body.applyLinearImpulse(new Vector2(0, (float) 0.5), body.getPosition(), true);
+				body.applyLinearImpulse(new Vector2(0, 0.5f), body.getPosition(), true);
 			} else if (playerY < positionY) {
-				body.applyLinearImpulse(new Vector2(0, (float) -0.5), body.getPosition(), true);
+				body.applyLinearImpulse(new Vector2(0, -0.5f), body.getPosition(), true);
 			}
 		} else {
 			if (player.points() % 6 == 0) {
