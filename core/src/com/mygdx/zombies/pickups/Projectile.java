@@ -1,4 +1,4 @@
-package pickups;
+package com.mygdx.zombies.pickups;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -19,7 +19,6 @@ public class Projectile extends Entity {
 	private Sprite sprite;
 
 	public Projectile(Level level, int x, int y, double angle) {
-		super();
 		
 		spriteBatch = level.worldBatch;
 		sprite = new Sprite(new Texture(Gdx.files.internal("bullet.png")));

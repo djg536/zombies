@@ -3,11 +3,11 @@ package com.mygdx.zombies.states;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.zombies.CustomContactListener;
 import com.mygdx.zombies.Entity;
-import com.mygdx.zombies.InfoContainer;
 import com.mygdx.zombies.Player;
 import com.mygdx.zombies.Zombie;
 import com.mygdx.zombies.Zombies;
-import pickups.Projectile;
+import com.mygdx.zombies.pickups.MeleeWeapon;
+import com.mygdx.zombies.pickups.Projectile;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class Level extends State {
@@ -23,13 +24,13 @@ public class Level extends State {
 	private Player player;
 	private ArrayList<Zombie> zombiesList;
 	private ArrayList<Projectile> bulletsList;
+	private MeleeWeapon meleeWeapon;
 	public World box2dWorld;
 	private Box2DDebugRenderer box2dDebugRenderer;
 	public BodyDef mob;
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
-
 
 	/**
 	 * Constructor for the level
@@ -65,8 +66,9 @@ public class Level extends State {
 
 		bulletsList = new ArrayList<Projectile>();
 		zombiesList = new ArrayList<Zombie>();
+		meleeWeapon = new MeleeWeapon(this);
 		
-		player = new Player(this, 400, 400, 3);
+		player = new Player(this, 400, 400, 20);
 		zombiesList.add(new Zombie(this, 600, 200, 3, player));
 		zombiesList.add(new Zombie(this, 300, 200, 3, player));
 		camera = new OrthographicCamera();
@@ -94,9 +96,13 @@ public class Level extends State {
 		player.render();	
 		for (Zombie zombie : zombiesList)
 			zombie.render();
-
 		for (Projectile bullet : bulletsList)
 			bullet.render();
+		
+		Vector2 pos = player.getHandsPosition();
+		meleeWeapon.render((int)(pos.x),
+				(int)(pos.y), (float)player.getHandsRotation());
+		
 		worldBatch.end();
 
 		UIBatch.begin();
@@ -109,9 +115,9 @@ public class Level extends State {
 	@Override
 	public int update() {
 
-		if (Gdx.input.justTouched()) {
+		if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
 			bulletsList.add(new Projectile(this, player.getPositionX(), player.getPositionY(),
-					player.getAngleRads() + Math.PI / 2));
+					player.getAngleRadians() + Math.PI / 2));
 		}
 
 		camera.position.set(player.getPositionX(), player.getPositionY(), 0);
