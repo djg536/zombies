@@ -28,6 +28,7 @@ public class Zombies extends Game {
 	// (maskBitsA & categoryBitsB) && (categoryBitsA & maskBitsB);
 	public static short playerFilter = 2;
 	public static short projectileFilter = 1;
+	
 
 	public static BitmapFont GenerateFont(String name, int size) {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(name));

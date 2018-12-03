@@ -1,10 +1,12 @@
 package com.mygdx.zombies;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -40,16 +42,17 @@ public class Player extends Entity {
 	private Sprite hud;
 	private SpriteBatch spriteBatch;
 	private SpriteBatch UIBatch;
+	private byte swingStep;
+	private byte swingDirection = -1;
 
-	public Player(Level level, int x, int y, int h) {
-		super();
+	public Player(Level level, int x, int y, int health) {
 
 		spriteBatch = level.worldBatch;
 		UIBatch = level.UIBatch;
 
 		sprite = new Sprite(new Texture(Gdx.files.internal("block.png")));
 		hud = new Sprite(new Texture(Gdx.files.internal("block.png")));
-		health = h;
+		this.health = health;
 
 		box2dWorld = level.box2dWorld;
 		body = box2dWorld.createBody(level.mob);
@@ -74,6 +77,28 @@ public class Player extends Entity {
 		body.setLinearDamping(6);
 		body.setFixedRotation(true);
 		polyShape.dispose();
+		
+		swingStep = 0;
+		swingDirection = -1;
+	}
+	
+	/**
+	 * @return the absolute rotation of the player's hands in degrees
+	 */
+	public float getHandsRotation() {
+		return swingStep*5 + nuAngle;
+	}
+	
+	/**
+	 * @return the absolute position of the player's hands
+	 */
+	public Vector2 getHandsPosition() {
+							
+		float offsetX = (float)Math.toDegrees(Math.cos(angleRads + swingStep/10.f))*0.5f;
+		float offsetY = (float)Math.toDegrees(Math.sin(angleRads + swingStep/10.f))*0.5f;
+		
+		return new Vector2(offsetX-sprite.getWidth()/2 + getPositionX(),
+				offsetY+ getPositionY());
 	}
 
 	public int points() {
@@ -175,14 +200,38 @@ public class Player extends Entity {
 			body.applyLinearImpulse(new Vector2(1, 0), body.getPosition(), true);
 		}
 	}
+	
+	/**
+	 * @return true if hands are moving
+	 */
+	public boolean isSwinging() {
+		return swingStep > 0 && swingStep < 30;
+	}
+	
+	/**
+	 * Method to deal with hand movement update
+	 */
+	public void swingUpdate() {
+		
+			if(isSwinging())
+				swingStep += swingDirection;
+			else {
+					if(Gdx.input.isButtonPressed(Buttons.RIGHT)){
+						swingDirection *= -1;
+						swingStep+=swingDirection;	
+				}
+			}			
+	}
 
 	private void attack() {
 
 	}
 
 	public int update(Vector3 mouseCoords) {
+		
 		move();
 		look(mouseCoords);
+		swingUpdate();	
 		sprite.setPosition(getPositionX() - sprite.getWidth() / 2, getPositionY() - sprite.getHeight() / 2);
 		sprite.setRotation(nuAngle);
 		points();
@@ -216,8 +265,12 @@ public class Player extends Entity {
 		return body;
 	}
 
-	public double getAngleRads() {
+	public double getAngleRadians() {
 		return angleRads;
+	}
+	
+	public double getAngleDegrees() {
+		return nuAngle;
 	}
 
 	public void setPowerUp(PowerUp powerUp) {

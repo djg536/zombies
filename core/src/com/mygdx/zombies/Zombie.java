@@ -36,7 +36,6 @@ public class Zombie extends Entity {
 	private Vector2 velocity;
 
 	public Zombie(Level level, int x, int y, int h, Player player) {
-		super();
 		
 		spriteBatch = level.worldBatch;
 		sprite = new Sprite(new Texture(Gdx.files.internal("zombie/zombie.png")));
