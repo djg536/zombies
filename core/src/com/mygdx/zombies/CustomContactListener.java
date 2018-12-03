@@ -2,16 +2,14 @@ package com.mygdx.zombies;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Manifold;
+import com.mygdx.zombies.pickups.PowerUp;
 import com.mygdx.zombies.pickups.Projectile;
-import com.mygdx.zombies.states.LevelContactListener;
 
-public class CustomContactListener extends LevelContactListener {
+public class CustomContactListener implements ContactListener {
 	
-	public CustomContactListener() {
-		super();
-	}
-	
-	@Override
 	public void beginContact(Contact contact) {
 		Body bodyA = contact.getFixtureA().getBody();
 		Body bodyB = contact.getFixtureB().getBody();
@@ -56,5 +54,25 @@ public class CustomContactListener extends LevelContactListener {
 			projectile.getInfo().flagForDeletion();
 			System.out.println("Bullet has hit wall");
 		}
+		else if (aType == InfoContainer.BodyID.PLAYER && bType == InfoContainer.BodyID.PICKUP) {
+			Player player = (Player)a.getObj();
+			PowerUp powerUp = (PowerUp)b.getObj();
+			powerUp.Collect();
+			player.setPowerUp(powerUp);
+			//powerUp.getInfo().flagForDeletion();
+			System.out.println("Player has picked up item");
+		}
+	}
+
+	@Override
+	public void endContact(Contact contact) {
+	}
+
+	@Override
+	public void preSolve(Contact contact, Manifold oldManifold) {
+	}
+
+	@Override
+	public void postSolve(Contact contact, ContactImpulse impulse) {
 	}
 }

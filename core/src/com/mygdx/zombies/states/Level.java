@@ -10,7 +10,9 @@ import com.mygdx.zombies.Player;
 import com.mygdx.zombies.Zombie;
 import com.mygdx.zombies.Zombies;
 import com.mygdx.zombies.pickups.MeleeWeapon;
+import com.mygdx.zombies.pickups.PowerUp;
 import com.mygdx.zombies.pickups.Projectile;
+import com.mygdx.zombies.pickups.RangedWeapon;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -28,12 +30,14 @@ public class Level extends State {
 	private ArrayList<Zombie> zombiesList;
 	private ArrayList<Projectile> bulletsList;
 	private MeleeWeapon meleeWeapon;
+	private RangedWeapon rangedWeapon;
 	public World box2dWorld;
 	private Box2DDebugRenderer box2dDebugRenderer;
 	public BodyDef mob;
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
+	private PowerUp powerUp;
 
 	private RayHandler rayHandler;
 	private ArrayList<PointLight> lightsList;
@@ -42,7 +46,7 @@ public class Level extends State {
 	 * Constructor for the level
 	 * 
 	 * @param path
-	 *            - name of .tmx file for tiled grid
+	 * 		- name of .tmx file for tiled grid
 	 */
 	public Level(String path) {
 		super();
@@ -70,18 +74,18 @@ public class Level extends State {
 			}
 		};
 
-
 		bulletsList = new ArrayList<Projectile>();
 		zombiesList = new ArrayList<Zombie>();
 		meleeWeapon = new MeleeWeapon(this);
+		rangedWeapon = new RangedWeapon(this);
 		
-		player = new Player(this, 400, 400, 20);
+		player = new Player(this, 400, 400, 5);
 		zombiesList.add(new Zombie(this, 600, 200, 3, player));
 		zombiesList.add(new Zombie(this, 300, 200, 3, player));
 		camera = new OrthographicCamera();
 		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		box2dWorld.setContactListener(new CustomContactListener());
-
+		powerUp = new PowerUp(0, 10, "pickups/health.png", this);
 	}
 
 	@Override
@@ -138,7 +142,8 @@ public class Level extends State {
 			zombie.render();
 		for (Projectile bullet : bulletsList)
 			bullet.render();
-		
+		rangedWeapon.render();
+		powerUp.render();
 		Vector2 pos = player.getHandsPosition();
 		meleeWeapon.render((int)(pos.x),
 				(int)(pos.y), (float)player.getHandsRotation());
@@ -154,12 +159,14 @@ public class Level extends State {
 
 	@Override
 	public int update() {
-
-		if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
-			bulletsList.add(new Projectile(this, player.getPositionX(), player.getPositionY(),
-					player.getAngleRadians() + Math.PI / 2));
-		}
-
+		
+		if (Gdx.input.isButtonPressed(Buttons.LEFT))
+			if(rangedWeapon.pullTrigger())
+				bulletsList.add(new Projectile(this, player.getPositionX(), player.getPositionY(),
+					(float)(player.getAngleRadians() + Math.PI / 2)));
+			
+		rangedWeapon.update();	
+	
 		camera.position.set(player.getPositionX(), player.getPositionY(), 0);
 		camera.update();
 		box2dWorld.step(1 / 60f, 6, 2);
@@ -170,6 +177,7 @@ public class Level extends State {
 		
 		Entity.removeDeletionFlagged(zombiesList);
 		Entity.removeDeletionFlagged(bulletsList);
+		Entity.removeDeletionFlagged(powerUp);
 		//Entity.removeDeletionFlagged(player);
 
 		rayHandler.setCombinedMatrix(camera);
