@@ -88,7 +88,7 @@ public class Zombie extends Entity {
 			distance = distanceX;
 		}
 
-		distance = distance * 10;
+		distance = distance * 5;
 
 		if (player.getNoise() > distance) {
 
@@ -97,7 +97,7 @@ public class Zombie extends Entity {
 			if (playerX > positionX) {
 				body.applyLinearImpulse(new Vector2(0.5f, 0), body.getPosition(), true);
 			} else if (playerX < positionX) {
-				body.applyLinearImpulse(new Vector2(0.5f, 0), body.getPosition(), true);
+				body.applyLinearImpulse(new Vector2(-0.5f, 0), body.getPosition(), true);
 			}
 
 			if (playerY > positionY) {
