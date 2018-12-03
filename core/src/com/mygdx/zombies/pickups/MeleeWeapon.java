@@ -11,12 +11,13 @@ import com.mygdx.zombies.InfoContainer;
 import com.mygdx.zombies.Zombies;
 import com.mygdx.zombies.states.Level;
 
-public class MeleeWeapon {
+public class MeleeWeapon extends PickUp {
 	
 	private SpriteBatch spriteBatch;
 	private Sprite sprite;
 	
 	public MeleeWeapon(Level level) {
+		super(true);
 		spriteBatch = level.worldBatch;
 		sprite = new Sprite(new Texture(Gdx.files.internal("sword.png")));
 	}

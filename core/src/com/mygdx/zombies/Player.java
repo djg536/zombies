@@ -12,9 +12,12 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.mygdx.zombies.pickups.PickUp;
+import com.mygdx.zombies.pickups.PowerUp;
 import com.mygdx.zombies.states.Level;
 
 import java.lang.Math;
+import java.util.ArrayList;
 
 public class Player extends Entity {
 
@@ -24,7 +27,6 @@ public class Player extends Entity {
 	private float points = 18110;
 	private String pointDisplay = "18110.0";
 	private Sprite sprite;
-	private int rotation;
 
 	private float directionX;
 	private float directionY;
@@ -32,8 +34,6 @@ public class Player extends Entity {
 	private float normalY;
 	private double angleRads;
 	private float nuAngle;
-
-	private double noise;
 
 	private float time;
 	private int timer;
@@ -44,9 +44,11 @@ public class Player extends Entity {
 	private SpriteBatch UIBatch;
 	private byte swingStep;
 	private byte swingDirection = -1;
+	
+	private ArrayList<PickUp> weaponsList;
+	private PowerUp powerUp;
 
 	public Player(Level level, int x, int y, int health) {
-
 		spriteBatch = level.worldBatch;
 		UIBatch = level.UIBatch;
 
@@ -80,6 +82,12 @@ public class Player extends Entity {
 		
 		swingStep = 0;
 		swingDirection = -1;
+		
+		weaponsList = new ArrayList<PickUp>();
+	}
+	
+	public void AddWeapon(PickUp pickUp) {
+		weaponsList.add(pickUp);
 	}
 	
 	/**
@@ -92,8 +100,7 @@ public class Player extends Entity {
 	/**
 	 * @return the absolute position of the player's hands
 	 */
-	public Vector2 getHandsPosition() {
-							
+	public Vector2 getHandsPosition() {						
 		float offsetX = (float)Math.toDegrees(Math.cos(angleRads + swingStep/10.f))*0.5f;
 		float offsetY = (float)Math.toDegrees(Math.sin(angleRads + swingStep/10.f))*0.5f;
 		
@@ -102,7 +109,6 @@ public class Player extends Entity {
 	}
 
 	public int points() {
-
 		time += Gdx.graphics.getDeltaTime();
 		timer = Math.round(time);
 
@@ -117,7 +123,8 @@ public class Player extends Entity {
 	}
 
 	public double getNoise() {
-
+		double noise;
+		
 		if (body.getLinearVelocity().x == 0) {
 			noise = Math.abs(body.getLinearVelocity().y);
 		} else if (body.getLinearVelocity().y == 0) {
@@ -135,21 +142,14 @@ public class Player extends Entity {
 	}
 
 	public int health() {
-
-		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+		if (Gdx.input.isKeyPressed(Keys.SPACE))
 			health -= 1;
-
-			System.out.println(health);
-		}
-		if (health <= 0) {
+		if (health <= 0)
 			System.out.println("RESTART");
-			return 1;
-		}
 		return 0;
 	}
 
 	private void look(Vector3 mouseCoords) {
-
 		int mouseX = (int) mouseCoords.x;
 		int mouseY = (int) mouseCoords.y;
 
@@ -178,27 +178,21 @@ public class Player extends Entity {
 
 		nuAngle = (float) angle;
 		sprite.setRotation(nuAngle);
-		// System.out.println(positionX + ", " + positionY + " : " + mouseX + ", " +
-		// mouseY + " : " + nuAngle);
 	}
 
 	private void move() {
+		int speedBoost = powerUp==null ? 1 : powerUp.getSpeedBoost();
+		Vector2 playerPosition = body.getPosition();
+		
+		if (Gdx.input.isKeyPressed(Keys.W))
+			body.applyLinearImpulse(new Vector2(0, 1*speedBoost), playerPosition, true);
+		else if (Gdx.input.isKeyPressed(Keys.S))
+			body.applyLinearImpulse(new Vector2(0, -1*speedBoost), playerPosition, true);
 
-		if (Gdx.input.isKeyPressed(Keys.W)) {
-			body.applyLinearImpulse(new Vector2(0, 1), body.getPosition(), true);
-		}
-
-		if (Gdx.input.isKeyPressed(Keys.S)) {
-			body.applyLinearImpulse(new Vector2(0, -1), body.getPosition(), true);
-		}
-
-		if (Gdx.input.isKeyPressed(Keys.A)) {
-			body.applyLinearImpulse(new Vector2(-1, 0), body.getPosition(), true);
-		}
-
-		if (Gdx.input.isKeyPressed(Keys.D)) {
-			body.applyLinearImpulse(new Vector2(1, 0), body.getPosition(), true);
-		}
+		if (Gdx.input.isKeyPressed(Keys.A))
+			body.applyLinearImpulse(new Vector2(-1*speedBoost, 0), playerPosition, true);
+		else if (Gdx.input.isKeyPressed(Keys.D))
+			body.applyLinearImpulse(new Vector2(1*speedBoost, 0), playerPosition, true);
 	}
 	
 	/**
@@ -212,7 +206,6 @@ public class Player extends Entity {
 	 * Method to deal with hand movement update
 	 */
 	public void swingUpdate() {
-		
 			if(isSwinging())
 				swingStep += swingDirection;
 			else {
@@ -223,12 +216,7 @@ public class Player extends Entity {
 			}			
 	}
 
-	private void attack() {
-
-	}
-
 	public int update(Vector3 mouseCoords) {
-		
 		move();
 		look(mouseCoords);
 		swingUpdate();	
@@ -239,12 +227,10 @@ public class Player extends Entity {
 	}
 
 	public void render() {
-
 		sprite.draw(spriteBatch);
 	}
 
 	public void hudRender() {
-
 		Zombies.pointsFont.draw(UIBatch, pointDisplay, 100, 590);
 
 		for (int i = 0; i < health; i++) {
@@ -270,7 +256,8 @@ public class Player extends Entity {
 	}
 
 	public void setPowerUp(PowerUp powerUp) {
-
+		this.powerUp = powerUp;
+		health += powerUp.getHealthBoost();
 	}
 
 	public int getHealth() {

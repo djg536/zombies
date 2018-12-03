@@ -7,7 +7,6 @@ import com.badlogic.gdx.physics.box2d.World;
 
 /**
  * Generic Entity class for handling safe flag deletion system
- *
  */
 public abstract class Entity {
 
