@@ -212,6 +212,10 @@ public class Player extends Entity {
 		return (int) (body.getPosition().y * Zombies.PhysicsDensity);
 	}
 
+	public Body getBody() {
+		return body;
+	}
+
 	public double getAngleRads() {
 		return angleRads;
 	}

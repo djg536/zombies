@@ -18,7 +18,7 @@ public class LevelContactListener implements ContactListener {
 	@Override
 	public void endContact(Contact contact) {
 		colliding = false;
-		System.out.println("Contact removed");
+		//System.out.println("Contact removed");
 	}
 
 	@Override
