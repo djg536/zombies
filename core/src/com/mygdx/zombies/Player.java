@@ -107,20 +107,20 @@ public class Player extends Entity {
 		return new Vector2(offsetX-sprite.getWidth()/2 + getPositionX(),
 				offsetY+ getPositionY());
 	}
-
+	
 	public int points() {
-		time += Gdx.graphics.getDeltaTime();
+		time += Gdx.graphics.getDeltaTime()/10;
 		timer = Math.round(time);
-
+	
 		if (timer % 2 == 0 && timer != last) {
 			points -= Math.round(Math.random() * 10);
 			pointDisplay = Integer.toString((int) points);
-
+			
 			last = timer;
 		}
-
+		
 		return timer;
-	}
+	}	
 
 	public double getNoise() {
 		double noise;
