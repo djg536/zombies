@@ -28,11 +28,14 @@ public class Zombie extends Entity {
 	private int normalX;
 	private int normalY;
 	private double angleRads;
-	private float attackAngle;
+	private float totAngle;
 	private float wanderAngle;
+	private float zpAngle;
+	
+	private boolean change;
 
-	private double randomX = 0.3f;
-	private double randomY = 0.3f;
+	private double randomX;
+	private double randomY;
 	
 	private int last;
 
@@ -80,7 +83,9 @@ public class Zombie extends Entity {
 	}
 
 	protected void move() {
-
+		
+		// Distance between zombie and player
+		
 		positionX = this.getPositionX();
 		positionY = this.getPositionY();
 
@@ -97,12 +102,29 @@ public class Zombie extends Entity {
 		} else if (distanceY == 0) {
 			distance = distanceX;
 		}
-		
-		distance = distance * 5;
-		
-		if (player.getNoise() > distance) {
 			
-			// System.out.println(player.getNoise() + ", " + distance);
+		// Angle between player and zombie
+		
+		directionX = playerX - positionX;
+		directionY = playerY - positionY;
+
+		normalX = 0;
+
+		double dotProduct = normalX * directionX + normalY * directionY;
+		double sizeA = (Math.sqrt(normalX * normalX + normalY * normalY));
+		double sizeB = (Math.sqrt(directionX * directionX + directionY * directionY));
+
+		angleRads = Math.acos(dotProduct / (sizeA * sizeB));
+
+		if (playerX > positionX) {
+			angleRads = -angleRads;
+		}
+
+		double angle = Math.toDegrees(angleRads);
+
+		zpAngle = (float) angle;
+		
+		if (player.getNoise() > distance || this.sight() == true) {
 			
 			if (playerX > positionX) {
 				body.applyLinearImpulse(new Vector2(0.5f, 0), body.getPosition(), true);
@@ -118,79 +140,61 @@ public class Zombie extends Entity {
 				normalY = positionY - 10;
 			}
 			
-			// Rotation
+			sprite.setRotation(zpAngle);
 			
-			directionX = playerX - positionX;
-			directionY = playerY - positionY;
-
-			normalX = 0;
-
-			double dotProduct = normalX * directionX + normalY * directionY;
-			double sizeA = (Math.sqrt(normalX * normalX + normalY * normalY));
-			double sizeB = (Math.sqrt(directionX * directionX + directionY * directionY));
-
-			angleRads = Math.acos(dotProduct / (sizeA * sizeB));
-
-			if (playerX > positionX) {
-				angleRads = -angleRads;
-			}
-
-			double angle = Math.toDegrees(angleRads);
-
-			attackAngle = (float) angle;
-			sprite.setRotation(attackAngle);
+			totAngle = zpAngle; 
 			
 		} else {
 			if ((player.points() % 4 == 0 || player.points() == 0) && player.points() != last) {
 				
-				// generates random number that correlates to one of NINE movement states
+				// Generates random number that correlates to one of NINE movement states
 				// N, NE, E, SE, S, SW, W, NW, Stationary
 				// 
 				// Messy: To be revised
-	
-				double angle = Math.random();
 				
-				if(angle > 0 && angle < 0.1) {
+				double rand = Math.random();
+				
+				if(rand > 0 && rand < 0.1) {
 					randomX = 0.2f;
 					randomY = 0.2f;
 					wanderAngle = -45;
 				}
-				if(angle > 0.1 && angle < 0.2) {
+				if(rand > 0.1 && rand < 0.2) {
 					randomX = 0.2f;
 					randomY = 0;
 					wanderAngle = -90;
 				}
-				if(angle > 0.2 && angle < 0.3) {
+				if(rand > 0.2 && rand < 0.3) {
 					randomX = 0.2f;
 					randomY = -0.2f;
 					wanderAngle = -135;
 				}
-				if(angle > 0.3 && angle < 0.4) {
+				if(rand > 0.3 && rand < 0.4) {
 					randomX = 0;
 					randomY = -0.2f;
 					wanderAngle = -180;
 				}
-				if(angle > 0.4 && angle < 0.5) {
+				if(rand > 0.4 && rand < 0.5) {
 					randomX = -0.2f;
 					randomY = -0.2f;
 					wanderAngle = -225;
 				}
-				if(angle > 0.5 && angle < 0.6) {
+				if(rand > 0.5 && rand < 0.6) {
 					randomX = -0.2f;
 					randomY = 0;
 					wanderAngle = -270;
 				}
-				if(angle > 0.6 && angle < 0.7) {
+				if(rand > 0.6 && rand < 0.7) {
 					randomX = -0.2f;
 					randomY = 0.2f;
 					wanderAngle = -315;
 				}
-				if(angle > 0.7 && angle < 0.8) {
+				if(rand > 0.7 && rand < 0.8) {
 					randomX = 0;
 					randomY = 0.2f;
 					wanderAngle = 0;
 				}
-				if(angle > 0.8) {
+				if(rand > 0.8) {
 					randomX = 0;
 					randomY = 0;
 				}
@@ -200,12 +204,30 @@ public class Zombie extends Entity {
 		
 			body.applyLinearImpulse(new Vector2((float) randomX, (float) randomY), body.getPosition(), true);
 			sprite.setRotation(wanderAngle);
+			
+			totAngle = wanderAngle;
 		}		
 	}
+	
+	private boolean sight() {
+		
+		// Returns true if the player is within distance < 200 of the zombie
+		// and and player is within 90 degrees of the zombie's angle
+		
+		if(distance < 200 && ((zpAngle <= totAngle + 45) || (zpAngle >= totAngle - 45))) {
+			return true;
+		}
+		else {
+			return false;
+		}	
+	}
 
-	public void reverseVelocity() {
-		velocity.x = -velocity.x;
-		velocity.y = -velocity.y;
+	public void reverseVelocity() {	
+		randomX = -randomX;
+		randomY = -randomY;
+		
+		wanderAngle = wanderAngle - 180;
+		
 	}
 
 	public void update() {

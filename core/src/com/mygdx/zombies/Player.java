@@ -135,8 +135,8 @@ public class Player extends Entity {
 		} else {
 			noise = 0;
 		}
-
-		noise = noise * 1000;
+			
+		noise = noise * 250;
 
 		return noise;
 	}
