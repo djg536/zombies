@@ -73,6 +73,7 @@ public class Player extends Entity {
 	}
 	
 	public void SetWeapon(Weapon weapon) {
+		Zombies.soundAmmo.play();
 		this.weapon = weapon;
 	}
 	
@@ -130,8 +131,10 @@ public class Player extends Entity {
 	public int health() {
 		if (Gdx.input.isKeyPressed(Keys.SPACE))
 			health -= 1;
-		if (health <= 0)
+		if (health <= 0) {
 			System.out.println("RESTART");
+			return 1;
+		}
 		return 0;
 	}
 
@@ -223,6 +226,7 @@ public class Player extends Entity {
 			swingStep += swingDirection;
 		else {
 				if(Gdx.input.isButtonPressed(Buttons.LEFT)){
+					Zombies.soundSwing.play();
 					swingDirection *= -1;
 					swingStep+=swingDirection;	
 			}
@@ -267,6 +271,7 @@ public class Player extends Entity {
 	}
 
 	public void setPowerUp(PowerUp powerUp) {
+		Zombies.soundPowerUp.play();
 		this.powerUp = powerUp;
 		health += powerUp.getHealthBoost();
 	}

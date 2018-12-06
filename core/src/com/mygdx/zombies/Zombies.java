@@ -25,7 +25,9 @@ public class Zombies extends Game {
 	public static Sound soundShoot;
 	public static Sound soundSelect;
 	public static Sound soundLaser;
-	public static Sound soundSword;
+	public static Sound soundSwing;
+	public static Sound soundAmmo;
+	public static Sound soundPowerUp;
 	private StateManager sm;
 
 	// Collision masks. Can OR these together to combine.
@@ -53,9 +55,11 @@ public class Zombies extends Game {
 		pointsFont = Zombies.GenerateFont("KaushanScript-Regular.otf", 50);
 		creditsFont = Zombies.GenerateFont("SourceSansPro-Regular.otf", 50);
 		soundShoot = Gdx.audio.newSound(Gdx.files.internal("sounds/gun.wav"));
-		//soundSword = Gdx.audio.newSound(Gdx.files.internal("sounds/sword.flac"));
-		//soundSelect = Gdx.audio.newSound(Gdx.files.internal("sounds/select.wav"));
-		//soundLaser = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
+		soundSwing = Gdx.audio.newSound(Gdx.files.internal("sounds/swing.wav"));
+		soundSelect = Gdx.audio.newSound(Gdx.files.internal("sounds/select.wav"));
+		soundLaser = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
+		soundAmmo = Gdx.audio.newSound(Gdx.files.internal("sounds/ammo.wav"));
+		soundPowerUp = Gdx.audio.newSound(Gdx.files.internal("sounds/powerup.wav"));
 	}
 
 	@Override
@@ -74,8 +78,11 @@ public class Zombies extends Game {
 		pointsFont.dispose();
 		creditsFont.dispose();
 		soundShoot.dispose();
-		//soundSelect.dispose();
-		//soundLaser.dispose();
+		soundSwing.dispose();
+		soundSelect.dispose();
+		soundLaser.dispose();
+		soundAmmo.dispose();
+		soundPowerUp.dispose();
 	}
 
 	@Override

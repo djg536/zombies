@@ -40,12 +40,15 @@ public class MainMenu extends State {
 				Gdx.app.exit();
 			}
 			if (play.isHover()) {
+				Zombies.soundSelect.play();
 				return 1;
 			}
 			if (credits.isHover()) {
+				Zombies.soundSelect.play();
 				return 2;
 			}
 			if (options.isHover()) {
+				Zombies.soundSelect.play();
 				return 4;
 			}
 

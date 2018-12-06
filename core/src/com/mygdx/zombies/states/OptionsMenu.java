@@ -27,6 +27,7 @@ public class OptionsMenu extends State {
 	public int update() {
 		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 			if (back.isHover()) {
+				Zombies.soundSelect.play();
 				return 3;
 			}
 

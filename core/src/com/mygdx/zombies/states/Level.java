@@ -69,9 +69,18 @@ public class Level extends State {
 		bulletsList = new ArrayList<Projectile>();
 		zombiesList = new ArrayList<Zombie>();
 		pickUpsList = new ArrayList<PickUp>();
-		pickUpsList.add(new PickUp(this, 200, 300, "pickups/pistol.png", new RangedWeapon(this), InfoContainer.BodyID.WEAPON));
+		
+		pickUpsList.add(new PickUp(this, 200, 300, "pickups/pistol.png",
+				new RangedWeapon(this, 35, "bullet.png", 1.5f, Zombies.soundShoot), InfoContainer.BodyID.WEAPON));
+		
+		pickUpsList.add(new PickUp(this, 400, 300, "pickups/pistol.png",
+				new RangedWeapon(this, 60, "laser.png", 4, Zombies.soundLaser), InfoContainer.BodyID.WEAPON));
+		
 		pickUpsList.add(new PickUp(this, 200, 350, "sword.png", new MeleeWeapon(worldBatch), InfoContainer.BodyID.WEAPON));
+		
 		pickUpsList.add(new PickUp(this, 200, 400, "pickups/health.png", new PowerUp(0, 2), InfoContainer.BodyID.PICKUP));
+		
+		pickUpsList.add(new PickUp(this, 200, 500, "pickups/speed.png", new PowerUp(1, 0), InfoContainer.BodyID.PICKUP));
 		
 		player = new Player(this, 400, 400, 5);
 		zombiesList.add(new Zombie(this, 600, 200, 3, player));
