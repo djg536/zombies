@@ -1,14 +1,11 @@
-package com.mygdx.zombies.pickups;
+package com.mygdx.zombies.items;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.zombies.Entity;
 import com.mygdx.zombies.InfoContainer;
 import com.mygdx.zombies.Zombies;
@@ -19,41 +16,36 @@ public class Projectile extends Entity {
 	private SpriteBatch spriteBatch;
 	private Sprite sprite;
 
-	public Projectile(Level level, int x, int y, float angle) {
+	public Projectile(Level level, int x, int y, float angle, String spritePath, float speed, Sound sound) {
 		
-		spriteBatch = level.worldBatch;
-		sprite = new Sprite(new Texture(Gdx.files.internal("bullet.png")));
+		//Apply bullet spray
+		angle += Math.random()*0.2f-0.1f;
+		
+		//Add sprite
+		this.spriteBatch = level.worldBatch;
+		sprite = new Sprite(new Texture(Gdx.files.internal(spritePath)));
 		sprite.setRotation((float)Math.toDegrees(angle));
 
-		box2dWorld = level.box2dWorld;
-		body = box2dWorld.createBody(level.mob);
-		final PolygonShape polyShape = new PolygonShape();
-		polyShape.setAsBox(sprite.getWidth() / 2 / Zombies.PhysicsDensity,
-				sprite.getHeight() / 2 / Zombies.PhysicsDensity);
-
+		//Build box2d body
 		FixtureDef fixtureDef = new FixtureDef() {
 			{
-				shape = polyShape;
-				density = 200f;
-				friction = 0;
-				restitution = 1f;
+				density = 200;
+				friction = 1;
+				restitution = 1;
 				filter.categoryBits = Zombies.playerFilter;
+				isSensor = true;
 			}
 		};
-
-		body.createFixture(fixtureDef);
-		body.setUserData(new InfoContainer(InfoContainer.BodyID.PROJECTILE, this));
-
+		GenerateBodyFromSprite(level.box2dWorld, sprite, InfoContainer.BodyID.PROJECTILE, fixtureDef);
 		body.setTransform(x / Zombies.PhysicsDensity, y / Zombies.PhysicsDensity, angle);
-		polyShape.dispose();
 		body.setBullet(true);
 		body.setFixedRotation(true);
 
-		final float speed = 1.5f;
+		//Apply movement
 		body.applyLinearImpulse((float) Math.cos(angle) * speed, (float) Math.sin(angle) * speed,
 				x / Zombies.PhysicsDensity, y / Zombies.PhysicsDensity, true);
 	
-		Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/gun.wav"));
+		//Play sound effect
 		sound.play();
 	}
 

@@ -50,31 +50,24 @@ public class Zombie extends Entity {
 
 	public Zombie(Level level, int x, int y, int h, Player player) {
 		
+		//Add sprite
 		spriteBatch = level.worldBatch;
 		sprite = new Sprite(new Texture(Gdx.files.internal("zombie/zombie.png")));
 
-		this.box2dWorld = level.box2dWorld;
-		body = box2dWorld.createBody(level.mob);
-		final PolygonShape polyShape = new PolygonShape();
-		polyShape.setAsBox(sprite.getWidth() / 2 / Zombies.PhysicsDensity,
-				sprite.getHeight() / 2 / Zombies.PhysicsDensity);
+		//Add box2d body
 		FixtureDef fixtureDef = new FixtureDef() {
 			{
-				shape = polyShape;
 				density = 40;
 				friction = 0.5f;
 				restitution = 1f;
 			}
 		};
-		body.createFixture(fixtureDef);
-		body.setUserData(new InfoContainer(InfoContainer.BodyID.ZOMBIE, this));
+		GenerateBodyFromSprite(level.box2dWorld, sprite, InfoContainer.BodyID.ZOMBIE, fixtureDef);
 		body.setTransform(x / Zombies.PhysicsDensity, y / Zombies.PhysicsDensity, 0);
 		body.setLinearDamping(4);
 		velocity = new Vector2(1, 0);
-		polyShape.dispose();
 		
 		health = 5;
-
 		this.player = player;
 	}
 

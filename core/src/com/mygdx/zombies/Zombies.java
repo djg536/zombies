@@ -2,6 +2,7 @@ package com.mygdx.zombies;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -21,6 +22,10 @@ public class Zombies extends Game {
 	public static BitmapFont titleFont;
 	public static BitmapFont pointsFont;
 	public static BitmapFont creditsFont;
+	public static Sound soundShoot;
+	public static Sound soundSelect;
+	public static Sound soundLaser;
+	public static Sound soundSword;
 	private StateManager sm;
 
 	// Collision masks. Can OR these together to combine.
@@ -47,6 +52,10 @@ public class Zombies extends Game {
 		titleFont = Zombies.GenerateFont("Amatic-Bold.ttf", 150);
 		pointsFont = Zombies.GenerateFont("KaushanScript-Regular.otf", 50);
 		creditsFont = Zombies.GenerateFont("SourceSansPro-Regular.otf", 50);
+		soundShoot = Gdx.audio.newSound(Gdx.files.internal("sounds/gun.wav"));
+		//soundSword = Gdx.audio.newSound(Gdx.files.internal("sounds/sword.flac"));
+		//soundSelect = Gdx.audio.newSound(Gdx.files.internal("sounds/select.wav"));
+		//soundLaser = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
 	}
 
 	@Override
@@ -64,6 +73,9 @@ public class Zombies extends Game {
 		titleFont.dispose();
 		pointsFont.dispose();
 		creditsFont.dispose();
+		soundShoot.dispose();
+		//soundSelect.dispose();
+		//soundLaser.dispose();
 	}
 
 	@Override

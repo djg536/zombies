@@ -6,18 +6,16 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.mygdx.zombies.pickups.PickUp;
-import com.mygdx.zombies.pickups.PowerUp;
+import com.mygdx.zombies.items.MeleeWeapon;
+import com.mygdx.zombies.items.PowerUp;
+import com.mygdx.zombies.items.Weapon;
 import com.mygdx.zombies.states.Level;
 
 import java.lang.Math;
-import java.util.ArrayList;
 
 public class Player extends Entity {
 
@@ -43,10 +41,10 @@ public class Player extends Entity {
 	private SpriteBatch spriteBatch;
 	private SpriteBatch UIBatch;
 	private byte swingStep;
-	private byte swingDirection = -1;
+	private byte swingDirection;
 	
-	private ArrayList<PickUp> weaponsList;
 	private PowerUp powerUp;
+	private Weapon weapon;
 
 	public Player(Level level, int x, int y, int health) {
 		spriteBatch = level.worldBatch;
@@ -55,57 +53,45 @@ public class Player extends Entity {
 		sprite = new Sprite(new Texture(Gdx.files.internal("block.png")));
 		hud = new Sprite(new Texture(Gdx.files.internal("block.png")));
 		this.health = health;
-
-		box2dWorld = level.box2dWorld;
-		body = box2dWorld.createBody(level.mob);
-		final PolygonShape polyShape = new PolygonShape();
-		polyShape.setAsBox(sprite.getWidth() / 2 / Zombies.PhysicsDensity,
-				sprite.getHeight() / 2 / Zombies.PhysicsDensity);
-
+		
 		FixtureDef fixtureDef = new FixtureDef() {
 			{
-				shape = polyShape;
 				density = 40;
 				friction = 0.5f;
 				restitution = 0f;
 				filter.maskBits = Zombies.projectileFilter;
 				filter.categoryBits = Zombies.playerFilter;
 			}
-		};
-
-		body.createFixture(fixtureDef);
-		body.setUserData(new InfoContainer(InfoContainer.BodyID.PLAYER, this));
+		};		
+		GenerateBodyFromSprite(level.box2dWorld, sprite, InfoContainer.BodyID.PLAYER, fixtureDef);
 		body.setTransform(x / Zombies.PhysicsDensity, y / Zombies.PhysicsDensity, 0);
 		body.setLinearDamping(6);
 		body.setFixedRotation(true);
-		polyShape.dispose();
-		
+
 		swingStep = 0;
-		swingDirection = -1;
-		
-		weaponsList = new ArrayList<PickUp>();
+		swingDirection = -1;	
 	}
 	
-	public void AddWeapon(PickUp pickUp) {
-		weaponsList.add(pickUp);
+	public void SetWeapon(Weapon weapon) {
+		this.weapon = weapon;
 	}
 	
 	/**
-	 * @return the absolute rotation of the player's hands in degrees
+	 * @return the relative rotation of the player's hands in degrees
 	 */
 	public float getHandsRotation() {
-		return swingStep*5 + nuAngle;
+		return swingStep*5;
 	}
 	
 	/**
-	 * @return the absolute position of the player's hands
+	 * @return the relative position of the player's hands
 	 */
 	public Vector2 getHandsPosition() {						
-		float offsetX = (float)Math.toDegrees(Math.cos(angleRads + swingStep/10.f))*0.5f;
-		float offsetY = (float)Math.toDegrees(Math.sin(angleRads + swingStep/10.f))*0.5f;
+		float x = (float)Math.toDegrees(Math.cos(angleRads + swingStep/10.f))*0.5f;
+		float y = (float)Math.toDegrees(Math.sin(angleRads + swingStep/10.f))*0.5f;
 		
-		return new Vector2(offsetX-sprite.getWidth()/2 + getPositionX(),
-				offsetY+ getPositionY());
+		return new Vector2(x-sprite.getWidth()/2,
+				y);
 	}
 	
 	public int points() {
@@ -201,33 +187,54 @@ public class Player extends Entity {
 	public boolean isSwinging() {
 		return swingStep > 0 && swingStep < 30;
 	}
-	
-	/**
-	 * Method to deal with hand movement update
-	 */
-	public void swingUpdate() {
-			if(isSwinging())
-				swingStep += swingDirection;
-			else {
-					if(Gdx.input.isButtonPressed(Buttons.RIGHT)){
-						swingDirection *= -1;
-						swingStep+=swingDirection;	
-				}
-			}			
-	}
 
 	public int update(Vector3 mouseCoords) {
+		
+		if (weapon != null) {
+			Vector2 h = getHandsPosition();
+			Vector2 pos = new Vector2(getPositionX() + h.x, getPositionY() + h.y);
+			float rot = nuAngle;
+			if(weapon instanceof MeleeWeapon)
+				swingUpdate();
+			else
+				swingStep=18;
+			rot += getHandsRotation();
+			weapon.update((int)(pos.x),
+					(int)(pos.y), rot);
+			if (Gdx.input.isButtonPressed(Buttons.LEFT))
+				weapon.use();
+		}
+			
+		
 		move();
 		look(mouseCoords);
-		swingUpdate();	
+		
 		sprite.setPosition(getPositionX() - sprite.getWidth() / 2, getPositionY() - sprite.getHeight() / 2);
 		sprite.setRotation(nuAngle);
 		points();
 		return health();
 	}
+	
+	/**
+	 * Method to deal with hand movement update
+	 */
+	public void swingUpdate() {
+		if(isSwinging())
+			swingStep += swingDirection;
+		else {
+				if(Gdx.input.isButtonPressed(Buttons.LEFT)){
+					swingDirection *= -1;
+					swingStep+=swingDirection;	
+			}
+		}		
+	}
 
 	public void render() {
 		sprite.draw(spriteBatch);
+		
+		if(weapon != null) {
+			weapon.render();
+		}
 	}
 
 	public void hudRender() {

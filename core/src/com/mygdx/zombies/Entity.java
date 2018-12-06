@@ -2,7 +2,11 @@ package com.mygdx.zombies;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
@@ -12,6 +16,22 @@ public abstract class Entity {
 
 	protected World box2dWorld;
 	protected Body body;
+	
+	public void GenerateBodyFromSprite(World box2dWorld, Sprite sprite, InfoContainer.BodyID bodyID, FixtureDef fixtureDef) {
+		this.box2dWorld = box2dWorld;
+		body = box2dWorld.createBody(new BodyDef() {
+			{
+				type = BodyDef.BodyType.DynamicBody;
+			}
+		});
+		final PolygonShape polyShape = new PolygonShape();
+		polyShape.setAsBox(sprite.getWidth() / 2 / Zombies.PhysicsDensity,
+				sprite.getHeight() / 2 / Zombies.PhysicsDensity);
+		fixtureDef.shape = polyShape;
+		body.createFixture(fixtureDef);
+		body.setUserData(new InfoContainer(bodyID, this));
+		polyShape.dispose();
+	}
 	
 	public void dispose() {
 		box2dWorld.destroyBody(body);
