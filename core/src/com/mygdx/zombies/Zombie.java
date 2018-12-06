@@ -22,9 +22,19 @@ public class Zombie extends Entity {
 	private int playerY;
 	private int distanceX;
 	private int distanceY;
+	
+	private int directionX;
+	private int directionY;
+	private int normalX;
+	private int normalY;
+	private double angleRads;
+	private float attackAngle;
+	private float wanderAngle;
 
-	private double randomX = 0.3;
-	private double randomY = 0.3;
+	private double randomX = 0.3f;
+	private double randomY = 0.3f;
+	
+	private int last;
 
 	private double distance;
 
@@ -87,41 +97,110 @@ public class Zombie extends Entity {
 		} else if (distanceY == 0) {
 			distance = distanceX;
 		}
-
+		
 		distance = distance * 5;
-
+		
 		if (player.getNoise() > distance) {
-
+			
 			// System.out.println(player.getNoise() + ", " + distance);
-
+			
 			if (playerX > positionX) {
 				body.applyLinearImpulse(new Vector2(0.5f, 0), body.getPosition(), true);
 			} else if (playerX < positionX) {
 				body.applyLinearImpulse(new Vector2(-0.5f, 0), body.getPosition(), true);
 			}
-
+			
 			if (playerY > positionY) {
-				body.applyLinearImpulse(new Vector2(0, 0.5f), body.getPosition(), true);
+				body.applyLinearImpulse(new Vector2(0, 0.5f), body.getPosition(), true);			
+				normalY = positionY + 10;
 			} else if (playerY < positionY) {
-				body.applyLinearImpulse(new Vector2(0, -0.5f), body.getPosition(), true);
+				body.applyLinearImpulse(new Vector2(0, -0.5f), body.getPosition(), true);	
+				normalY = positionY - 10;
 			}
+			
+			// Rotation
+			
+			directionX = playerX - positionX;
+			directionY = playerY - positionY;
+
+			normalX = 0;
+
+			double dotProduct = normalX * directionX + normalY * directionY;
+			double sizeA = (Math.sqrt(normalX * normalX + normalY * normalY));
+			double sizeB = (Math.sqrt(directionX * directionX + directionY * directionY));
+
+			angleRads = Math.acos(dotProduct / (sizeA * sizeB));
+
+			if (playerX > positionX) {
+				angleRads = -angleRads;
+			}
+
+			double angle = Math.toDegrees(angleRads);
+
+			attackAngle = (float) angle;
+			sprite.setRotation(attackAngle);
+			
 		} else {
-			if (player.points() % 6 == 0) {
-
-				double signX = Math.random();
-				double signY = Math.random();
-
-				if (signX >= 0.5) {
-					randomX = -randomX;
+			if ((player.points() % 4 == 0 || player.points() == 0) && player.points() != last) {
+				
+				// generates random number that correlates to one of NINE movement states
+				// N, NE, E, SE, S, SW, W, NW, Stationary
+				// 
+				// Messy: To be revised
+	
+				double angle = Math.random();
+				
+				if(angle > 0 && angle < 0.1) {
+					randomX = 0.2f;
+					randomY = 0.2f;
+					wanderAngle = -45;
 				}
-				if (signY >= 0.5) {
-					randomY = -randomY;
+				if(angle > 0.1 && angle < 0.2) {
+					randomX = 0.2f;
+					randomY = 0;
+					wanderAngle = -90;
 				}
+				if(angle > 0.2 && angle < 0.3) {
+					randomX = 0.2f;
+					randomY = -0.2f;
+					wanderAngle = -135;
+				}
+				if(angle > 0.3 && angle < 0.4) {
+					randomX = 0;
+					randomY = -0.2f;
+					wanderAngle = -180;
+				}
+				if(angle > 0.4 && angle < 0.5) {
+					randomX = -0.2f;
+					randomY = -0.2f;
+					wanderAngle = -225;
+				}
+				if(angle > 0.5 && angle < 0.6) {
+					randomX = -0.2f;
+					randomY = 0;
+					wanderAngle = -270;
+				}
+				if(angle > 0.6 && angle < 0.7) {
+					randomX = -0.2f;
+					randomY = 0.2f;
+					wanderAngle = -315;
+				}
+				if(angle > 0.7 && angle < 0.8) {
+					randomX = 0;
+					randomY = 0.2f;
+					wanderAngle = 0;
+				}
+				if(angle > 0.8) {
+					randomX = 0;
+					randomY = 0;
+				}
+						
+				last = player.points();
 			}
-
-			// System.out.println(randomX + ", " + randomY);
+		
 			body.applyLinearImpulse(new Vector2((float) randomX, (float) randomY), body.getPosition(), true);
-		}
+			sprite.setRotation(wanderAngle);
+		}		
 	}
 
 	public void reverseVelocity() {
