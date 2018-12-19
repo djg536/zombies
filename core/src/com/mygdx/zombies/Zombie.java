@@ -47,6 +47,8 @@ public class Zombie extends Entity {
 
 	private Level level;
 	private Vector2 velocity;
+	
+	boolean inLights;
 
 	public Zombie(Level level, int x, int y, int h, Player player) {
 		
@@ -207,7 +209,7 @@ public class Zombie extends Entity {
 		// Returns true if the player is within distance < 200 of the zombie
 		// and and player is within 90 degrees of the zombie's angle
 		
-		if(distance < 200 && ((zpAngle <= totAngle + 45) || (zpAngle >= totAngle - 45))) {
+		if(((zpAngle <= totAngle + 45) || (zpAngle >= totAngle - 45)) && ((distance < 200) || (inLights == true && distance < 5000))) {
 			return true;
 		}
 		else {
@@ -223,7 +225,8 @@ public class Zombie extends Entity {
 		
 	}
 
-	public void update() {
+	public void update(boolean inLights) {
+		this.inLights = inLights;
 		move();
 		sprite.setPosition(getPositionX() - sprite.getWidth() / 2, getPositionY() - sprite.getHeight() / 2);
 	}

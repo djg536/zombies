@@ -163,7 +163,7 @@ public class Level extends State {
 		box2dWorld.step(1 / 60f, 6, 2);
 
 		for(Zombie zombie : zombiesList) {
-			zombie.update();
+			zombie.update(this.inLights());
 		}
 		
 		Entity.removeDeletionFlagged(zombiesList);
@@ -174,7 +174,7 @@ public class Level extends State {
 		rayHandler.setCombinedMatrix(camera);
 		rayHandler.update();
 
-		return player.update(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0)));
+		return player.update(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0)), this.inLights());
 	}
 
 	@Override

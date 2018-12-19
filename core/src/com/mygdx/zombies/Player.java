@@ -191,7 +191,7 @@ public class Player extends Entity {
 		return swingStep > 0 && swingStep < 30;
 	}
 
-	public int update(Vector3 mouseCoords) {
+	public int update(Vector3 mouseCoords, boolean inLights) {
 		
 		if (weapon != null) {
 			Vector2 h = getHandsPosition();
