@@ -8,10 +8,12 @@ import com.mygdx.zombies.Zombies;
 public class OptionsMenu extends State {
 	private Texture background;
 	private Button back;
+	private Button fullscreen;
 
 	public OptionsMenu() {
 		background = new Texture("backround.jpg");
 		back = new Button(UIBatch, 500, 10, "Back");
+		fullscreen = new Button(UIBatch, 500, 450, "Fullscreen");
 	}
 
 	@Override
@@ -19,6 +21,7 @@ public class OptionsMenu extends State {
 		UIBatch.begin();
 		UIBatch.draw(background, 0, 0);
 		back.render();
+		fullscreen.render();
 		Zombies.titleFont.draw(UIBatch, "Options", 500, 700);
 		UIBatch.end();
 	}

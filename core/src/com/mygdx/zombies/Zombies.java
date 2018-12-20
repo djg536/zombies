@@ -50,7 +50,7 @@ public class Zombies extends Game {
 	public void create() {
 		Box2D.init();
 		sm = new StateManager();
-		mainFont = Zombies.GenerateFont("NESCyrillic.ttf", 70);
+		mainFont = Zombies.GenerateFont("NESCyrillic.ttf", 55);
 		titleFont = Zombies.GenerateFont("Amatic-Bold.ttf", 150);
 		pointsFont = Zombies.GenerateFont("KaushanScript-Regular.otf", 50);
 		creditsFont = Zombies.GenerateFont("SourceSansPro-Regular.otf", 50);

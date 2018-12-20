@@ -42,7 +42,7 @@ public class Button {
 		} else {
 			spriteBatch.draw(texture, positionX, positionY);
 		}
-		Zombies.mainFont.draw(spriteBatch, text, (float) ((positionX + 140) - (text.length() * 17.5)), positionY + 70);
+		Zombies.mainFont.draw(spriteBatch, text, (float) ((positionX + 148) - (text.length() * 14)), positionY + 69);
 		spriteBatch.draw(logo, 1050, 10);
 	}
 
