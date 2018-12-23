@@ -9,30 +9,17 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.zombies.states.Level;
 
 public class Zombie extends Entity {
-	private int speed;
+	private float speed;
 	private int strength;
 	private int health;
 
 	private Sprite sprite;
-	private int rotation;
-	private int positionX;
-	private int positionY;
 
-	private int playerX;
-	private int playerY;
-	private int distanceX;
-	private int distanceY;
-	
-	private int directionX;
-	private int directionY;
-	private int normalX;
-	private int normalY;
 	private double angleRads;
 	private float totAngle;
 	private float wanderAngle;
-	private float zpAngle;
-	
-	private boolean change;
+	private double angleDegrees;
+
 
 	private double randomX;
 	private double randomY;
@@ -46,7 +33,6 @@ public class Zombie extends Entity {
 	private SpriteBatch spriteBatch;
 
 	private Level level;
-	private Vector2 velocity;
 	
 	boolean inLights;
 
@@ -67,9 +53,10 @@ public class Zombie extends Entity {
 		GenerateBodyFromSprite(level.box2dWorld, sprite, InfoContainer.BodyID.ZOMBIE, fixtureDef);
 		body.setTransform(x / Zombies.PhysicsDensity, y / Zombies.PhysicsDensity, 0);
 		body.setLinearDamping(4);
-		velocity = new Vector2(1, 0);
+		body.setFixedRotation(true);
 		
 		health = 5;
+		speed = 0.5f;
 		this.player = player;
 	}
 
@@ -79,65 +66,22 @@ public class Zombie extends Entity {
 
 	protected void move() {
 		
-		// Distance between zombie and player
-		
-		positionX = this.getPositionX();
-		positionY = this.getPositionY();
+		angleRads = Zombies.angleBetweenRads(new Vector2(getPositionX(), getPositionY()),
+									     new Vector2(player.getPositionX(), player.getPositionY()));
+		distance = Zombies.distanceBetween(new Vector2(getPositionX(), getPositionY()),
+									new Vector2(player.getPositionX(), player.getPositionY()));
 
-		playerX = player.getPositionX();
-		playerY = player.getPositionY();
-
-		distanceX = Math.abs(positionX - playerX);
-		distanceY = Math.abs(positionY - playerY);
-
-		if (playerX != positionX && playerY != positionY) {
-			distance = Math.sqrt((distanceX * distanceX) + (distanceY * distanceY));
-		} else if (distanceX == 0) {
-			distance = distanceY;
-		} else if (distanceY == 0) {
-			distance = distanceX;
-		}
-			
-		// Angle between player and zombie
-		
-		directionX = playerX - positionX;
-		directionY = playerY - positionY;
-
-		normalX = 0;
-
-		double dotProduct = normalX * directionX + normalY * directionY;
-		double sizeA = (Math.sqrt(normalX * normalX + normalY * normalY));
-		double sizeB = (Math.sqrt(directionX * directionX + directionY * directionY));
-
-		angleRads = Math.acos(dotProduct / (sizeA * sizeB));
-
-		if (playerX > positionX) {
-			angleRads = -angleRads;
-		}
-
-		double angle = Math.toDegrees(angleRads);
-
-		zpAngle = (float) angle;
+		angleDegrees = Math.toDegrees(angleRads);
 		
 		if (player.getNoise() > distance || this.sight() == true) {
 			
-			if (playerX > positionX) {
-				body.applyLinearImpulse(new Vector2(0.5f, 0), body.getPosition(), true);
-			} else if (playerX < positionX) {
-				body.applyLinearImpulse(new Vector2(-0.5f, 0), body.getPosition(), true);
-			}
+			body.applyLinearImpulse(new Vector2((float) Math.cos(angleRads) * -speed, (float) Math.sin(angleRads) * -speed),
+					body.getPosition(), true);
 			
-			if (playerY > positionY) {
-				body.applyLinearImpulse(new Vector2(0, 0.5f), body.getPosition(), true);			
-				normalY = positionY + 10;
-			} else if (playerY < positionY) {
-				body.applyLinearImpulse(new Vector2(0, -0.5f), body.getPosition(), true);	
-				normalY = positionY - 10;
-			}
 			
-			sprite.setRotation(zpAngle);
+			sprite.setRotation((float) angleDegrees);
 			
-			totAngle = zpAngle; 
+			totAngle = (float) angleDegrees; 
 			
 		} else {
 			if ((player.points() % 4 == 0 || player.points() == 0) && player.points() != last) {
@@ -209,7 +153,7 @@ public class Zombie extends Entity {
 		// Returns true if the player is within distance < 200 of the zombie
 		// and and player is within 90 degrees of the zombie's angle
 		
-		if(((zpAngle <= totAngle + 45) || (zpAngle >= totAngle - 45)) && ((distance < 200) || (inLights == true && distance < 5000))) {
+		if(((angleDegrees <= totAngle + 45) || (angleDegrees >= totAngle - 45)) && ((distance < 200) || (inLights == true && distance < 5000))) {
 			return true;
 		}
 		else {
@@ -249,8 +193,7 @@ public class Zombie extends Entity {
 
 	public void setHealth(int health) {
 		this.health = health;
-		if(health <= 0) {						
+		if(health <= 0)					
 			getInfo().flagForDeletion();
-		}
 	}
 }

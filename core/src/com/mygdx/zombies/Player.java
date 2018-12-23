@@ -26,12 +26,8 @@ public class Player extends Entity {
 	private String pointDisplay = "18110.0";
 	private Sprite sprite;
 
-	private float directionX;
-	private float directionY;
-	private float normalX;
-	private float normalY;
 	private double angleRads;
-	private float nuAngle;
+	private float angleDegrees;
 
 	private float time;
 	private int timer;
@@ -91,8 +87,7 @@ public class Player extends Entity {
 		float x = (float)Math.toDegrees(Math.cos(angleRads + swingStep/10.f))*0.5f;
 		float y = (float)Math.toDegrees(Math.sin(angleRads + swingStep/10.f))*0.5f;
 		
-		return new Vector2(x-sprite.getWidth()/2,
-				y);
+		return new Vector2(x-sprite.getWidth()/2, y);
 	}
 	
 	public int points() {
@@ -139,34 +134,11 @@ public class Player extends Entity {
 	}
 
 	private void look(Vector3 mouseCoords) {
-		int mouseX = (int) mouseCoords.x;
-		int mouseY = (int) mouseCoords.y;
-
-		directionX = mouseX - getPositionX();
-		directionY = mouseY - getPositionY();
-
-		normalX = 0;
-
-		if (mouseY > getPositionY()) {
-			normalY = getPositionY() + 10;
-		} else if (mouseY < getPositionY()) {
-			normalY = getPositionY() - 10;
-		}
-
-		double dotProduct = normalX * directionX + normalY * directionY;
-		double sizeA = (Math.sqrt(normalX * normalX + normalY * normalY));
-		double sizeB = (Math.sqrt(directionX * directionX + directionY * directionY));
-
-		angleRads = Math.acos(dotProduct / (sizeA * sizeB));
-
-		if (mouseX > getPositionX()) {
-			angleRads = -angleRads;
-		}
-
-		double angle = Math.toDegrees(angleRads);
-
-		nuAngle = (float) angle;
-		sprite.setRotation(nuAngle);
+		
+		angleRads = Zombies.angleBetweenRads(new Vector2(getPositionX(), getPositionY()),
+				new Vector2(mouseCoords.x, mouseCoords.y)) + Math.PI/2;
+		angleDegrees = (float) Math.toDegrees(angleRads);
+		sprite.setRotation(angleDegrees);
 	}
 
 	private void move() {
@@ -196,7 +168,7 @@ public class Player extends Entity {
 		if (weapon != null) {
 			Vector2 h = getHandsPosition();
 			Vector2 pos = new Vector2(getPositionX() + h.x, getPositionY() + h.y);
-			float rot = nuAngle;
+			float rot = angleDegrees;
 			if(weapon instanceof MeleeWeapon)
 				swingUpdate();
 			else
@@ -213,7 +185,6 @@ public class Player extends Entity {
 		look(mouseCoords);
 		
 		sprite.setPosition(getPositionX() - sprite.getWidth() / 2, getPositionY() - sprite.getHeight() / 2);
-		sprite.setRotation(nuAngle);
 		points();
 		return health();
 	}
@@ -267,7 +238,7 @@ public class Player extends Entity {
 	}
 	
 	public double getAngleDegrees() {
-		return nuAngle;
+		return angleDegrees;
 	}
 
 	public void setPowerUp(PowerUp powerUp) {
@@ -282,8 +253,7 @@ public class Player extends Entity {
 
 	public void setHealth(int health) {
 		this.health = health;
-		if(health <= 0) {						
+		if(health <= 0)						
 			getInfo().flagForDeletion();
-		}
 	}
 }

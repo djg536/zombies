@@ -69,6 +69,11 @@ public class CustomContactListener implements ContactListener {
 			weaponPickUp.getInfo().flagForDeletion();
 			System.out.println("Player has picked up weapon");
 		}
+		else if (aType == InfoContainer.BodyID.ZOMBIE && bType == InfoContainer.BodyID.NPC) {
+			NPC npc = (NPC)b.getObj();
+			npc.setHealth(npc.getHealth()-1);
+			System.out.println("NPC has contacted zombie");
+		}
 	}
 
 	@Override

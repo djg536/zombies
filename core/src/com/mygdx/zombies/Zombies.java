@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.mygdx.zombies.states.StateManager;
 
@@ -37,7 +38,7 @@ public class Zombies extends Game {
 	public static short projectileFilter = 1;
 	
 
-	public static BitmapFont GenerateFont(String name, int size) {
+	public static BitmapFont generateFont(String name, int size) {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(name));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = size;
@@ -45,15 +46,25 @@ public class Zombies extends Game {
 		generator.dispose();
 		return font;
 	}
+	
+	public static double angleBetweenRads(Vector2 p1, Vector2 p2) {
+		double diffx = p1.x - p2.x;
+		double diffy = p1.y - p2.y;
+		return Math.atan2(diffy, diffx);
+	}
+	
+	public static double distanceBetween(Vector2 p1, Vector2 p2) {
+		return Math.sqrt(Math.pow(p1.x-p2.x, 2) + Math.pow(p1.y-p2.y, 2));
+	}
 
 	@Override
 	public void create() {
 		Box2D.init();
 		sm = new StateManager();
-		mainFont = Zombies.GenerateFont("NESCyrillic.ttf", 55);
-		titleFont = Zombies.GenerateFont("Amatic-Bold.ttf", 150);
-		pointsFont = Zombies.GenerateFont("KaushanScript-Regular.otf", 50);
-		creditsFont = Zombies.GenerateFont("SourceSansPro-Regular.otf", 50);
+		mainFont = Zombies.generateFont("NESCyrillic.ttf", 55);
+		titleFont = Zombies.generateFont("Amatic-Bold.ttf", 150);
+		pointsFont = Zombies.generateFont("KaushanScript-Regular.otf", 50);
+		creditsFont = Zombies.generateFont("SourceSansPro-Regular.otf", 50);
 		soundShoot = Gdx.audio.newSound(Gdx.files.internal("sounds/gun.wav"));
 		soundSwing = Gdx.audio.newSound(Gdx.files.internal("sounds/swing.wav"));
 		soundSelect = Gdx.audio.newSound(Gdx.files.internal("sounds/select.wav"));

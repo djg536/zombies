@@ -14,6 +14,7 @@ import com.mygdx.zombies.items.PowerUp;
 import com.mygdx.zombies.items.Projectile;
 import com.mygdx.zombies.items.RangedWeapon;
 import com.mygdx.zombies.InfoContainer;
+import com.mygdx.zombies.NPC;
 import com.mygdx.zombies.PickUp;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -40,6 +41,7 @@ public class Level extends State {
 
 	private RayHandler rayHandler;
 	private ArrayList<PointLight> lightsList;
+	private ArrayList<NPC> npcList;
 
 	/**
 	 * Constructor for the level
@@ -69,6 +71,7 @@ public class Level extends State {
 		bulletsList = new ArrayList<Projectile>();
 		zombiesList = new ArrayList<Zombie>();
 		pickUpsList = new ArrayList<PickUp>();
+		npcList = new ArrayList<NPC>();
 		
 		pickUpsList.add(new PickUp(this, 200, 300, "pickups/pistol.png",
 				new RangedWeapon(this, 35, "bullet.png", 1.5f, Zombies.soundShoot), InfoContainer.BodyID.WEAPON));
@@ -76,7 +79,7 @@ public class Level extends State {
 		pickUpsList.add(new PickUp(this, 400, 300, "pickups/pistol.png",
 				new RangedWeapon(this, 60, "laser.png", 4, Zombies.soundLaser), InfoContainer.BodyID.WEAPON));
 		
-		pickUpsList.add(new PickUp(this, 200, 350, "sword.png", new MeleeWeapon(worldBatch), InfoContainer.BodyID.WEAPON));
+		pickUpsList.add(new PickUp(this, 200, 200, "sword.png", new MeleeWeapon(worldBatch), InfoContainer.BodyID.WEAPON));
 		
 		pickUpsList.add(new PickUp(this, 200, 400, "pickups/health.png", new PowerUp(0, 2), InfoContainer.BodyID.PICKUP));
 		
@@ -88,6 +91,8 @@ public class Level extends State {
 		camera = new OrthographicCamera();
 		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		box2dWorld.setContactListener(new CustomContactListener());
+		
+		npcList.add(new NPC(this, 400, 200, player));
 	}
 
 	@Override
@@ -100,7 +105,7 @@ public class Level extends State {
 	private void initLights() {
 		//set up lights in corners of the screen
 		rayHandler = new RayHandler(box2dWorld);
-		rayHandler.setAmbientLight(.5f);
+		rayHandler.setAmbientLight(.2f);
 		//rayHandler.useDiffuseLight(true);
 		lightsList = new ArrayList<PointLight>();
 		lightsList.add(new PointLight(rayHandler, 128, Color.FIREBRICK, 512, 80, 80));
@@ -146,6 +151,8 @@ public class Level extends State {
 			bullet.render();
 		for(PickUp pickUp : pickUpsList)
 			pickUp.render();
+		for(NPC npc : npcList)
+			npc.render();
 		
 		worldBatch.end();
 		rayHandler.render();
@@ -162,13 +169,15 @@ public class Level extends State {
 		camera.update();
 		box2dWorld.step(1 / 60f, 6, 2);
 
-		for(Zombie zombie : zombiesList) {
+		for(Zombie zombie : zombiesList)
 			zombie.update(this.inLights());
-		}
+		for(NPC npc : npcList)
+			npc.update();
 		
 		Entity.removeDeletionFlagged(zombiesList);
 		Entity.removeDeletionFlagged(bulletsList);
 		Entity.removeDeletionFlagged(pickUpsList);
+		Entity.removeDeletionFlagged(npcList);
 		//Entity.removeDeletionFlagged(player);
 
 		rayHandler.setCombinedMatrix(camera);

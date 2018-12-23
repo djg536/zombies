@@ -39,7 +39,7 @@ public class RangedWeapon implements Weapon {
 			timerTicks++;
 			Vector2 pos = level.player.getHandsPosition();
 			level.bulletsList.add(new Projectile(level, (int)pos.x + level.player.getPositionX(), (int)pos.y + level.player.getPositionY(),
-					(float)(level.player.getAngleRadians() + Math.PI / 2), bulletSpritePath, bulletSpeed, shootSound));
+					(float)(level.player.getAngleRadians() + Math.PI/2), bulletSpritePath, bulletSpeed, shootSound));
 		}
 	}
 	
