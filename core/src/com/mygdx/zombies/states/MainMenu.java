@@ -41,6 +41,7 @@ public class MainMenu extends State {
 			}
 			if (play.isHover()) {
 				Zombies.soundSelect.play();
+				Zombies.soundAmbientWind.loop();
 				return 1;
 			}
 			if (credits.isHover()) {

@@ -1,5 +1,6 @@
 package com.mygdx.zombies;
 
+import java.util.Random;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -29,6 +30,9 @@ public class Zombies extends Game {
 	public static Sound soundSwing;
 	public static Sound soundAmmo;
 	public static Sound soundPowerUp;
+	public static Sound soundAmbientWind;
+	public static Sound[] soundArrayZombie;
+	public static Random random;
 	private StateManager sm;
 
 	// Collision masks. Can OR these together to combine.
@@ -60,6 +64,8 @@ public class Zombies extends Game {
 	@Override
 	public void create() {
 		Box2D.init();
+		random = new Random();
+		
 		sm = new StateManager();
 		mainFont = Zombies.generateFont("NESCyrillic.ttf", 55);
 		titleFont = Zombies.generateFont("Amatic-Bold.ttf", 150);
@@ -71,6 +77,11 @@ public class Zombies extends Game {
 		soundLaser = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
 		soundAmmo = Gdx.audio.newSound(Gdx.files.internal("sounds/ammo.wav"));
 		soundPowerUp = Gdx.audio.newSound(Gdx.files.internal("sounds/powerup.wav"));
+		soundAmbientWind = Gdx.audio.newSound(Gdx.files.internal("sounds/wind.mp3"));
+		
+		soundArrayZombie = new Sound[8];
+		for(int i = 0; i<soundArrayZombie.length; i++)
+			soundArrayZombie[i] = Gdx.audio.newSound(Gdx.files.internal(String.format("sounds/zombie%d.wav", i+1)));
 	}
 
 	@Override
@@ -94,6 +105,7 @@ public class Zombies extends Game {
 		soundLaser.dispose();
 		soundAmmo.dispose();
 		soundPowerUp.dispose();
+		soundAmbientWind.dispose();
 	}
 
 	@Override

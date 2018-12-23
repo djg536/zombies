@@ -36,6 +36,8 @@ public class Zombie extends Entity {
 	
 	boolean inLights;
 
+	private int noiseTimer;
+
 	public Zombie(Level level, int x, int y, int h, Player player) {
 		
 		//Add sprite
@@ -58,6 +60,7 @@ public class Zombie extends Entity {
 		health = 5;
 		speed = 0.5f;
 		this.player = player;
+		noiseTimer = 300;
 	}
 
 	protected void attack() {
@@ -168,11 +171,22 @@ public class Zombie extends Entity {
 		wanderAngle = wanderAngle - 180;
 		
 	}
+	
+	//Method to update zombie sound effects timer
+	public void noiseStep() {
+		noiseTimer--;
+		if(noiseTimer <= 0) {
+			noiseTimer = Zombies.random.nextInt(2000) + 1000;
+			Zombies.soundArrayZombie[1+Zombies.random.nextInt(Zombies.soundArrayZombie.length-1)]
+					.play(distance < 500 ? 500-(float)distance : 0);
+		}
+	}
 
 	public void update(boolean inLights) {
 		this.inLights = inLights;
 		move();
 		sprite.setPosition(getPositionX() - sprite.getWidth() / 2, getPositionY() - sprite.getHeight() / 2);
+		noiseStep();
 	}
 
 	public int getPositionX() {

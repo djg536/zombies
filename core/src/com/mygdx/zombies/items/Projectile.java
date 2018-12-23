@@ -19,7 +19,7 @@ public class Projectile extends Entity {
 	public Projectile(Level level, int x, int y, float angle, String spritePath, float speed, Sound sound) {
 		
 		//Apply bullet spray
-		angle += Math.random()*0.2f-0.1f;
+		angle += Zombies.random.nextFloat()*0.2f-0.1f;
 		
 		//Add sprite
 		this.spriteBatch = level.worldBatch;
