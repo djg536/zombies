@@ -17,6 +17,9 @@ import com.mygdx.zombies.InfoContainer;
 import com.mygdx.zombies.NPC;
 import com.mygdx.zombies.PickUp;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -50,7 +53,13 @@ public class Level extends State {
 	 * 		- name of .tmx file for tiled grid
 	 */
 	public Level(String path) {
-		super();
+		super();	
+		
+		bulletsList = new ArrayList<Projectile>();
+		zombiesList = new ArrayList<Zombie>();
+		pickUpsList = new ArrayList<PickUp>();
+		npcList = new ArrayList<NPC>();
+			
 		try {
 			String mapFile = String.format("stages/%s.tmx", path);
 
@@ -60,39 +69,67 @@ public class Level extends State {
 			box2dWorld = new World(new Vector2(0, 0), true);
 			box2dDebugRenderer = new Box2DDebugRenderer();
 
-			initLights();
-
 			MapBodyBuilder.buildShapes(map, Zombies.PhysicsDensity / Zombies.WorldScale, box2dWorld);
-
-		} catch (Exception e) {
-			e.printStackTrace();
+			loadObjects();			
+			initLights();
+						
+			camera = new OrthographicCamera();
+			resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			box2dWorld.setContactListener(new CustomContactListener());
 		}
+		catch (Exception e) {
+				e.printStackTrace();
+		}
+	}
+	
+	private void loadObjects() {
+		MapObjects objects = map.getLayers().get("Objects").getObjects();
+		
+		for(MapObject object : objects) {
+			
+			MapProperties p = object.getProperties();
+			int x = ((Float) p.get("x")).intValue();
+			int y = ((Float) p.get("y")).intValue();
 
-		bulletsList = new ArrayList<Projectile>();
-		zombiesList = new ArrayList<Zombie>();
-		pickUpsList = new ArrayList<PickUp>();
-		npcList = new ArrayList<NPC>();
-		
-		pickUpsList.add(new PickUp(this, 200, 300, "pickups/pistol.png",
-				new RangedWeapon(this, 35, "bullet.png", 1.5f, Zombies.soundShoot), InfoContainer.BodyID.WEAPON));
-		
-		pickUpsList.add(new PickUp(this, 400, 300, "pickups/pistol.png",
-				new RangedWeapon(this, 60, "laser.png", 4, Zombies.soundLaser), InfoContainer.BodyID.WEAPON));
-		
-		pickUpsList.add(new PickUp(this, 200, 200, "sword.png", new MeleeWeapon(worldBatch), InfoContainer.BodyID.WEAPON));
-		
-		pickUpsList.add(new PickUp(this, 200, 400, "pickups/health.png", new PowerUp(0, 2), InfoContainer.BodyID.PICKUP));
-		
-		pickUpsList.add(new PickUp(this, 200, 500, "pickups/speed.png", new PowerUp(1, 0), InfoContainer.BodyID.PICKUP));
-		
-		player = new Player(this, 400, 400, 5);
-		zombiesList.add(new Zombie(this, 600, 200, 3, player));
-		zombiesList.add(new Zombie(this, 300, 200, 3, player));
-		camera = new OrthographicCamera();
-		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		box2dWorld.setContactListener(new CustomContactListener());
-		
-		npcList.add(new NPC(this, 400, 200, player));
+			switch(object.getName()) {
+				case "powerUpHealth":
+					pickUpsList.add(new PickUp(this, x, y, "pickups/health.png",
+							new PowerUp(0, 2), InfoContainer.BodyID.PICKUP));
+				break;
+				
+				case "powerUpSpeed":
+					pickUpsList.add(new PickUp(this, x, y, "pickups/speed.png",
+							new PowerUp(1, 0), InfoContainer.BodyID.PICKUP));
+				break;
+				
+				case "lasergun":
+					pickUpsList.add(new PickUp(this, x, y, "pickups/pistol.png",
+							new RangedWeapon(this, 60, "laser.png", 4, Zombies.soundLaser), InfoContainer.BodyID.WEAPON));
+				break;
+				
+				case "pistol":
+					pickUpsList.add(new PickUp(this, x, y, "pickups/pistol.png",
+							new RangedWeapon(this, 35, "bullet.png", 1.5f, Zombies.soundShoot), InfoContainer.BodyID.WEAPON));
+				break;
+				
+				case "sword":
+					pickUpsList.add(new PickUp(this, x, y, "sword.png",
+							new MeleeWeapon(worldBatch), InfoContainer.BodyID.WEAPON));
+				break;
+				
+				case "player":
+					player = new Player(this, x, y, 5);
+				break;
+				
+				case "zombie1":
+					zombiesList.add(new Zombie(this, x, y, 3, player));
+				break;
+				
+				case "NPC":
+					npcList.add(new NPC(this, x, y, player));
+				break;
+			}
+		}
 	}
 
 	@Override

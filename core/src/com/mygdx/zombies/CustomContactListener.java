@@ -17,63 +17,82 @@ public class CustomContactListener implements ContactListener {
 		InfoContainer a = (InfoContainer)bodyA.getUserData();
 		InfoContainer b = (InfoContainer)bodyB.getUserData();
 			
-		//If if a is null, swap.
 		//There should never be a situation where a and b are null,
-		//since only walls are null and they do not collide with each other.
-		if(a == null)
-		{
+		//Only walls are null and they do not collide with each other.
+		InfoContainer.BodyID aType = a == null ? InfoContainer.BodyID.WALL : a.getType();
+		InfoContainer.BodyID bType = b == null ? InfoContainer.BodyID.WALL : b.getType();
+		
+		//Sorted alphabetically so aType before bType
+		if (aType.name().compareTo(bType.name()) >= 0) {
+			InfoContainer.BodyID tempType = aType;
+			aType = bType;
+			bType = tempType;		
+			InfoContainer tempInfoContainer = a;
 			a = b;
-			b = null;
+			b = tempInfoContainer;
 		}
 		
-		InfoContainer.BodyID aType = a.getType();
-		InfoContainer.BodyID bType = b != null ? b.getType() : null;
-
-		if (aType == InfoContainer.BodyID.ZOMBIE && bType == null) {
-			Zombie zombie = (Zombie)a.getObj();
-			zombie.reverseVelocity();
-			System.out.println("Collision between zombie and wall");
-		}
-		else if (aType == InfoContainer.BodyID.ZOMBIE && bType == InfoContainer.BodyID.PROJECTILE) {
-			Zombie zombie = (Zombie)a.getObj();
-			zombie.setHealth(zombie.getHealth()-1);
-			System.out.println("Zombie has been damaged");
-		}
-		else if (aType == InfoContainer.BodyID.PLAYER && bType == InfoContainer.BodyID.ZOMBIE) {
-			Player player = (Player)a.getObj();
-			if (player.isSwinging()) {
-				player.setHealth(player.getHealth()-1);
-				Zombie zombie = (Zombie)b.getObj();
-				zombie.setHealth(zombie.getHealth()-1);
-			}
-			else
-				player.setHealth(player.getHealth()-2);			
-			System.out.println("Player has contacted zombie");
-		}
-		else if (aType == InfoContainer.BodyID.PROJECTILE && bType == null) {
-			Projectile projectile = (Projectile)a.getObj();
-			projectile.getInfo().flagForDeletion();
-			System.out.println("Bullet has hit wall");
-		}
-		else if (aType == InfoContainer.BodyID.PICKUP && bType == InfoContainer.BodyID.PLAYER) {
-			PickUp powerUpPickUp = (PickUp)a.getObj();
-			Player player = (Player)b.getObj();
-			player.setPowerUp((PowerUp)powerUpPickUp.getContainedItem());
-			powerUpPickUp.getInfo().flagForDeletion();
-			System.out.println("Player has picked up item");
-		}
-		else if (aType == InfoContainer.BodyID.WEAPON && bType == InfoContainer.BodyID.PLAYER) {
-			PickUp weaponPickUp = (PickUp)a.getObj();
-			Player player = (Player)b.getObj();
-			player.SetWeapon((Weapon)weaponPickUp.getContainedItem());
-			weaponPickUp.getInfo().flagForDeletion();
-			System.out.println("Player has picked up weapon");
-		}
-		else if (aType == InfoContainer.BodyID.ZOMBIE && bType == InfoContainer.BodyID.NPC) {
-			NPC npc = (NPC)b.getObj();
-			npc.setHealth(npc.getHealth()-1);
-			System.out.println("NPC has contacted zombie");
-		}
+		switch(aType) {
+			case WALL:
+				if (bType == InfoContainer.BodyID.ZOMBIE) {
+					Zombie zombie = (Zombie)b.getObj();
+					zombie.reverseVelocity();
+					System.out.println("Collision between zombie and wall");
+				}
+				break;
+				
+			case PROJECTILE:
+				if (bType == InfoContainer.BodyID.ZOMBIE) {
+					Zombie zombie = (Zombie)b.getObj();
+					zombie.setHealth(zombie.getHealth()-1);
+					System.out.println("Zombie has been damaged");
+				}
+				else if (bType == InfoContainer.BodyID.WALL) {
+					Projectile projectile = (Projectile)a.getObj();
+					projectile.getInfo().flagForDeletion();
+					System.out.println("Bullet has hit wall");
+				}
+				break;
+				
+			case PLAYER:
+				if (bType == InfoContainer.BodyID.ZOMBIE) {
+					Player player = (Player)a.getObj();
+					if (player.isSwinging()) {
+						player.setHealth(player.getHealth()-1);
+						Zombie zombie = (Zombie)b.getObj();
+						zombie.setHealth(zombie.getHealth()-1);
+					}
+					else
+						player.setHealth(player.getHealth()-2);			
+					System.out.println("Player has contacted zombie");
+				}
+				else if (bType == InfoContainer.BodyID.WEAPON) {
+					Player player = (Player)a.getObj();
+					PickUp weaponPickUp = (PickUp)b.getObj();
+					player.SetWeapon((Weapon)weaponPickUp.getContainedItem());
+					weaponPickUp.getInfo().flagForDeletion();
+					System.out.println("Player has picked up weapon");
+				}
+				break;
+				
+			case PICKUP:
+				if (bType == InfoContainer.BodyID.PLAYER) {
+					PickUp powerUpPickUp = (PickUp)a.getObj();
+					Player player = (Player)b.getObj();
+					player.setPowerUp((PowerUp)powerUpPickUp.getContainedItem());
+					powerUpPickUp.getInfo().flagForDeletion();
+					System.out.println("Player has picked up item");
+				}
+				break;
+				
+			case NPC:
+				if (bType == InfoContainer.BodyID.ZOMBIE) {
+					NPC npc = (NPC)a.getObj();
+					npc.setHealth(npc.getHealth()-1);
+					System.out.println("NPC has contacted zombie");
+				}
+				break;
+		}		
 	}
 
 	@Override

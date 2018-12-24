@@ -8,7 +8,7 @@ public class InfoContainer {
 	
 	// Body IDs for collision identification
 	public static enum BodyID {
-		ZOMBIE, PLAYER, LEVEL, PROJECTILE, PICKUP, WEAPON, NPC
+		ZOMBIE, PLAYER, LEVEL, PROJECTILE, PICKUP, WEAPON, NPC, WALL
 	}
 	
 	private BodyID type;
