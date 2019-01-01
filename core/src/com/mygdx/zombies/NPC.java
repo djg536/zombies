@@ -15,7 +15,7 @@ public class NPC extends Entity {
 	private Player player;
 	private int health;
 	
-	public NPC(Level level, int x, int y, Player player) {
+	public NPC(Level level, int x, int y) {
 		
 		//Add sprite
 		spriteBatch = level.worldBatch;
@@ -34,7 +34,7 @@ public class NPC extends Entity {
 		body.setLinearDamping(4);
 		body.setFixedRotation(true);
 				
-		this.player = player;
+		this.player = level.getPlayer();
 		health = 10;
 	}
 	

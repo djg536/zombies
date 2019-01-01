@@ -4,10 +4,12 @@ import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.zombies.Boss1;
 import com.mygdx.zombies.CustomContactListener;
 import com.mygdx.zombies.Entity;
 import com.mygdx.zombies.Player;
 import com.mygdx.zombies.Zombie;
+import com.mygdx.zombies.Enemy;
 import com.mygdx.zombies.Zombies;
 import com.mygdx.zombies.items.MeleeWeapon;
 import com.mygdx.zombies.items.PowerUp;
@@ -32,7 +34,7 @@ public class Level extends State {
 
 
 	public Player player;
-	private ArrayList<Zombie> zombiesList;
+	private ArrayList<Enemy> zombiesList;
 	public ArrayList<Projectile> bulletsList;
 
 	private ArrayList<PickUp> pickUpsList;
@@ -56,7 +58,7 @@ public class Level extends State {
 		super();	
 		
 		bulletsList = new ArrayList<Projectile>();
-		zombiesList = new ArrayList<Zombie>();
+		zombiesList = new ArrayList<Enemy>();
 		pickUpsList = new ArrayList<PickUp>();
 		npcList = new ArrayList<NPC>();
 			
@@ -127,11 +129,19 @@ public class Level extends State {
 				break;
 				
 				case "zombie1":
-					zombiesList.add(new Zombie(this, x, y, 3, player));
+					zombiesList.add(new Zombie(this, x, y, 3));
 				break;
 				
 				case "NPC":
-					npcList.add(new NPC(this, x, y, player));
+					npcList.add(new NPC(this, x, y));
+				break;
+				
+				case "boss1":
+					zombiesList.add(new Boss1(this, x, y));
+				break;
+				
+				default:
+					System.err.println("Error importing stage: unrecognised object");
 				break;
 			}
 		}
@@ -187,7 +197,7 @@ public class Level extends State {
 		worldBatch.setProjectionMatrix(camera.combined);
 		worldBatch.begin();		
 		player.render();	
-		for (Zombie zombie : zombiesList)
+		for (Enemy zombie : zombiesList)
 			zombie.render();
 		for (Projectile bullet : bulletsList)
 			bullet.render();
@@ -211,7 +221,7 @@ public class Level extends State {
 		camera.update();
 		box2dWorld.step(1 / 60f, 6, 2);
 
-		for(Zombie zombie : zombiesList)
+		for(Enemy zombie : zombiesList)
 			zombie.update(this.inLights());
 		for(NPC npc : npcList)
 			npc.update();
@@ -226,6 +236,10 @@ public class Level extends State {
 		rayHandler.update();
 
 		return player.update(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0)), this.inLights());
+	}
+	
+	public Player getPlayer() {
+		return player;
 	}
 
 	@Override

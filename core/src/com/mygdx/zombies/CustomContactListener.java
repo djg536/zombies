@@ -35,7 +35,7 @@ public class CustomContactListener implements ContactListener {
 		switch(aType) {
 			case WALL:
 				if (bType == InfoContainer.BodyID.ZOMBIE) {
-					Zombie zombie = (Zombie)b.getObj();
+					Enemy zombie = (Enemy)b.getObj();
 					zombie.reverseVelocity();
 					System.out.println("Collision between zombie and wall");
 				}
@@ -43,7 +43,7 @@ public class CustomContactListener implements ContactListener {
 				
 			case PROJECTILE:
 				if (bType == InfoContainer.BodyID.ZOMBIE) {
-					Zombie zombie = (Zombie)b.getObj();
+					Enemy zombie = (Enemy)b.getObj();
 					zombie.setHealth(zombie.getHealth()-1);
 					System.out.println("Zombie has been damaged");
 				}
@@ -59,7 +59,7 @@ public class CustomContactListener implements ContactListener {
 					Player player = (Player)a.getObj();
 					if (player.isSwinging()) {
 						player.setHealth(player.getHealth()-1);
-						Zombie zombie = (Zombie)b.getObj();
+						Enemy zombie = (Enemy)b.getObj();
 						zombie.setHealth(zombie.getHealth()-1);
 					}
 					else
