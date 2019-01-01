@@ -105,22 +105,8 @@ public class Player extends Entity {
 	}	
 
 	public double getNoise() {
-		double noise;
-		
-		if (body.getLinearVelocity().x == 0) {
-			noise = Math.abs(body.getLinearVelocity().y);
-		} else if (body.getLinearVelocity().y == 0) {
-			noise = Math.abs(body.getLinearVelocity().x);
-		} else if (Math.abs(body.getLinearVelocity().x) > 0 && Math.abs(body.getLinearVelocity().y) > 0) {
-			noise = Math.sqrt((body.getLinearVelocity().x * body.getLinearVelocity().x)
-					+ (body.getLinearVelocity().y * body.getLinearVelocity().y));
-		} else {
-			noise = 0;
-		}
-			
-		noise = noise * 250;
-
-		return noise;
+		int stealth = powerUp==null ? 1 : powerUp.getStealthBoost()+1;
+		return body.getLinearVelocity().len() / stealth * 250;
 	}
 
 	public int health() {

@@ -94,12 +94,17 @@ public class Level extends State {
 			switch(object.getName()) {
 				case "powerUpHealth":
 					pickUpsList.add(new PickUp(this, x, y, "pickups/health.png",
-							new PowerUp(0, 2), InfoContainer.BodyID.PICKUP));
+							new PowerUp(0, 2, 0), InfoContainer.BodyID.PICKUP));
 				break;
 				
 				case "powerUpSpeed":
 					pickUpsList.add(new PickUp(this, x, y, "pickups/speed.png",
-							new PowerUp(1, 0), InfoContainer.BodyID.PICKUP));
+							new PowerUp(1, 0, 0), InfoContainer.BodyID.PICKUP));
+				break;
+				
+				case "powerUpStealth":
+					pickUpsList.add(new PickUp(this, x, y, "pickups/stealth.png",
+							new PowerUp(0, 0, 1), InfoContainer.BodyID.PICKUP));
 				break;
 				
 				case "lasergun":

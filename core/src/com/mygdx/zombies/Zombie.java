@@ -63,10 +63,6 @@ public class Zombie extends Entity {
 		noiseTimer = 300;
 	}
 
-	protected void attack() {
-
-	}
-
 	protected void move() {
 		
 		angleRads = Zombies.angleBetweenRads(new Vector2(getPositionX(), getPositionY()),
