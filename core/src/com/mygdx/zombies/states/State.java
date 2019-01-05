@@ -6,8 +6,10 @@ public class State {
 
 	public SpriteBatch worldBatch;
 	public SpriteBatch UIBatch;
+	protected StateManager stateManager;
 
-	public State() {
+	public State(StateManager stateManager) {
+		this.stateManager = stateManager;
 		worldBatch = new SpriteBatch();
 		UIBatch = new SpriteBatch();
 	}
@@ -16,8 +18,8 @@ public class State {
 
 	}
 
-	public int update() {
-		return 0;
+	public void update() {
+		
 	}
 
 	public void resize(int width, int height) {

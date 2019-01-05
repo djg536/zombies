@@ -13,7 +13,8 @@ public class MainMenu extends State {
 	private Button credits;
 	private Texture background;
 
-	public MainMenu() {
+	public MainMenu(StateManager stateManager) {
+		super(stateManager);
 		background = new Texture("backround.jpg");
 		play = new Button(UIBatch, 325, 350, "Play");
 		exit = new Button(UIBatch, 675, 150, "Exit");
@@ -34,27 +35,26 @@ public class MainMenu extends State {
 	}
 
 	@Override
-	public int update() {
+	public void update() {
 		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-			if (exit.isHover()) {
-				Gdx.app.exit();
-			}
+			
 			if (play.isHover()) {
 				Zombies.soundSelect.play();
 				Zombies.soundAmbientWind.loop();
-				return 1;
+				stateManager.loadState(new Level(stateManager, "teststage"));
 			}
-			if (credits.isHover()) {
+			else if (credits.isHover()) {
 				Zombies.soundSelect.play();
-				return 2;
+				stateManager.loadState(new CreditsMenu(stateManager));
 			}
-			if (options.isHover()) {
+			else if (options.isHover()) {
 				Zombies.soundSelect.play();
-				return 4;
+				stateManager.loadState(new OptionsMenu(stateManager));
 			}
-
+			else if (exit.isHover()) {
+				Gdx.app.exit();
+			}
 		}
-		return 0;
 	}
 
 	@Override

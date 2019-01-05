@@ -10,7 +10,8 @@ public class OptionsMenu extends State {
 	private Button back;
 	private Button fullscreen;
 
-	public OptionsMenu() {
+	public OptionsMenu(StateManager stateManager) {
+		super(stateManager);
 		background = new Texture("backround.jpg");
 		back = new Button(UIBatch, 500, 10, "Back");
 		fullscreen = new Button(UIBatch, 500, 450, "Fullscreen");
@@ -27,15 +28,12 @@ public class OptionsMenu extends State {
 	}
 
 	@Override
-	public int update() {
+	public void update() {
 		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 			if (back.isHover()) {
 				Zombies.soundSelect.play();
-				return 3;
+				stateManager.loadState(new MainMenu(stateManager));
 			}
-
 		}
-		return 0;
 	}
-
 }

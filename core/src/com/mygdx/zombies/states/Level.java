@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.zombies.Boss1;
 import com.mygdx.zombies.CustomContactListener;
 import com.mygdx.zombies.Entity;
+import com.mygdx.zombies.Gate;
 import com.mygdx.zombies.Player;
 import com.mygdx.zombies.Zombie;
 import com.mygdx.zombies.Enemy;
@@ -24,6 +25,7 @@ import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import java.util.ArrayList;
@@ -54,8 +56,8 @@ public class Level extends State {
 	 * @param path
 	 * 		- name of .tmx file for tiled grid
 	 */
-	public Level(String path) {
-		super();	
+	public Level(StateManager stateManager, String path) {
+		super(stateManager);	
 		
 		bulletsList = new ArrayList<Projectile>();
 		zombiesList = new ArrayList<Enemy>();
@@ -72,15 +74,31 @@ public class Level extends State {
 			box2dDebugRenderer = new Box2DDebugRenderer();
 
 			MapBodyBuilder.buildShapes(map, Zombies.PhysicsDensity / Zombies.WorldScale, box2dWorld);
-			loadObjects();			
+			loadObjects();	
+			loadGates();
 			initLights();
 						
 			camera = new OrthographicCamera();
 			resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			box2dWorld.setContactListener(new CustomContactListener());
+			box2dWorld.setContactListener(new CustomContactListener(stateManager));
 		}
 		catch (Exception e) {
 				e.printStackTrace();
+		}
+	}
+	
+	private void loadGates() {
+		MapObjects objects = map.getLayers().get("Gates").getObjects();
+		
+		for(MapObject object : objects) {
+			
+			MapProperties p = object.getProperties();
+			int x = ((Float) p.get("x")).intValue();
+			int y = ((Float) p.get("y")).intValue();
+			int width = ((Float) p.get("width")).intValue();
+			int height = ((Float) p.get("height")).intValue();
+			
+			new Gate(box2dWorld, new Rectangle(x, y, width, height), "");
 		}
 	}
 	
@@ -111,12 +129,12 @@ public class Level extends State {
 				
 				case "lasergun":
 					pickUpsList.add(new PickUp(this, x, y, "pickups/pistol.png",
-							new RangedWeapon(this, 60, "laser.png", 4, Zombies.soundLaser), InfoContainer.BodyID.WEAPON));
+							new RangedWeapon(this, 60, "laser.png", 10, Zombies.soundLaser), InfoContainer.BodyID.WEAPON));
 				break;
 				
 				case "pistol":
 					pickUpsList.add(new PickUp(this, x, y, "pickups/pistol.png",
-							new RangedWeapon(this, 35, "bullet.png", 1.5f, Zombies.soundShoot), InfoContainer.BodyID.WEAPON));
+							new RangedWeapon(this, 35, "bullet.png", 15, Zombies.soundShoot), InfoContainer.BodyID.WEAPON));
 				break;
 				
 				case "sword":
@@ -216,7 +234,7 @@ public class Level extends State {
 	}
 
 	@Override
-	public int update() {
+	public void update() {
 		camera.position.set(player.getPositionX(), player.getPositionY(), 0);
 		camera.update();
 		box2dWorld.step(1 / 60f, 6, 2);
@@ -235,7 +253,9 @@ public class Level extends State {
 		rayHandler.setCombinedMatrix(camera);
 		rayHandler.update();
 
-		return player.update(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0)), this.inLights());
+		if(player.update(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0)), this.inLights()) <= 0) {
+			stateManager.loadState(new Level(stateManager, "teststage"));
+		}
 	}
 	
 	public Player getPlayer() {

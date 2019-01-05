@@ -57,7 +57,7 @@ public class NPC extends Entity {
 		float angleDegrees = (float) Math.toDegrees(angleRads);
 		
 		if(distance > 150)
-			body.applyLinearImpulse((float) Math.cos(angleDegrees)*0.2f, (float) Math.sin(angleDegrees)*0.2f,
+			body.applyLinearImpulse((float) Math.cos(angleDegrees)*0.8f, (float) Math.sin(angleDegrees)*0.8f,
 					bodyPosition.x, bodyPosition.y, true);
 		
 		sprite.setPosition(bodyPosition.x - sprite.getWidth()/2, bodyPosition.y - sprite.getHeight()/2);

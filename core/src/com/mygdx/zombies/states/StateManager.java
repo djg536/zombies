@@ -5,9 +5,7 @@ public class StateManager {
 	private State currentState;
 
 	public StateManager() {
-		// currentState = new Level("teststage");
-		currentState = new MainMenu();
-		// currentState = new CreditsMenu();
+		currentState = new MainMenu(this);
 	}
 
 	public void resize(int width, int height) {
@@ -20,18 +18,7 @@ public class StateManager {
 	}
 
 	public void gameLoop() {
-		if (currentState.update() == 1) {
-			loadState(new Level("teststage"));
-		}
-		if (currentState.update() == 2) {
-			loadState(new CreditsMenu());
-		}
-		if (currentState.update() == 3) {
-			loadState(new MainMenu());
-		}
-		if (currentState.update() == 4) {
-			loadState(new OptionsMenu());
-		}
+		currentState.update();
 	}
 
 	public void render() {

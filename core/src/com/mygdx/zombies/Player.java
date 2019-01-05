@@ -77,15 +77,15 @@ public class Player extends Entity {
 	 * @return the relative rotation of the player's hands in degrees
 	 */
 	public float getHandsRotation() {
-		return swingStep*5;
+		return swingStep*15;
 	}
 	
 	/**
 	 * @return the relative position of the player's hands
 	 */
 	public Vector2 getHandsPosition() {						
-		float x = (float)Math.toDegrees(Math.cos(angleRads + swingStep/10.f))*0.5f;
-		float y = (float)Math.toDegrees(Math.sin(angleRads + swingStep/10.f))*0.5f;
+		float x = (float)Math.toDegrees(Math.cos(angleRads + swingStep/3.f))*0.5f;
+		float y = (float)Math.toDegrees(Math.sin(angleRads + swingStep/3.f))*0.5f;
 		
 		return new Vector2(x-sprite.getWidth()/2, y);
 	}
@@ -112,11 +112,7 @@ public class Player extends Entity {
 	public int health() {
 		if (Gdx.input.isKeyPressed(Keys.SPACE))
 			health -= 1;
-		if (health <= 0) {
-			System.out.println("RESTART");
-			return 1;
-		}
-		return 0;
+		return health;
 	}
 
 	private void look(Vector3 mouseCoords) {
@@ -132,21 +128,21 @@ public class Player extends Entity {
 		Vector2 playerPosition = body.getPosition();
 		
 		if (Gdx.input.isKeyPressed(Keys.W))
-			body.applyLinearImpulse(new Vector2(0, 1*speedBoost), playerPosition, true);
+			body.applyLinearImpulse(new Vector2(0, 3*speedBoost), playerPosition, true);
 		else if (Gdx.input.isKeyPressed(Keys.S))
-			body.applyLinearImpulse(new Vector2(0, -1*speedBoost), playerPosition, true);
+			body.applyLinearImpulse(new Vector2(0, -3*speedBoost), playerPosition, true);
 
 		if (Gdx.input.isKeyPressed(Keys.A))
-			body.applyLinearImpulse(new Vector2(-1*speedBoost, 0), playerPosition, true);
+			body.applyLinearImpulse(new Vector2(-3*speedBoost, 0), playerPosition, true);
 		else if (Gdx.input.isKeyPressed(Keys.D))
-			body.applyLinearImpulse(new Vector2(1*speedBoost, 0), playerPosition, true);
+			body.applyLinearImpulse(new Vector2(3*speedBoost, 0), playerPosition, true);
 	}
 	
 	/**
 	 * @return true if hands are moving
 	 */
 	public boolean isSwinging() {
-		return swingStep > 0 && swingStep < 30;
+		return swingStep > 0 && swingStep < 10;
 	}
 
 	public int update(Vector3 mouseCoords, boolean inLights) {
@@ -158,7 +154,7 @@ public class Player extends Entity {
 			if(weapon instanceof MeleeWeapon)
 				swingUpdate();
 			else
-				swingStep=18;
+				swingStep=6;
 			rot += getHandsRotation();
 			weapon.update((int)(pos.x),
 					(int)(pos.y), rot);

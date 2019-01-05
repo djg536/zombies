@@ -8,8 +8,16 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.zombies.items.PowerUp;
 import com.mygdx.zombies.items.Projectile;
 import com.mygdx.zombies.items.Weapon;
+import com.mygdx.zombies.states.EndScreen;
+import com.mygdx.zombies.states.StateManager;
 
 public class CustomContactListener implements ContactListener {
+	
+	private StateManager stateManager;
+	
+	public CustomContactListener(StateManager stateManager) {
+		this.stateManager = stateManager;
+	}
 	
 	public void beginContact(Contact contact) {
 		Body bodyA = contact.getFixtureA().getBody();
@@ -33,11 +41,21 @@ public class CustomContactListener implements ContactListener {
 		}
 		
 		switch(aType) {
+		
 			case WALL:
 				if (bType == InfoContainer.BodyID.ZOMBIE) {
 					Enemy zombie = (Enemy)b.getObj();
 					zombie.reverseVelocity();
 					System.out.println("Collision between zombie and wall");
+				}
+				break;
+				
+			case GATE:
+				if(bType == InfoContainer.BodyID.PLAYER) {
+					Gate gate = (Gate)a.getObj();
+					//gate.getDestination();
+					stateManager.loadState(new EndScreen(stateManager));
+					System.out.println("Player has contacted gate");
 				}
 				break;
 				

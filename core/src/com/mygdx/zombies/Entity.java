@@ -1,8 +1,8 @@
 package com.mygdx.zombies;
 
 import java.util.ArrayList;
-
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -17,7 +17,7 @@ public abstract class Entity {
 	protected World box2dWorld;
 	protected Body body;
 	
-	public void GenerateBodyFromSprite(World box2dWorld, Sprite sprite, InfoContainer.BodyID bodyID, FixtureDef fixtureDef) {
+	public void GenerateBodyRectangle(Vector2 dimens, World box2dWorld, InfoContainer.BodyID bodyID, FixtureDef fixtureDef) {
 		this.box2dWorld = box2dWorld;
 		body = box2dWorld.createBody(new BodyDef() {
 			{
@@ -25,12 +25,18 @@ public abstract class Entity {
 			}
 		});
 		final PolygonShape polyShape = new PolygonShape();
-		polyShape.setAsBox(sprite.getWidth() / 2 / Zombies.PhysicsDensity,
-				sprite.getHeight() / 2 / Zombies.PhysicsDensity);
+		polyShape.setAsBox(dimens.x, dimens.y);
 		fixtureDef.shape = polyShape;
 		body.createFixture(fixtureDef);
 		body.setUserData(new InfoContainer(bodyID, this));
 		polyShape.dispose();
+	}
+	
+	public void GenerateBodyFromSprite(World box2dWorld, Sprite sprite, InfoContainer.BodyID bodyID, FixtureDef fixtureDef) {
+		
+		Vector2 dimens = new Vector2(sprite.getWidth() / 2 / Zombies.PhysicsDensity,
+				sprite.getHeight() / 2 / Zombies.PhysicsDensity);
+		GenerateBodyRectangle(dimens, box2dWorld, bodyID, fixtureDef);
 	}
 	
 	public void dispose() {

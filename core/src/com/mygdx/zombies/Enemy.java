@@ -47,7 +47,7 @@ public class Enemy extends Entity {
 		body.setFixedRotation(true);
 		
 		health = h;
-		speed = 0.5f;
+		speed = 2;
 		this.player = level.getPlayer();
 		noiseTimer = 300;
 	}
