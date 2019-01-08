@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.zombies.Zombies;
+import com.mygdx.zombies.states.StateManager.StateID;
 
 public class OptionsMenu extends State {
 	private Texture background;
@@ -32,7 +33,7 @@ public class OptionsMenu extends State {
 		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 			if (back.isHover()) {
 				Zombies.soundSelect.play();
-				stateManager.loadState(new MainMenu(stateManager));
+				stateManager.loadState(StateID.MAINMENU);
 			}
 		}
 	}

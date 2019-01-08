@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.zombies.Zombies;
+import com.mygdx.zombies.states.StateManager.StateID;
 
 public class EndScreen extends State {
 
@@ -17,7 +18,7 @@ public class EndScreen extends State {
 	@Override
 	public void update() {
 		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-			stateManager.loadState(new MainMenu(stateManager));
+			stateManager.loadState(StateID.MAINMENU);
 		}
 	}
 	

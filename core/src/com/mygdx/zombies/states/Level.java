@@ -16,6 +16,7 @@ import com.mygdx.zombies.items.MeleeWeapon;
 import com.mygdx.zombies.items.PowerUp;
 import com.mygdx.zombies.items.Projectile;
 import com.mygdx.zombies.items.RangedWeapon;
+import com.mygdx.zombies.states.StateManager.StateID;
 import com.mygdx.zombies.InfoContainer;
 import com.mygdx.zombies.NPC;
 import com.mygdx.zombies.PickUp;
@@ -97,8 +98,9 @@ public class Level extends State {
 			int y = ((Float) p.get("y")).intValue();
 			int width = ((Float) p.get("width")).intValue();
 			int height = ((Float) p.get("height")).intValue();
+			String destination = (String) p.get("Destination");
 			
-			new Gate(box2dWorld, new Rectangle(x, y, width, height), "");
+			new Gate(box2dWorld, new Rectangle(x, y, width, height), StateID.valueOf(destination));
 		}
 	}
 	
@@ -129,12 +131,12 @@ public class Level extends State {
 				
 				case "lasergun":
 					pickUpsList.add(new PickUp(this, x, y, "pickups/pistol.png",
-							new RangedWeapon(this, 60, "laser.png", 10, Zombies.soundLaser), InfoContainer.BodyID.WEAPON));
+							new RangedWeapon(this, 10, "laser.png", 50, Zombies.soundLaser), InfoContainer.BodyID.WEAPON));
 				break;
 				
 				case "pistol":
 					pickUpsList.add(new PickUp(this, x, y, "pickups/pistol.png",
-							new RangedWeapon(this, 35, "bullet.png", 15, Zombies.soundShoot), InfoContainer.BodyID.WEAPON));
+							new RangedWeapon(this, 15, "bullet.png", 20, Zombies.soundShoot), InfoContainer.BodyID.WEAPON));
 				break;
 				
 				case "sword":

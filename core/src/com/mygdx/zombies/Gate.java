@@ -4,12 +4,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.zombies.states.StateManager.StateID;
 
 public class Gate extends Entity {
 	
-	private String destination;
+	private StateID destination;
 	
-	public Gate(World world, Rectangle rect, String destination) {
+	public Gate(World world, Rectangle rect, StateID destination) {
 		this.destination = destination;
 		
 		FixtureDef fixtureDef = new FixtureDef() {
@@ -23,7 +24,7 @@ public class Gate extends Entity {
 		body.setTransform(rect.x / Zombies.PhysicsDensity, rect.y / Zombies.PhysicsDensity, 0);
 	}
 	
-	public String getDestination() {
+	public StateID getDestination() {
 		return destination;
 	}
 }

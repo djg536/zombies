@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.zombies.Zombies;
+import com.mygdx.zombies.states.StateManager.StateID;
 
 public class MainMenu extends State {
 
@@ -41,15 +42,15 @@ public class MainMenu extends State {
 			if (play.isHover()) {
 				Zombies.soundSelect.play();
 				Zombies.soundAmbientWind.loop();
-				stateManager.loadState(new Level(stateManager, "teststage"));
+				stateManager.loadState(StateID.STAGE1);
 			}
 			else if (credits.isHover()) {
 				Zombies.soundSelect.play();
-				stateManager.loadState(new CreditsMenu(stateManager));
+				stateManager.loadState(StateID.CREDITSMENU);
 			}
 			else if (options.isHover()) {
 				Zombies.soundSelect.play();
-				stateManager.loadState(new OptionsMenu(stateManager));
+				stateManager.loadState(StateID.OPTIONSMENU);
 			}
 			else if (exit.isHover()) {
 				Gdx.app.exit();

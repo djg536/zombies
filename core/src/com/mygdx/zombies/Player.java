@@ -61,7 +61,7 @@ public class Player extends Entity {
 		};		
 		GenerateBodyFromSprite(level.box2dWorld, sprite, InfoContainer.BodyID.PLAYER, fixtureDef);
 		body.setTransform(x / Zombies.PhysicsDensity, y / Zombies.PhysicsDensity, 0);
-		body.setLinearDamping(6);
+		body.setLinearDamping(20);
 		body.setFixedRotation(true);
 
 		swingStep = 0;
@@ -128,14 +128,14 @@ public class Player extends Entity {
 		Vector2 playerPosition = body.getPosition();
 		
 		if (Gdx.input.isKeyPressed(Keys.W))
-			body.applyLinearImpulse(new Vector2(0, 3*speedBoost), playerPosition, true);
+			body.applyLinearImpulse(new Vector2(0, 10*speedBoost), playerPosition, true);
 		else if (Gdx.input.isKeyPressed(Keys.S))
-			body.applyLinearImpulse(new Vector2(0, -3*speedBoost), playerPosition, true);
+			body.applyLinearImpulse(new Vector2(0, -10*speedBoost), playerPosition, true);
 
 		if (Gdx.input.isKeyPressed(Keys.A))
-			body.applyLinearImpulse(new Vector2(-3*speedBoost, 0), playerPosition, true);
+			body.applyLinearImpulse(new Vector2(-10*speedBoost, 0), playerPosition, true);
 		else if (Gdx.input.isKeyPressed(Keys.D))
-			body.applyLinearImpulse(new Vector2(3*speedBoost, 0), playerPosition, true);
+			body.applyLinearImpulse(new Vector2(10*speedBoost, 0), playerPosition, true);
 	}
 	
 	/**

@@ -8,7 +8,6 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.zombies.items.PowerUp;
 import com.mygdx.zombies.items.Projectile;
 import com.mygdx.zombies.items.Weapon;
-import com.mygdx.zombies.states.EndScreen;
 import com.mygdx.zombies.states.StateManager;
 
 public class CustomContactListener implements ContactListener {
@@ -53,8 +52,7 @@ public class CustomContactListener implements ContactListener {
 			case GATE:
 				if(bType == InfoContainer.BodyID.PLAYER) {
 					Gate gate = (Gate)a.getObj();
-					//gate.getDestination();
-					stateManager.loadState(new EndScreen(stateManager));
+					stateManager.loadState(gate.getDestination());
 					System.out.println("Player has contacted gate");
 				}
 				break;
@@ -109,6 +107,10 @@ public class CustomContactListener implements ContactListener {
 					npc.setHealth(npc.getHealth()-1);
 					System.out.println("NPC has contacted zombie");
 				}
+				break;
+				
+			default:
+				System.err.println("Error: Unrecognised collision event");
 				break;
 		}		
 	}

@@ -13,7 +13,11 @@
   </data>
  </layer>
  <objectgroup id="8" name="Gates">
-  <object id="39" name="gate1" x="445" y="543" width="135" height="63"/>
+  <object id="39" name="gate1" type="Gate" x="445" y="543" width="135" height="63">
+   <properties>
+    <property name="Destination" value="ENDSCREEN"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="4" name="Obstacles">
   <object id="10" name="border" x="0" y="0" width="640" height="32"/>
