@@ -49,7 +49,8 @@ public class Level extends State {
 
 	private RayHandler rayHandler;
 	private ArrayList<PointLight> lightsList;
-	private ArrayList<NPC> npcList;
+	private ArrayList<NPC> npcsList;
+	private ArrayList<Gate> gatesList;
 
 	/**
 	 * Constructor for the level
@@ -57,13 +58,14 @@ public class Level extends State {
 	 * @param path
 	 * 		- name of .tmx file for tiled grid
 	 */
-	public Level(StateManager stateManager, String path) {
+	public Level(StateManager stateManager, String path, int spawnEntryID) {
 		super(stateManager);	
 		
 		bulletsList = new ArrayList<Projectile>();
 		zombiesList = new ArrayList<Enemy>();
 		pickUpsList = new ArrayList<PickUp>();
-		npcList = new ArrayList<NPC>();
+		npcsList = new ArrayList<NPC>();
+		gatesList = new ArrayList<Gate>();
 			
 		try {
 			String mapFile = String.format("stages/%s.tmx", path);
@@ -75,10 +77,12 @@ public class Level extends State {
 			box2dDebugRenderer = new Box2DDebugRenderer();
 
 			MapBodyBuilder.buildShapes(map, Zombies.PhysicsDensity / Zombies.WorldScale, box2dWorld);
-			loadObjects();	
+					
 			loadGates();
-			initLights();
-						
+			loadPlayer(spawnEntryID);
+			loadObjects();		
+			initLights();			
+								
 			camera = new OrthographicCamera();
 			resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			box2dWorld.setContactListener(new CustomContactListener(stateManager));
@@ -86,6 +90,28 @@ public class Level extends State {
 		catch (Exception e) {
 				e.printStackTrace();
 		}
+	}
+	
+	private void loadPlayer(int spawnEntryID) {
+		int x, y;
+		x = y = 100;
+				
+		if(spawnEntryID != -1)
+		{
+			MapObjects objects = map.getLayers().get("Entries").getObjects();
+			//Parse entries until one with the correct ID is found
+			//Then get x and y coordinates and supply to player
+			for(MapObject object : objects) {	
+				MapProperties p = object.getProperties();
+				int entryID = (Integer) p.get("EntryID");		
+				if(entryID==spawnEntryID) {
+					x = ((Float) p.get("x")).intValue();
+					y = ((Float) p.get("y")).intValue();			
+					break;
+				}
+			}
+		}	
+		player = new Player(this, x, y, 5);
 	}
 	
 	private void loadGates() {
@@ -99,8 +125,11 @@ public class Level extends State {
 			int width = ((Float) p.get("width")).intValue();
 			int height = ((Float) p.get("height")).intValue();
 			String destination = (String) p.get("Destination");
+			int entryID = (Integer) p.get("EntryID");
 			
-			new Gate(box2dWorld, new Rectangle(x, y, width, height), StateID.valueOf(destination));
+			Gate gate = new Gate(box2dWorld, new Rectangle(x, y, width, height),
+					StateID.valueOf(destination), entryID);
+			gatesList.add(gate);
 		}
 	}
 	
@@ -144,16 +173,12 @@ public class Level extends State {
 							new MeleeWeapon(worldBatch), InfoContainer.BodyID.WEAPON));
 				break;
 				
-				case "player":
-					player = new Player(this, x, y, 5);
-				break;
-				
 				case "zombie1":
 					zombiesList.add(new Zombie(this, x, y, 3));
 				break;
 				
 				case "NPC":
-					npcList.add(new NPC(this, x, y));
+					npcsList.add(new NPC(this, x, y));
 				break;
 				
 				case "boss1":
@@ -184,8 +209,6 @@ public class Level extends State {
 		lightsList.add(new PointLight(rayHandler, 128, Color.FIREBRICK, 512, 80, 880));
 		lightsList.add(new PointLight(rayHandler, 128, Color.FIREBRICK, 512, 880, 80));
 		lightsList.add(new PointLight(rayHandler, 128, Color.BLUE, 512, 300, 300));
-		System.out.println(lightsList.get(0).getPosition());
-		System.out.println(lightsList.get(0).getDistance());
 	}
 
 	public ArrayList<PointLight> getLights() {
@@ -223,7 +246,7 @@ public class Level extends State {
 			bullet.render();
 		for(PickUp pickUp : pickUpsList)
 			pickUp.render();
-		for(NPC npc : npcList)
+		for(NPC npc : npcsList)
 			npc.render();
 		
 		worldBatch.end();
@@ -243,20 +266,21 @@ public class Level extends State {
 
 		for(Enemy zombie : zombiesList)
 			zombie.update(this.inLights());
-		for(NPC npc : npcList)
+		for(NPC npc : npcsList)
 			npc.update();
 		
 		Entity.removeDeletionFlagged(zombiesList);
 		Entity.removeDeletionFlagged(bulletsList);
 		Entity.removeDeletionFlagged(pickUpsList);
-		Entity.removeDeletionFlagged(npcList);
+		Entity.removeDeletionFlagged(npcsList);
 		//Entity.removeDeletionFlagged(player);
 
 		rayHandler.setCombinedMatrix(camera);
 		rayHandler.update();
 
-		if(player.update(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0)), this.inLights()) <= 0) {
-			stateManager.loadState(new Level(stateManager, "teststage"));
+		// this.inLights()
+		if(player.update(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0))) <= 0) {
+			stateManager.loadState(new Level(stateManager, "teststage", -1));
 		}
 	}
 	

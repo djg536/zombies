@@ -5,7 +5,7 @@ public class StateManager {
 	private State currentState;
 	
 	public static enum StateID {
-		MAINMENU, CREDITSMENU, OPTIONSMENU, ENDSCREEN, STAGE1
+		MAINMENU, CREDITSMENU, OPTIONSMENU, ENDSCREEN, STAGE1, STAGE2
 	}
 
 	public StateManager() {
@@ -22,6 +22,10 @@ public class StateManager {
 	}
 	
 	public void loadState(StateID stateID) {
+		loadState(stateID, -1);
+	}
+	
+	public void loadState(StateID stateID, int entryID) {
 		State tempState = null;
 		switch(stateID) {
 			case MAINMENU:
@@ -37,7 +41,10 @@ public class StateManager {
 				tempState = new EndScreen(this);
 				break;
 			case STAGE1:
-				tempState = new Level(this, "teststage");
+				tempState = new Level(this, "teststage", entryID);
+				break;
+			case STAGE2:
+				tempState = new Level(this, "teststage2", entryID);
 				break;
 			default:
 				System.err.println("Error: Unrecognised gate destination");

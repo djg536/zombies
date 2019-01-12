@@ -145,7 +145,7 @@ public class Player extends Entity {
 		return swingStep > 0 && swingStep < 10;
 	}
 
-	public int update(Vector3 mouseCoords, boolean inLights) {
+	public int update(Vector3 mouseCoords) {
 		
 		if (weapon != null) {
 			Vector2 h = getHandsPosition();

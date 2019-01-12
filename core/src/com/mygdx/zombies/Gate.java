@@ -9,9 +9,11 @@ import com.mygdx.zombies.states.StateManager.StateID;
 public class Gate extends Entity {
 	
 	private StateID destination;
+	private int entryID;
 	
-	public Gate(World world, Rectangle rect, StateID destination) {
+	public Gate(World world, Rectangle rect, StateID destination, int entryID) {
 		this.destination = destination;
+		this.entryID = entryID;
 		
 		FixtureDef fixtureDef = new FixtureDef() {
 			{
@@ -26,5 +28,9 @@ public class Gate extends Entity {
 	
 	public StateID getDestination() {
 		return destination;
+	}
+	
+	public int getEntryID() {
+		return entryID;
 	}
 }
