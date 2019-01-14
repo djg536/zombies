@@ -46,7 +46,7 @@ public class Player extends Entity {
 		spriteBatch = level.worldBatch;
 		UIBatch = level.UIBatch;
 
-		sprite = new Sprite(new Texture(Gdx.files.internal("block.png")));
+		sprite = new Sprite(new Texture(Gdx.files.internal("zombie/player_unequipped.png")));
 		hud = new Sprite(new Texture(Gdx.files.internal("block.png")));
 		this.health = health;
 		
@@ -128,14 +128,14 @@ public class Player extends Entity {
 		Vector2 playerPosition = body.getPosition();
 		
 		if (Gdx.input.isKeyPressed(Keys.W))
-			body.applyLinearImpulse(new Vector2(0, 10*speedBoost), playerPosition, true);
+			body.applyLinearImpulse(new Vector2(0, 25*speedBoost), playerPosition, true);
 		else if (Gdx.input.isKeyPressed(Keys.S))
-			body.applyLinearImpulse(new Vector2(0, -10*speedBoost), playerPosition, true);
+			body.applyLinearImpulse(new Vector2(0, -25*speedBoost), playerPosition, true);
 
 		if (Gdx.input.isKeyPressed(Keys.A))
-			body.applyLinearImpulse(new Vector2(-10*speedBoost, 0), playerPosition, true);
+			body.applyLinearImpulse(new Vector2(-25*speedBoost, 0), playerPosition, true);
 		else if (Gdx.input.isKeyPressed(Keys.D))
-			body.applyLinearImpulse(new Vector2(10*speedBoost, 0), playerPosition, true);
+			body.applyLinearImpulse(new Vector2(25*speedBoost, 0), playerPosition, true);
 	}
 	
 	/**
@@ -148,6 +148,7 @@ public class Player extends Entity {
 	public int update(Vector3 mouseCoords) {
 		
 		if (weapon != null) {
+			sprite.setTexture(new Texture(Gdx.files.internal("zombie/player_equipped.png")));
 			Vector2 h = getHandsPosition();
 			Vector2 pos = new Vector2(getPositionX() + h.x, getPositionY() + h.y);
 			float rot = angleDegrees;
