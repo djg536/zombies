@@ -32,7 +32,7 @@ public class CreditsMenu extends State {
 
 	@Override
 	public void update() {
-		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Gdx.input.justTouched()) {
 			if (back.isHover()) {
 				Zombies.soundSelect.play();
 				stateManager.loadState(StateID.MAINMENU);

@@ -46,7 +46,7 @@ public class Player extends Entity {
 		spriteBatch = level.worldBatch;
 		UIBatch = level.UIBatch;
 
-		sprite = new Sprite(new Texture(Gdx.files.internal("zombie/player_unequipped.png")));
+		sprite = new Sprite(new Texture(Gdx.files.internal("player/player1_unequipped.png")));
 		hud = new Sprite(new Texture(Gdx.files.internal("block.png")));
 		this.health = health;
 		
@@ -69,6 +69,7 @@ public class Player extends Entity {
 	}
 	
 	public void SetWeapon(Weapon weapon) {
+		sprite.setTexture(new Texture(Gdx.files.internal("player/player1_equipped.png")));
 		Zombies.soundAmmo.play();
 		this.weapon = weapon;
 	}
@@ -148,7 +149,6 @@ public class Player extends Entity {
 	public int update(Vector3 mouseCoords) {
 		
 		if (weapon != null) {
-			sprite.setTexture(new Texture(Gdx.files.internal("zombie/player_equipped.png")));
 			Vector2 h = getHandsPosition();
 			Vector2 pos = new Vector2(getPositionX() + h.x, getPositionY() + h.y);
 			float rot = angleDegrees;

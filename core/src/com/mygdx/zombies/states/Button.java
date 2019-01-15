@@ -2,6 +2,7 @@ package com.mygdx.zombies.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.zombies.Zombies;
@@ -9,21 +10,53 @@ import com.mygdx.zombies.Zombies;
 public class Button {
 
 	private SpriteBatch spriteBatch;
-	private Texture texture;
+	private Sprite mainSprite;
+	private Sprite hoverSprite;
 	private int positionX;
 	private int positionY;
 	private String text;
-	private Texture hoverTexture;
-	private Texture logo;
+	private int mode;
+	private String[] modeTextArray;
 
-	public Button(SpriteBatch spriteBatch, int x, int y, String draw) {
+	public Button(SpriteBatch spriteBatch, int x, int y, String text) {
+		this.text = text;	
+		setup(spriteBatch, x, y);
+	}
+	
+	public Button(SpriteBatch spriteBatch, int x, int y, String[] modeTextArray) {
+		mode = 0;
+		text = modeTextArray[mode];
+		this.modeTextArray = modeTextArray;
+		setup(spriteBatch, x, y);
+	}
+	
+	private void setup(SpriteBatch spriteBatch, int x, int y) {
 		this.spriteBatch = spriteBatch;
-		texture = new Texture("button.jpg");
-		hoverTexture = new Texture("hover_button.jpg");
+		
+		mainSprite = new Sprite(new Texture(Gdx.files.internal("button.jpg")));
+		mainSprite.setPosition(x, y);
+		hoverSprite = new Sprite(new Texture(Gdx.files.internal("hover_button.jpg")));
+		hoverSprite.setPosition(x, y);
+		
 		positionX = x;
 		positionY = y;
-		text = draw;
-		logo = new Texture("logo.png");
+	}
+	
+	public void nextMode() {
+		mode++;
+		if(mode >= modeTextArray.length) {
+			mode = 0;
+		}
+		text = modeTextArray[mode];
+	}
+	
+	public int getMode() {
+		return mode;
+	}
+	
+	public void setMode(int mode) {
+		this.mode = mode;
+		text = modeTextArray[mode];
 	}
 
 	public boolean isHover() {
@@ -32,18 +65,18 @@ public class Button {
 		float adjustedMouseY = (Gdx.graphics.getHeight() - Gdx.input.getY()) * Zombies.InitialWindowHeight
 				/ (float) Gdx.graphics.getHeight();
 
-		return new Rectangle(positionX, positionY, texture.getWidth(), texture.getHeight()).contains(adjustedMouseX,
-				adjustedMouseY);
+		return new Rectangle(positionX, positionY, mainSprite.getWidth(), mainSprite.getHeight())
+				.contains(adjustedMouseX, adjustedMouseY);
 	}
 
 	public void render() {
-		if (isHover() == true) {
-			spriteBatch.draw(hoverTexture, positionX, positionY);
+		
+		if (isHover()) {
+			hoverSprite.draw(spriteBatch);
 		} else {
-			spriteBatch.draw(texture, positionX, positionY);
+			mainSprite.draw(spriteBatch);
 		}
 		Zombies.mainFont.draw(spriteBatch, text, (float) ((positionX + 148) - (text.length() * 14)), positionY + 69);
-		spriteBatch.draw(logo, 1050, 10);
 	}
 
 	public void update() {
@@ -52,8 +85,6 @@ public class Button {
 	}
 
 	public void dispose() {
-		hoverTexture.dispose();
-		texture.dispose();
 		spriteBatch.dispose();
 	}
 }
