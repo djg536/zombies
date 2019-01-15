@@ -12,7 +12,7 @@ public class CreditsMenu extends State {
 
 	public CreditsMenu(StateManager stateManager) {
 		super(stateManager);
-		background = new Texture("backround.jpg");
+		background = new Texture("background.jpg");
 		back = new Button(UIBatch, 500, 10, "Back");
 	}
 

@@ -14,7 +14,7 @@ public class OptionsMenu extends State {
 
 	public OptionsMenu(StateManager stateManager) {
 		super(stateManager);
-		background = new Texture("backround.jpg");
+		background = new Texture("background.jpg");
 		back = new Button(UIBatch, 500, 10, "Back");
 		fullscreen = new Button(UIBatch, 500, 450, new String[] { "Fullscreen", "Windowed" });
 		if(Gdx.graphics.isFullscreen()) {
