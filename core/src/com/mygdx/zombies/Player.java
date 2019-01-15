@@ -190,7 +190,7 @@ public class Player extends Entity {
 		
 		sprite.setPosition(getPositionX() - sprite.getWidth() / 2, getPositionY() - sprite.getHeight() / 2);
 		points();
-		return health();
+		return getHealth();
 	}
 	
 	/**
