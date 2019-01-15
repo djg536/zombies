@@ -18,6 +18,7 @@ public class RangedWeapon implements Weapon {
 	private String bulletSpritePath;
 	private Sound shootSound;
 	private float bulletSpeed;
+	public static boolean firing = false;
 	
 	public RangedWeapon(Level level, int shootDelay, String bulletSpritePath, float bulletSpeed, Sound shootSound) {
 		
@@ -33,6 +34,10 @@ public class RangedWeapon implements Weapon {
 		timerTicks = 0;
 	}
 	
+	public static boolean isFiring() {
+		return firing;
+	}
+	
 	@Override
 	public void use() {
 		if(timerTicks == 0) {
@@ -40,6 +45,7 @@ public class RangedWeapon implements Weapon {
 			Vector2 pos = level.player.getHandsPosition();
 			level.bulletsList.add(new Projectile(level, (int)pos.x + level.player.getPositionX(), (int)pos.y + level.player.getPositionY(),
 					(float)(level.player.getAngleRadians() + Math.PI/2), bulletSpritePath, bulletSpeed, shootSound));
+			firing = true;
 		}
 	}
 	
@@ -53,6 +59,7 @@ public class RangedWeapon implements Weapon {
 			timerTicks++;
 		if(timerTicks >= shootDelay) {
 			timerTicks = 0;
+			firing = false;
 		}
 	}
 

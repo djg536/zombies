@@ -95,6 +95,10 @@ public class Level extends State {
 		}
 	}
 	
+	public static boolean gunFire() {
+		return RangedWeapon.isFiring();
+	}
+	
 	private void loadPlayer(int spawnEntryID) {
 		int x, y;
 		x = y = 300;
@@ -135,7 +139,7 @@ public class Level extends State {
 			gatesList.add(gate);
 		}
 	}
-	
+
 	private void loadObjects() {
 		MapObjects objects = map.getLayers().get("Objects").getObjects();
 		
@@ -300,7 +304,7 @@ public class Level extends State {
 		camera.position.set(player.getPositionX(), player.getPositionY(), 0);
 		camera.update();
 		box2dWorld.step(1 / 60f, 6, 2);
-
+		
 		for(Enemy zombie : zombiesList)
 			zombie.update(this.inLights());
 		for(NPC npc : npcsList)
