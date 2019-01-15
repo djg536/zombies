@@ -45,15 +45,15 @@ public class MainMenu extends State {
 			if (play.isHover()) {
 				Zombies.soundSelect.play();
 				Zombies.soundAmbientWind.loop();
-				stateManager.loadState(StateID.PLAYERSELECTMENU);
+				stateManager.loadState(StateID.PLAYERSELECTMENU, null);
 			}
 			else if (credits.isHover()) {
 				Zombies.soundSelect.play();
-				stateManager.loadState(StateID.CREDITSMENU);
+				stateManager.loadState(StateID.CREDITSMENU, null);
 			}
 			else if (options.isHover()) {
 				Zombies.soundSelect.play();
-				stateManager.loadState(StateID.OPTIONSMENU);
+				stateManager.loadState(StateID.OPTIONSMENU, null);
 			}
 			else if (exit.isHover()) {
 				Gdx.app.exit();

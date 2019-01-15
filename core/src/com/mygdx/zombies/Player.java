@@ -41,12 +41,15 @@ public class Player extends Entity {
 	
 	private PowerUp powerUp;
 	private Weapon weapon;
+	private String playerPath;
 
-	public Player(Level level, int x, int y, int health) {
+	public Player(Level level, int x, int y, int health, String playerPath) {
 		spriteBatch = level.worldBatch;
 		UIBatch = level.UIBatch;
+		
+		this.playerPath = playerPath;
 
-		sprite = new Sprite(new Texture(Gdx.files.internal("player/player1_unequipped.png")));
+		sprite = new Sprite(new Texture(Gdx.files.internal(playerPath+"_unequipped_fat.png")));
 		hud = new Sprite(new Texture(Gdx.files.internal("player/heart.png")));
 		this.health = health;
 		
@@ -69,7 +72,7 @@ public class Player extends Entity {
 	}
 	
 	public void SetWeapon(Weapon weapon) {
-		sprite.setTexture(new Texture(Gdx.files.internal("player/player1_equipped.png")));
+		sprite.setTexture(new Texture(Gdx.files.internal(playerPath+"_equipped.png")));
 		Zombies.soundAmmo.play();
 		this.weapon = weapon;
 	}
