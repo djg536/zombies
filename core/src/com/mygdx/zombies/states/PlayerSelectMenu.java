@@ -20,9 +20,9 @@ public class PlayerSelectMenu extends State {
 	{
 		super(stateManager);
 		
-		player1 = new Button(UIBatch, 50, 50, "Player 1");
-		player2 = new Button(UIBatch, 500, 50, "Player 2");
-		player3 = new Button(UIBatch, 950, 50, "Player 3");
+		player1 = new Button(UIBatch, 50, 50, "Comp Sci");
+		player2 = new Button(UIBatch, 500, 50, "Chemistry");
+		player3 = new Button(UIBatch, 950, 50, "Footballer");
 		sprite1 = new Sprite(new Texture(Gdx.files.internal("player/player1_unequipped_fat.png")));
 		sprite1.setPosition(150, 400);
 		sprite1.scale(3);
@@ -37,6 +37,7 @@ public class PlayerSelectMenu extends State {
 	@Override
 	public void render() {
 		UIBatch.begin();
+		Zombies.mainFont.draw(UIBatch, "Select a Student", 450, 700);
 		player1.render();
 		player2.render();
 		player3.render();

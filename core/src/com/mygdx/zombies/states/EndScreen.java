@@ -18,7 +18,7 @@ public class EndScreen extends State {
 	@Override
 	public void update() {
 		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Gdx.input.justTouched()) {
-			stateManager.loadState(StateID.MAINMENU, null);
+			stateManager.loadState(StateID.MAINMENU, 0);
 		}
 	}
 	

@@ -97,7 +97,7 @@ public class Level extends State {
 	
 	private void loadPlayer(int spawnEntryID) {
 		int x, y;
-		x = y = 100;
+		x = y = 300;
 				
 		if(spawnEntryID != -1)
 		{

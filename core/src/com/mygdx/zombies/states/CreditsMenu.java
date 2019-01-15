@@ -35,7 +35,7 @@ public class CreditsMenu extends State {
 		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Gdx.input.justTouched()) {
 			if (back.isHover()) {
 				Zombies.soundSelect.play();
-				stateManager.loadState(StateID.MAINMENU);
+				stateManager.loadState(StateID.MAINMENU, 0);
 			}
 		}
 	}
