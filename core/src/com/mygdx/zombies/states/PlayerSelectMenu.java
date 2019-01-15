@@ -52,15 +52,15 @@ public class PlayerSelectMenu extends State {
 		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Gdx.input.justTouched()) {
 				if (player1.isHover()) {
 					Zombies.soundSelect.play();
-					stateManager.loadState(StateID.TESTSTAGE1, 1);
+					stateManager.loadState(StateID.STAGE1, 1);
 				}
 				else if (player2.isHover()) {
 					Zombies.soundSelect.play();
-					stateManager.loadState(StateID.TESTSTAGE1, 2);
+					stateManager.loadState(StateID.STAGE2, 2);
 				}
 				else if (player3.isHover()) {
 					Zombies.soundSelect.play();
-					stateManager.loadState(StateID.TESTSTAGE1, 3);
+					stateManager.loadState(StateID.STAGE3, 3);
 				}
 		}
 	}

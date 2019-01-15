@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="2018.11.14" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="21" nextobjectid="37">
+<map version="1.2" tiledversion="2018.11.14" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="22" nextobjectid="58">
  <tileset firstgid="1" source="Assets/Tileset.tsx"/>
  <tileset firstgid="1041" source="Assets/Roads.tsx"/>
  <layer id="1" name="Background" width="50" height="50">
@@ -794,5 +794,71 @@
  </objectgroup>
  <objectgroup id="18" name="Gates"/>
  <objectgroup id="19" name="Entries"/>
- <objectgroup id="20" name="Objects"/>
+ <objectgroup id="20" name="Objects">
+  <object id="37" name="lasergun" x="656" y="728">
+   <point/>
+  </object>
+  <object id="38" name="boss1" x="629" y="395">
+   <point/>
+  </object>
+  <object id="39" name="powerUpStealth" x="1286" y="1335">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="21" name="Lights">
+  <object id="40" name="red" x="129" y="1059">
+   <point/>
+  </object>
+  <object id="41" name="red" x="125" y="961">
+   <point/>
+  </object>
+  <object id="42" name="red" x="129" y="1153">
+   <point/>
+  </object>
+  <object id="43" name="red" x="128" y="1346">
+   <point/>
+  </object>
+  <object id="44" name="red" x="128" y="1247">
+   <point/>
+  </object>
+  <object id="45" name="red" x="382" y="1120">
+   <point/>
+  </object>
+  <object id="46" name="red" x="257" y="1123">
+   <point/>
+  </object>
+  <object id="47" name="red" x="512" y="1122">
+   <point/>
+  </object>
+  <object id="48" name="street" x="162" y="1538">
+   <point/>
+  </object>
+  <object id="49" name="street" x="445" y="1394">
+   <point/>
+  </object>
+  <object id="50" name="street" x="697" y="1543">
+   <point/>
+  </object>
+  <object id="51" name="street" x="918" y="1392">
+   <point/>
+  </object>
+  <object id="52" name="street" x="1124" y="1549">
+   <point/>
+  </object>
+  <object id="53" name="street" x="1328" y="1393">
+   <point/>
+  </object>
+  <object id="54" name="red" x="448" y="1217">
+   <point/>
+  </object>
+  <object id="55" name="red" x="1504" y="1188">
+   <point/>
+  </object>
+  <object id="56" name="red" x="1504" y="1312">
+   <point/>
+  </object>
+  <object id="57" name="red" x="1407" y="1314">
+   <point/>
+  </object>
+ </objectgroup>
 </map>
