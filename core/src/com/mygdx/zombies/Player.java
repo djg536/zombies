@@ -43,7 +43,9 @@ public class Player extends Entity {
 	private Weapon weapon;
 	private int playerNumber;
 	private String playerPath;
-	private int charStealth;
+	private int charStealth = 1;
+	private int charSpeed = 1;
+	private int charDamage = 1;
 
 	public Player(Level level, int x, int y, int health, int playerNumber) {
 		spriteBatch = level.worldBatch;
@@ -54,17 +56,17 @@ public class Player extends Entity {
 		if(playerNumber == 1) {
 			playerPath = "player/player1";
 			sprite = new Sprite(new Texture(Gdx.files.internal(playerPath+"_unequipped_fat.png")));
-			charStealth = 1;
+			charDamage = 1;
 		}
 		else if(playerNumber == 2) {
 			playerPath = "player/player2";
 			sprite = new Sprite(new Texture(Gdx.files.internal(playerPath+"_unequipped_fat.png")));
-			charStealth = 3;
+			charStealth = 5;
 		}
 		else if(playerNumber == 3) {
 			playerPath = "player/player3";
 			sprite = new Sprite(new Texture(Gdx.files.internal(playerPath+"_unequipped_fat.png")));
-			charStealth = 1;
+			charSpeed = 3;
 		}
 		
 		hud = new Sprite(new Texture(Gdx.files.internal("player/heart.png")));
@@ -89,7 +91,7 @@ public class Player extends Entity {
 	}
 	
 	public void SetWeapon(Weapon weapon) {
-		sprite.setTexture(new Texture(Gdx.files.internal(playerPath+"_equipped.png")));
+		sprite.setTexture(new Texture(Gdx.files.internal(playerPath+"_equipped_fat.png")));
 		Zombies.soundAmmo.play();
 		this.weapon = weapon;
 	}
@@ -149,14 +151,14 @@ public class Player extends Entity {
 		Vector2 playerPosition = body.getPosition();
 		
 		if (Gdx.input.isKeyPressed(Keys.W))
-			body.applyLinearImpulse(new Vector2(0, 25*speedBoost), playerPosition, true);
+			body.applyLinearImpulse(new Vector2(0, 25*speedBoost*charSpeed), playerPosition, true);
 		else if (Gdx.input.isKeyPressed(Keys.S))
-			body.applyLinearImpulse(new Vector2(0, -25*speedBoost), playerPosition, true);
+			body.applyLinearImpulse(new Vector2(0, -25*speedBoost*charSpeed), playerPosition, true);
 
 		if (Gdx.input.isKeyPressed(Keys.A))
-			body.applyLinearImpulse(new Vector2(-25*speedBoost, 0), playerPosition, true);
+			body.applyLinearImpulse(new Vector2(-25*speedBoost*charSpeed, 0), playerPosition, true);
 		else if (Gdx.input.isKeyPressed(Keys.D))
-			body.applyLinearImpulse(new Vector2(25*speedBoost, 0), playerPosition, true);
+			body.applyLinearImpulse(new Vector2(25*speedBoost*charSpeed, 0), playerPosition, true);
 	}
 	
 	/**
@@ -258,5 +260,9 @@ public class Player extends Entity {
 		this.health = health;
 		if(health <= 0)						
 			getInfo().flagForDeletion();
+	}
+	
+	public int getDamage() {
+		return charDamage;
 	}
 }
