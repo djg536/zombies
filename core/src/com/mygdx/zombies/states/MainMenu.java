@@ -13,6 +13,7 @@ public class MainMenu extends State {
 	private Button options;
 	private Button credits;
 	private Texture background;
+	private Texture logo;
 
 	public MainMenu(StateManager stateManager) {
 		super(stateManager);
@@ -21,6 +22,7 @@ public class MainMenu extends State {
 		exit = new Button(UIBatch, 675, 150, "Exit");
 		options = new Button(UIBatch, 675, 350, "Options");
 		credits = new Button(UIBatch, 325, 150, "Credits");
+		logo = new Texture("logo.png");
 	}
 
 	@Override
@@ -32,17 +34,18 @@ public class MainMenu extends State {
 		options.render();
 		credits.render();
 		Zombies.titleFont.draw(UIBatch, "Silence Of The Lamberts", 225, 650);
-		UIBatch.end();
+		UIBatch.draw(logo, 1050, 10);
+		UIBatch.end();		
 	}
 
 	@Override
 	public void update() {
-		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Gdx.input.justTouched()) {
 			
 			if (play.isHover()) {
 				Zombies.soundSelect.play();
 				Zombies.soundAmbientWind.loop();
-				stateManager.loadState(StateID.STAGE1);
+				stateManager.loadState(StateID.PLAYERSELECTMENU);
 			}
 			else if (credits.isHover()) {
 				Zombies.soundSelect.play();
@@ -65,5 +68,6 @@ public class MainMenu extends State {
 		// options.dispose();
 		// credits.dispose();
 		// background.dispose();
+		logo.dispose();
 	}
 }

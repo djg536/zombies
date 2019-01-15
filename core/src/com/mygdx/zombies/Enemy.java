@@ -63,11 +63,11 @@ public class Enemy extends Entity {
 		
 		if (player.getNoise() > distance || this.sight() == true) {
 			
-			body.applyLinearImpulse(new Vector2((float) Math.cos(angleRads) * -speed, (float) Math.sin(angleRads) * -speed),
+			body.applyLinearImpulse(new Vector2(2*((float) Math.cos(angleRads) * -speed), 2*((float) Math.sin(angleRads) * -speed)),
 					body.getPosition(), true);
 			
 			
-			sprite.setRotation((float) angleDegrees);
+			sprite.setRotation((float) angleDegrees+90);
 			
 			totAngle = (float) angleDegrees; 
 			

@@ -1,6 +1,7 @@
 package com.mygdx.zombies.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.zombies.Zombies;
@@ -15,7 +16,10 @@ public class OptionsMenu extends State {
 		super(stateManager);
 		background = new Texture("backround.jpg");
 		back = new Button(UIBatch, 500, 10, "Back");
-		fullscreen = new Button(UIBatch, 500, 450, "Fullscreen");
+		fullscreen = new Button(UIBatch, 500, 450, new String[] { "Fullscreen", "Windowed" });
+		if(Gdx.graphics.isFullscreen()) {
+			fullscreen.setMode(1);
+		}
 	}
 
 	@Override
@@ -30,8 +34,20 @@ public class OptionsMenu extends State {
 
 	@Override
 	public void update() {
-		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-			if (back.isHover()) {
+		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Gdx.input.justTouched()) {
+			if (fullscreen.isHover()) {
+				
+				Zombies.soundSelect.play();	
+				fullscreen.nextMode();			
+				if(fullscreen.getMode() == 0) {
+					Gdx.graphics.setWindowedMode(Zombies.InitialWindowWidth, Zombies.InitialWindowHeight);
+				}
+				else {
+					DisplayMode mode = Gdx.graphics.getDisplayMode();
+					Gdx.graphics.setFullscreenMode(mode);
+				}
+			}
+			else if (back.isHover()) {
 				Zombies.soundSelect.play();
 				stateManager.loadState(StateID.MAINMENU);
 			}
