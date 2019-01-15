@@ -56,17 +56,17 @@ public class Player extends Entity {
 		if(playerNumber == 1) {
 			playerPath = "player/player1";
 			sprite = new Sprite(new Texture(Gdx.files.internal(playerPath+"_unequipped_fat.png")));
-			charDamage = (float) 0.3;
+			charDamage = (float) 0.5;
 		}
 		else if(playerNumber == 2) {
 			playerPath = "player/player2";
 			sprite = new Sprite(new Texture(Gdx.files.internal(playerPath+"_unequipped_fat.png")));
-			charStealth = 5;
+			charStealth = 2;
 		}
 		else if(playerNumber == 3) {
 			playerPath = "player/player3";
 			sprite = new Sprite(new Texture(Gdx.files.internal(playerPath+"_unequipped_fat.png")));
-			charSpeed = 3;
+			charSpeed = 2;
 		}
 		
 		hud = new Sprite(new Texture(Gdx.files.internal("player/heart.png")));
@@ -135,12 +135,6 @@ public class Player extends Entity {
 	public double getNoise() {
 		int stealth = powerUp==null ? 1 : powerUp.getStealthBoost()+1;
 		return body.getLinearVelocity().len() / (stealth*charStealth) * 250;
-	}
-
-	public float health() {
-		if (Gdx.input.isKeyPressed(Keys.SPACE))
-			health -= 1;
-		return health;
 	}
 
 	private void look(Vector3 mouseCoords) {
