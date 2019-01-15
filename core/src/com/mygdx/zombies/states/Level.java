@@ -52,7 +52,7 @@ public class Level extends State {
 	private ArrayList<NPC> npcsList;
 	private ArrayList<Gate> gatesList;
 	
-	public String playerPath;
+	private int playerNumber;
 
 	/**
 	 * Constructor for the level
@@ -60,7 +60,7 @@ public class Level extends State {
 	 * @param path
 	 * 		- name of .tmx file for tiled grid
 	 */
-	public Level(StateManager stateManager, String path, int spawnEntryID, String playerPath) {
+	public Level(StateManager stateManager, String path, int spawnEntryID, int playerNumber) {
 		super(stateManager);	
 		
 		bulletsList = new ArrayList<Projectile>();
@@ -68,7 +68,7 @@ public class Level extends State {
 		pickUpsList = new ArrayList<PickUp>();
 		npcsList = new ArrayList<NPC>();
 		gatesList = new ArrayList<Gate>();
-		this.playerPath = playerPath;
+		this.playerNumber = playerNumber;
 			
 		try {
 			String mapFile = String.format("stages/%s.tmx", path);
@@ -88,7 +88,7 @@ public class Level extends State {
 								
 			camera = new OrthographicCamera();
 			resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			box2dWorld.setContactListener(new CustomContactListener(stateManager, playerPath));
+			box2dWorld.setContactListener(new CustomContactListener(stateManager, playerNumber));
 		}
 		catch (Exception e) {
 				e.printStackTrace();
@@ -114,7 +114,7 @@ public class Level extends State {
 				}
 			}
 		}	
-		player = new Player(this, x, y, 5, playerPath);
+		player = new Player(this, x, y, 5, playerNumber);
 	}
 	
 	private void loadGates() {
@@ -283,7 +283,7 @@ public class Level extends State {
 
 		// this.inLights()
 		if(player.update(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0))) <= 0) {
-			stateManager.loadState(new Level(stateManager, "teststage", -1, playerPath));
+			stateManager.loadState(new Level(stateManager, "teststage", -1, playerNumber));
 		}
 	}
 	

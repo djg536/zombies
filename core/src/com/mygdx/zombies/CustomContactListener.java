@@ -13,11 +13,11 @@ import com.mygdx.zombies.states.StateManager;
 public class CustomContactListener implements ContactListener {
 	
 	private StateManager stateManager;
-	private String playerPath;
+	private int playerNumber;
 	
-	public CustomContactListener(StateManager stateManager, String playerPath) {
+	public CustomContactListener(StateManager stateManager, int playerNumber) {
 		this.stateManager = stateManager;
-		this.playerPath = playerPath;
+		this.playerNumber = playerNumber;
 	}
 	
 	public void beginContact(Contact contact) {
@@ -54,7 +54,7 @@ public class CustomContactListener implements ContactListener {
 			case GATE:
 				if(bType == InfoContainer.BodyID.PLAYER) {
 					Gate gate = (Gate)a.getObj();
-					stateManager.loadState(gate.getDestination(), gate.getEntryID(), playerPath);
+					stateManager.loadState(gate.getDestination(), gate.getEntryID(), playerNumber);
 					System.out.println("Player has contacted gate");
 				}
 				break;
