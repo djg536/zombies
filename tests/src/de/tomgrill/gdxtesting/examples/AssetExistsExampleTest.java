@@ -41,7 +41,7 @@ public class AssetExistsExampleTest extends GameTest {
 	@Test
 	public void backgroundFileExists() {
 		assertTrue("This test will only pass when the badlogic.jpg file coming with a new project setup has not been deleted.",
-				Gdx.files.internal("../core/assets/backround.jpg").exists());
+				Gdx.files.internal("../core/assets/background.jpg").exists());
 	}
 	@Test
 	public void textureTest() {

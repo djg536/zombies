@@ -17,7 +17,7 @@ public class MainMenu extends State {
 
 	public MainMenu(StateManager stateManager) {
 		super(stateManager);
-		background = new Texture("backround.jpg");
+		background = new Texture("background.jpg");
 		play = new Button(UIBatch, 325, 350, "Play");
 		exit = new Button(UIBatch, 675, 150, "Exit");
 		options = new Button(UIBatch, 675, 350, "Options");
