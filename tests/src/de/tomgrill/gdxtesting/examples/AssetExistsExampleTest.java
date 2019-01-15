@@ -20,30 +20,26 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import box2dLight.Light;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.zombies.Player;
-import com.mygdx.zombies.states.Level;
+import com.mygdx.zombies.items.PowerUp;
+import de.tomgrill.gdxtesting.GameTest;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import com.badlogic.gdx.Gdx;
 
-import de.tomgrill.gdxtesting.GdxTestRunner;
+import org.mockito.Mockito;
 
-import javax.xml.soap.Text;
-
-@RunWith(GdxTestRunner.class)
-public class AssetExistsExampleTest {
+//@RunWith(GdxTestRunner.class)
+public class AssetExistsExampleTest extends GameTest {
 
 	@Test
-	public void badlogicLogoFileExists() {
+	public void backgroundFileExists() {
 		assertTrue("This test will only pass when the badlogic.jpg file coming with a new project setup has not been deleted.",
 				Gdx.files.internal("../core/assets/backround.jpg").exists());
 	}
@@ -54,10 +50,9 @@ public class AssetExistsExampleTest {
 	}
 	@Test
 	public void lightsTest() {
-		World box2dWorld = new World(new Vector2(0,0), true);
-		//RayHandler rayHandler = new RayHandler(box2dWorld);
-		//PointLight light = new PointLight(rayHandler,128, Color.FIREBRICK,0,0,0);
-		assertNotNull(box2dWorld);
+		Player player = Mockito.mock(Player.class);
+		player.setHealth(3);
+		assertEquals("Should output 3", 3, player.getHealth());
 	}
 
 }
