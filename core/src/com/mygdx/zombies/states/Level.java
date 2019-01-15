@@ -143,7 +143,10 @@ public class Level extends State {
 			String destination = (String) p.get("Destination");
 			int entryID = (Integer) p.get("EntryID");
 			
-			Gate gate = new Gate(box2dWorld, new Rectangle(x*Zombies.WorldScale, y*Zombies.WorldScale, width, height),
+			x*= Zombies.WorldScale;
+			y*= Zombies.WorldScale;
+			
+			Gate gate = new Gate(box2dWorld, new Rectangle(x, y, width, height),
 					StateID.valueOf(destination), entryID);
 			gatesList.add(gate);
 		}
@@ -157,6 +160,9 @@ public class Level extends State {
 			MapProperties p = object.getProperties();
 			int x = ((Float) p.get("x")).intValue();
 			int y = ((Float) p.get("y")).intValue();
+			
+			x*= Zombies.WorldScale;
+			y*= Zombies.WorldScale;
 
 			switch(object.getName()) {
 				case "powerUpHealth":

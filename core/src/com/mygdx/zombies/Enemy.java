@@ -41,7 +41,7 @@ public class Enemy extends Entity {
 			}
 		};
 		GenerateBodyFromSprite(level.box2dWorld, sprite, InfoContainer.BodyID.ZOMBIE, fixtureDef);
-		body.setTransform(x * Zombies.WorldScale / Zombies.PhysicsDensity, y * Zombies.WorldScale / Zombies.PhysicsDensity, 0);
+		body.setTransform(x / Zombies.PhysicsDensity, y / Zombies.PhysicsDensity, 0);
 		body.setLinearDamping(4);
 		body.setFixedRotation(true);
 
