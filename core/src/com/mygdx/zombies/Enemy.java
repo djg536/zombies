@@ -82,43 +82,43 @@ public class Enemy extends Entity {
 				double rand = Math.random();
 				
 				if(rand > 0 && rand < 0.1) {
-					randomX = 0.2f;
-					randomY = 0.2f;
+					randomX = 1.2f;
+					randomY = 1.2f;
 					wanderAngle = -45;
 				}
 				if(rand > 0.1 && rand < 0.2) {
-					randomX = 0.2f;
+					randomX = 1.2f;
 					randomY = 0;
 					wanderAngle = -90;
 				}
 				if(rand > 0.2 && rand < 0.3) {
-					randomX = 0.2f;
-					randomY = -0.2f;
+					randomX = 1.2f;
+					randomY = -1.2f;
 					wanderAngle = -135;
 				}
 				if(rand > 0.3 && rand < 0.4) {
 					randomX = 0;
-					randomY = -0.2f;
+					randomY = -1.2f;
 					wanderAngle = -180;
 				}
 				if(rand > 0.4 && rand < 0.5) {
-					randomX = -0.2f;
-					randomY = -0.2f;
+					randomX = -1.2f;
+					randomY = -1.2f;
 					wanderAngle = -225;
 				}
 				if(rand > 0.5 && rand < 0.6) {
-					randomX = -0.2f;
+					randomX = -1.2f;
 					randomY = 0;
 					wanderAngle = -270;
 				}
 				if(rand > 0.6 && rand < 0.7) {
-					randomX = -0.2f;
-					randomY = 0.2f;
+					randomX = -1.2f;
+					randomY = 1.2f;
 					wanderAngle = -315;
 				}
 				if(rand > 0.7 && rand < 0.8) {
 					randomX = 0;
-					randomY = 0.2f;
+					randomY = 1.2f;
 					wanderAngle = 0;
 				}
 				if(rand > 0.8) {
