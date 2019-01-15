@@ -21,11 +21,11 @@ public class StateManager {
 		currentState = newState;
 	}
 	
-	public void loadState(StateID stateID) {
-		loadState(stateID, -1);
+	public void loadState(StateID stateID, int playerNumber) {
+		loadState(stateID, -1, playerNumber);
 	}
 	
-	public void loadState(StateID stateID, int entryID) {
+	public void loadState(StateID stateID, int entryID, int playerNumber) {
 		State tempState = null;
 		switch(stateID) {
 			case MAINMENU:
@@ -44,19 +44,19 @@ public class StateManager {
 				tempState = new PlayerSelectMenu(this);
 				break;
 			case TESTSTAGE1:
-				tempState = new Level(this, "teststage", entryID);
+				tempState = new Level(this, "teststage", entryID, playerNumber);
 				break;
 			case TESTSTAGE2:
-				tempState = new Level(this, "teststage2", entryID);
+				tempState = new Level(this, "teststage2", entryID, playerNumber);
 				break;
 			case STAGE1:
-				tempState = new Level(this, "World_One", entryID);
+				tempState = new Level(this, "World_One", entryID, playerNumber);
 				break;
 			case STAGE2:
-				tempState = new Level(this, "World_Two", entryID);
+				tempState = new Level(this, "World_Two", entryID, playerNumber);
 				break;
 			case STAGE3:
-				tempState = new Level(this, "World_Three", entryID);
+				tempState = new Level(this, "World_Three", entryID, playerNumber);
 				break;
 			default:
 				System.err.println("Error: Unrecognised gate destination");

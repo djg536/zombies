@@ -41,13 +41,33 @@ public class Player extends Entity {
 	
 	private PowerUp powerUp;
 	private Weapon weapon;
+	private int playerNumber;
+	private String playerPath;
+	private int charStealth;
 
-	public Player(Level level, int x, int y, int health) {
+	public Player(Level level, int x, int y, int health, int playerNumber) {
 		spriteBatch = level.worldBatch;
 		UIBatch = level.UIBatch;
-
-		sprite = new Sprite(new Texture(Gdx.files.internal("player/player1_unequipped.png")));
-		hud = new Sprite(new Texture(Gdx.files.internal("block.png")));
+		
+		this.playerNumber = playerNumber;
+		
+		if(playerNumber == 1) {
+			playerPath = "player/player1";
+			sprite = new Sprite(new Texture(Gdx.files.internal(playerPath+"_unequipped_fat.png")));
+			charStealth = 1;
+		}
+		else if(playerNumber == 2) {
+			playerPath = "player/player2";
+			sprite = new Sprite(new Texture(Gdx.files.internal(playerPath+"_unequipped_fat.png")));
+			charStealth = 3;
+		}
+		else if(playerNumber == 3) {
+			playerPath = "player/player3";
+			sprite = new Sprite(new Texture(Gdx.files.internal(playerPath+"_unequipped_fat.png")));
+			charStealth = 1;
+		}
+		
+		hud = new Sprite(new Texture(Gdx.files.internal("player/heart.png")));
 		this.health = health;
 		
 		FixtureDef fixtureDef = new FixtureDef() {
@@ -69,7 +89,7 @@ public class Player extends Entity {
 	}
 	
 	public void SetWeapon(Weapon weapon) {
-		sprite.setTexture(new Texture(Gdx.files.internal("player/player1_equipped.png")));
+		sprite.setTexture(new Texture(Gdx.files.internal(playerPath+"_equipped.png")));
 		Zombies.soundAmmo.play();
 		this.weapon = weapon;
 	}
@@ -107,7 +127,7 @@ public class Player extends Entity {
 
 	public double getNoise() {
 		int stealth = powerUp==null ? 1 : powerUp.getStealthBoost()+1;
-		return body.getLinearVelocity().len() / stealth * 250;
+		return body.getLinearVelocity().len() / (stealth*charStealth) * 250;
 	}
 
 	public int health() {
