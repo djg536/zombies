@@ -60,7 +60,7 @@ public class Level extends State {
 	 * @param path
 	 * 		- name of .tmx file for tiled grid
 	 */
-	public Level(StateManager stateManager, String path, int spawnEntryID, int playerNumber) {
+	public Level(StateManager stateManager, String path, int spawnEntryID) {
 		super(stateManager);	
 		
 		bulletsList = new ArrayList<Projectile>();
@@ -68,7 +68,6 @@ public class Level extends State {
 		pickUpsList = new ArrayList<PickUp>();
 		npcsList = new ArrayList<NPC>();
 		gatesList = new ArrayList<Gate>();
-		this.playerNumber = playerNumber;
 			
 		try {
 			String mapFile = String.format("stages/%s.tmx", path);
@@ -118,7 +117,11 @@ public class Level extends State {
 				}
 			}
 		}	
-		player = new Player(this, x, y, 5, playerNumber);
+		
+		x*= Zombies.WorldScale;
+		y*= Zombies.WorldScale;
+		
+		player = new Player(this, x, y, 5);
 	}
 	
 	private void loadGates() {
@@ -134,7 +137,7 @@ public class Level extends State {
 			String destination = (String) p.get("Destination");
 			int entryID = (Integer) p.get("EntryID");
 			
-			Gate gate = new Gate(box2dWorld, new Rectangle(x, y, width, height),
+			Gate gate = new Gate(box2dWorld, new Rectangle(x*Zombies.WorldScale, y*Zombies.WorldScale, width, height),
 					StateID.valueOf(destination), entryID);
 			gatesList.add(gate);
 		}
@@ -296,7 +299,7 @@ public class Level extends State {
 		player.hudRender();
 		UIBatch.end();
 
-		//box2dDebugRenderer.render(box2dWorld, camera.combined.scl(Zombies.PhysicsDensity));
+		box2dDebugRenderer.render(box2dWorld, camera.combined.scl(Zombies.PhysicsDensity));
 	}
 
 	@Override
@@ -321,7 +324,7 @@ public class Level extends State {
 
 		// this.inLights()
 		if(player.update(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0))) <= 0) {
-			stateManager.loadState(new Level(stateManager, "teststage", -1, playerNumber));
+			stateManager.loadState(new Level(stateManager, "teststage", -1));
 		}
 	}
 	

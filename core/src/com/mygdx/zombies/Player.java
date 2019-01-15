@@ -41,17 +41,15 @@ public class Player extends Entity {
 	
 	private PowerUp powerUp;
 	private Weapon weapon;
-	private int playerNumber;
+	private static int playerNumber;
 	private String playerPath;
 	private int charStealth = 1;
 	private int charSpeed = 1;
 	private float charDamage = 1;
 
-	public Player(Level level, int x, int y, int health, int playerNumber) {
+	public Player(Level level, int x, int y, int health) {
 		spriteBatch = level.worldBatch;
 		UIBatch = level.UIBatch;
-		
-		this.playerNumber = playerNumber;
 		
 		if(playerNumber == 1) {
 			playerPath = "player/player1";
@@ -88,6 +86,10 @@ public class Player extends Entity {
 
 		swingStep = 0;
 		swingDirection = -1;	
+	}
+	
+	public static void setPlayerNumber(int playerNumber) {
+		Player.playerNumber = playerNumber;
 	}
 	
 	public void SetWeapon(Weapon weapon) {

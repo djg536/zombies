@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="2018.11.14" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="22" nextobjectid="58">
+<map version="1.2" tiledversion="2018.11.14" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="22" nextobjectid="61">
  <tileset firstgid="1" source="Assets/Tileset.tsx"/>
  <tileset firstgid="1041" source="Assets/Roads.tsx"/>
  <layer id="1" name="Background" width="50" height="50">
@@ -792,16 +792,30 @@
    <polygon points="0,0 2,194 -30,194 -30,272 66,270 63,-8"/>
   </object>
  </objectgroup>
- <objectgroup id="18" name="Gates"/>
- <objectgroup id="19" name="Entries"/>
+ <objectgroup id="18" name="Gates">
+  <object id="59" name="gate" type="Gate" x="1457" y="1121" width="83" height="57">
+   <properties>
+    <property name="Destination" value="STAGE3"/>
+    <property name="EntryID" type="int" value="0"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="19" name="Entries">
+  <object id="58" name="entry" type="Entry" x="87" y="484">
+   <properties>
+    <property name="EntryID" type="int" value="0"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
  <objectgroup id="20" name="Objects">
   <object id="37" name="lasergun" x="656" y="728">
    <point/>
   </object>
-  <object id="38" name="boss1" x="629" y="395">
+  <object id="39" name="powerUpStealth" x="1286" y="1335">
    <point/>
   </object>
-  <object id="39" name="powerUpStealth" x="1286" y="1335">
+  <object id="60" name="zombie1" x="1049" y="1468">
    <point/>
   </object>
  </objectgroup>

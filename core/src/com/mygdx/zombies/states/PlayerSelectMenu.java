@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.mygdx.zombies.Player;
 import com.mygdx.zombies.Zombies;
 import com.mygdx.zombies.states.StateManager.StateID;
 
@@ -52,15 +53,18 @@ public class PlayerSelectMenu extends State {
 		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Gdx.input.justTouched()) {
 				if (player1.isHover()) {
 					Zombies.soundSelect.play();
-					stateManager.loadState(StateID.STAGE1, 1);
+					Player.setPlayerNumber(1);
+					stateManager.loadState(StateID.STAGE1, 0);
 				}
 				else if (player2.isHover()) {
 					Zombies.soundSelect.play();
-					stateManager.loadState(StateID.STAGE2, 2);
+					Player.setPlayerNumber(2);
+					stateManager.loadState(StateID.STAGE1, 0);
 				}
 				else if (player3.isHover()) {
 					Zombies.soundSelect.play();
-					stateManager.loadState(StateID.STAGE3, 3);
+					Player.setPlayerNumber(3);
+					stateManager.loadState(StateID.STAGE1, 0);
 				}
 		}
 	}
