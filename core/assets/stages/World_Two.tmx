@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="21" nextobjectid="31">
+<map version="1.2" tiledversion="2018.11.14" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="21" nextobjectid="37">
  <tileset firstgid="1" source="Assets/Tileset.tsx"/>
  <tileset firstgid="1041" source="Assets/Roads.tsx"/>
  <layer id="1" name="Background" width="50" height="50">
@@ -774,19 +774,7 @@
   <object id="13" x="192" y="640" width="32" height="256"/>
   <object id="17" x="0" y="928" width="32" height="672"/>
   <object id="18" x="0" y="1568" width="1600" height="32"/>
-  <object id="19" x="614" y="38">
-   <polygon points="0,0 72,56 64,114 84,136 124,146 150,170 168,198 208,214 214,232 218,270 226,308 258,336 284,316 308,308 326,334 330,354 356,370 388,368 384,402 422,412 538,410 538,-38 -6,-38"/>
-  </object>
   <object id="20" x="736" y="1120" width="832" height="32"/>
-  <object id="21" x="1420" y="1454">
-   <polygon points="0,0 22,24 52,20 76,20 96,18 96,34 92,68 110,86 122,102 124,114 134,124 178,138 230,100 262,54 270,-18 230,-62 202,-102 198,-112 188,-144 152,-174 132,-150 114,-134 108,-112 96,-94 86,-80 76,-68 68,-60 38,-46 10,-38 -6,-22"/>
-  </object>
-  <object id="22" x="1548" y="1154">
-   <polygon points="0,0 4,32 12,52 18,72 26,94 34,102 52,104 58,100 66,80 56,46 50,30 54,18 64,-8 38,-16"/>
-  </object>
-  <object id="23" x="1574" y="1232">
-   <polygon points="0,0 -16,60 -6,82 24,82 40,70 48,46 44,26 34,6"/>
-  </object>
   <object id="24" x="736" y="512" width="32" height="640"/>
   <object id="25" x="1120" y="448" width="32" height="64"/>
   <object id="26" x="736" y="448" width="416" height="32"/>
@@ -794,6 +782,15 @@
   <object id="28" x="600" y="1136" width="14" height="14"/>
   <object id="29" x="666" y="1140" width="12" height="14"/>
   <object id="30" x="538" y="1138" width="18" height="14"/>
+  <object id="33" x="605" y="32">
+   <polygon points="0,0 109,172 331,417 548,417 163,-30 3,-32"/>
+  </object>
+  <object id="35" x="1529" y="1567">
+   <polygon points="0,0 -116,-98 -115,-147 72,-148 70,0"/>
+  </object>
+  <object id="36" x="1536" y="1152">
+   <polygon points="0,0 2,194 -30,194 -30,272 66,270 63,-8"/>
+  </object>
  </objectgroup>
  <objectgroup id="18" name="Gates"/>
  <objectgroup id="19" name="Entries"/>
