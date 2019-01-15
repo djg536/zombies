@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="2018.11.14" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="42" nextobjectid="45">
+<map version="1.2" tiledversion="2018.11.14" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="44" nextobjectid="73">
  <tileset firstgid="1" source="Assets/Tileset.tsx"/>
  <tileset firstgid="1041" source="Assets/Roads.tsx"/>
  <layer id="2" name="Backgroud" width="50" height="50">
@@ -69,9 +69,9 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 817,818,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 857,858,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-817,818,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+817,818,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,85,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 857,858,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-817,818,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+817,818,0,0,0,0,0,0,0,0,0,85,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 857,858,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 817,818,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 857,858,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -1395,13 +1395,84 @@
   </object>
  </objectgroup>
  <objectgroup id="40" name="Entries"/>
- <objectgroup id="41" name="Objects"/>
- <objectgroup id="31" name="Gates">
-  <object id="25" name="Exit Gate" type="Gate" x="1472.33" y="304" width="56" height="48.3333">
-   <properties>
-    <property name="Destination" value="STAGE2"/>
-    <property name="EntryID" type="int" value="0"/>
-   </properties>
+ <objectgroup id="41" name="Objects">
+  <object id="46" name="NPC" x="686" y="1315">
+   <point/>
+  </object>
+  <object id="47" name="sword" x="1139" y="1131">
+   <point/>
+  </object>
+  <object id="48" name="pistol" x="852" y="211">
+   <point/>
+  </object>
+  <object id="49" name="zombie1" x="145" y="220">
+   <point/>
+  </object>
+  <object id="50" name="zombie1" x="1285" y="456">
+   <point/>
+  </object>
+  <object id="51" name="zombie1" x="650" y="624">
+   <point/>
+  </object>
+  <object id="52" name="powerUpHealth" x="1185" y="825">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="31" name="Gates"/>
+ <objectgroup id="43" name="Lights">
+  <object id="54" name="street" x="382" y="140">
+   <point/>
+  </object>
+  <object id="55" name="street" x="207" y="309">
+   <point/>
+  </object>
+  <object id="57" name="security" x="272" y="1206">
+   <point/>
+  </object>
+  <object id="58" name="street" x="559" y="282">
+   <point/>
+  </object>
+  <object id="59" name="street" x="728" y="137">
+   <point/>
+  </object>
+  <object id="60" name="street" x="915" y="283">
+   <point/>
+  </object>
+  <object id="61" name="street" x="47" y="449">
+   <point/>
+  </object>
+  <object id="62" name="street" x="201" y="617">
+   <point/>
+  </object>
+  <object id="63" name="street" x="43" y="788">
+   <point/>
+  </object>
+  <object id="64" name="street" x="198" y="959">
+   <point/>
+  </object>
+  <object id="65" name="street" x="45" y="1152">
+   <point/>
+  </object>
+  <object id="66" name="street" x="410" y="1400">
+   <point/>
+  </object>
+  <object id="67" name="street" x="214" y="1235">
+   <point/>
+  </object>
+  <object id="68" name="street" x="647" y="1263">
+   <point/>
+  </object>
+  <object id="69" name="street" x="1116" y="1263">
+   <point/>
+  </object>
+  <object id="70" name="street" x="918" y="1398">
+   <point/>
+  </object>
+  <object id="71" name="street" x="1351" y="1401">
+   <point/>
+  </object>
+  <object id="72" name="street" x="1549" y="1268">
+   <point/>
   </object>
  </objectgroup>
 </map>

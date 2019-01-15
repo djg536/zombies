@@ -95,6 +95,10 @@ public class Level extends State {
 		}
 	}
 	
+	public static boolean gunFire() {
+		return RangedWeapon.isFiring();
+	}
+	
 	private void loadPlayer(int spawnEntryID) {
 		int x, y;
 		x = y = 300;
@@ -135,7 +139,7 @@ public class Level extends State {
 			gatesList.add(gate);
 		}
 	}
-	
+
 	private void loadObjects() {
 		MapObjects objects = map.getLayers().get("Objects").getObjects();
 		
@@ -208,10 +212,44 @@ public class Level extends State {
 		rayHandler.setAmbientLight(.2f);
 		//rayHandler.useDiffuseLight(true);
 		lightsList = new ArrayList<PointLight>();
-		lightsList.add(new PointLight(rayHandler, 128, Color.FIREBRICK, 512, 80, 80));
-		lightsList.add(new PointLight(rayHandler, 128, Color.FIREBRICK, 512, 80, 880));
-		lightsList.add(new PointLight(rayHandler, 128, Color.FIREBRICK, 512, 880, 80));
-		lightsList.add(new PointLight(rayHandler, 128, Color.BLUE, 512, 300, 300));
+		
+		MapObjects objects = map.getLayers().get("Lights").getObjects();
+				
+				for(MapObject object : objects) {
+					
+					MapProperties p = object.getProperties();
+					int x = ((Float) p.get("x")).intValue();
+					int y = ((Float) p.get("y")).intValue();
+					
+					x *=  Zombies.WorldScale;
+					y *=  Zombies.WorldScale;
+					
+					Color color;
+					int distance;
+					
+					switch(object.getName()) {
+						case "street":
+							color = Color.ORANGE;
+							distance = 250;
+							break;
+						case "security":
+							color = Color.CYAN;
+							distance = 120;
+							break;
+						case "red":
+							color = Color.FIREBRICK;
+							distance = 80;
+							break;
+						case "torch":
+							color = Color.GREEN;
+							distance = 80;
+							break;
+						default:
+							throw new IllegalArgumentException();
+					}		
+					
+					lightsList.add(new PointLight(rayHandler, 128, color, distance, x, y));
+				}
 	}
 
 	public ArrayList<PointLight> getLights() {
@@ -258,7 +296,7 @@ public class Level extends State {
 		player.hudRender();
 		UIBatch.end();
 
-		box2dDebugRenderer.render(box2dWorld, camera.combined.scl(Zombies.PhysicsDensity));
+		//box2dDebugRenderer.render(box2dWorld, camera.combined.scl(Zombies.PhysicsDensity));
 	}
 
 	@Override
@@ -266,7 +304,7 @@ public class Level extends State {
 		camera.position.set(player.getPositionX(), player.getPositionY(), 0);
 		camera.update();
 		box2dWorld.step(1 / 60f, 6, 2);
-
+		
 		for(Enemy zombie : zombiesList)
 			zombie.update(this.inLights());
 		for(NPC npc : npcsList)

@@ -61,7 +61,7 @@ public class Enemy extends Entity {
 
 		angleDegrees = Math.toDegrees(angleRads);
 		
-		if (player.getNoise() > distance || this.sight() == true) {
+		if (player.getNoise() > distance || this.sight() == true || Level.gunFire() == true) {
 			
 			body.applyLinearImpulse(new Vector2(2*((float) Math.cos(angleRads) * -speed), 2*((float) Math.sin(angleRads) * -speed)),
 					body.getPosition(), true);

@@ -15,7 +15,7 @@ public class Boss1 extends Enemy {
 	private int attackStep;
 
 	public Boss1(Level level, int x, int y) {	
-		super(level, x, y, 1000, "zombie/boss1_head.png");	
+		super(level, x, y, 50, "zombie/boss1_head.png");	
 		
 		spriteBatch = level.worldBatch;
 		armLeft = new Sprite(new Texture(Gdx.files.internal("zombie/boss1_armLeft.png")));

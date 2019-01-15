@@ -21,7 +21,7 @@ public class Player extends Entity {
 
 	private String name;
 	private int speed;
-	private int health;
+	private float health;
 	private float points = 18110;
 	private String pointDisplay = "18110.0";
 	private Sprite sprite;
@@ -45,7 +45,7 @@ public class Player extends Entity {
 	private String playerPath;
 	private int charStealth = 1;
 	private int charSpeed = 1;
-	private int charDamage = 1;
+	private float charDamage = 1;
 
 	public Player(Level level, int x, int y, int health, int playerNumber) {
 		spriteBatch = level.worldBatch;
@@ -56,17 +56,17 @@ public class Player extends Entity {
 		if(playerNumber == 1) {
 			playerPath = "player/player1";
 			sprite = new Sprite(new Texture(Gdx.files.internal(playerPath+"_unequipped_fat.png")));
-			charDamage = 1;
+			charDamage = (float) 0.5;
 		}
 		else if(playerNumber == 2) {
 			playerPath = "player/player2";
 			sprite = new Sprite(new Texture(Gdx.files.internal(playerPath+"_unequipped_fat.png")));
-			charStealth = 5;
+			charStealth = 2;
 		}
 		else if(playerNumber == 3) {
 			playerPath = "player/player3";
 			sprite = new Sprite(new Texture(Gdx.files.internal(playerPath+"_unequipped_fat.png")));
-			charSpeed = 3;
+			charSpeed = 2;
 		}
 		
 		hud = new Sprite(new Texture(Gdx.files.internal("player/heart.png")));
@@ -89,9 +89,14 @@ public class Player extends Entity {
 		swingStep = 0;
 		swingDirection = -1;	
 	}
-	
-	public void setWeapon(Weapon weapon) {
-		sprite.setTexture(new Texture(Gdx.files.internal(playerPath+"_equipped_fat.png")));
+
+	public void SetWeapon(Weapon weapon) {
+		if(weapon instanceof MeleeWeapon) {
+			sprite.setTexture(new Texture(Gdx.files.internal(playerPath+"_unequipped_fat.png")));
+		}
+		else {
+			sprite.setTexture(new Texture(Gdx.files.internal(playerPath+"_equipped_fat.png")));
+		}
 		Zombies.soundAmmo.play();
 		this.weapon = weapon;
 	}
@@ -169,7 +174,7 @@ public class Player extends Entity {
 		return swingStep > 0 && swingStep < 10;
 	}
 
-	public int update(Vector3 mouseCoords) {
+	public float update(Vector3 mouseCoords) {
 		
 		if (weapon != null) {
 			Vector2 h = getHandsPosition();
@@ -253,17 +258,18 @@ public class Player extends Entity {
 		health += powerUp.getHealthBoost();
 	}
 
-	public int getHealth() {
+	public float getHealth() {
 		return health;
 	}
 
-	public void setHealth(int health) {
+	public void setHealth(float health) {
 		this.health = health;
 		if(health <= 0)						
 			getInfo().flagForDeletion();
 	}
 	
-	public int getDamage() {
+	public float getDamage() {
 		return charDamage;
 	}
+	
 }
