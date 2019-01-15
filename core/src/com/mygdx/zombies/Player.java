@@ -175,8 +175,6 @@ public class Player extends Entity {
 			float rot = angleDegrees;
 			if(weapon instanceof MeleeWeapon)
 				swingUpdate();
-			else
-				swingStep=6;
 			rot += getHandsRotation();
 			weapon.update((int)(pos.x),
 					(int)(pos.y), rot);

@@ -12,7 +12,6 @@ public class RangedWeapon implements Weapon {
 
 	private int shootDelay;
 	private int timerTicks;
-	private Sprite sprite;
 	private SpriteBatch spriteBatch;
 	private Level level;
 	private String bulletSpritePath;
@@ -24,8 +23,7 @@ public class RangedWeapon implements Weapon {
 		
 		this.level = level;
 		spriteBatch = level.worldBatch;	
-		sprite = new Sprite(new Texture(Gdx.files.internal("gun.png")));
-
+		
 		this.shootDelay = shootDelay;
 		this.bulletSpritePath = bulletSpritePath;
 		this.shootSound = shootSound;
@@ -51,9 +49,6 @@ public class RangedWeapon implements Weapon {
 	
 	@Override
 	public void update(int x, int y, float rotation) {
-		//set position to front part of player sprite, sticking to player rotation and rotating with mouse.
-		sprite.setPosition(x, y);		
-		sprite.setRotation(rotation);	
 		
 		if(timerTicks > 0)
 			timerTicks++;
@@ -65,6 +60,5 @@ public class RangedWeapon implements Weapon {
 
 	@Override
 	public void render() {
-		sprite.draw(spriteBatch);
 	}
 }

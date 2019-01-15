@@ -81,7 +81,7 @@ public class CustomContactListener implements ContactListener {
 						zombie.setHealth(zombie.getHealth()-1);
 					}
 					else
-						player.setHealth(player.getHealth()-(player.getDamage()*2));			
+					player.setHealth(player.getHealth()-(player.getDamage()));			
 					System.out.println("Player has contacted zombie");
 				}
 				else if (bType == InfoContainer.BodyID.WEAPON) {
