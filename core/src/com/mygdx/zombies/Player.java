@@ -47,7 +47,7 @@ public class Player extends Entity {
 		UIBatch = level.UIBatch;
 
 		sprite = new Sprite(new Texture(Gdx.files.internal("player/player1_unequipped.png")));
-		hud = new Sprite(new Texture(Gdx.files.internal("block.png")));
+		hud = new Sprite(new Texture(Gdx.files.internal("player/heart.png")));
 		this.health = health;
 		
 		FixtureDef fixtureDef = new FixtureDef() {
