@@ -28,6 +28,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.zombies.Player;
 import com.mygdx.zombies.items.PowerUp;
+import com.mygdx.zombies.items.Weapon;
 import de.tomgrill.gdxtesting.GameTest;
 import org.junit.Test;
 
@@ -49,10 +50,11 @@ public class AssetExistsExampleTest extends GameTest {
 		assertNotNull(texture);
 	}
 	@Test
-	public void lightsTest() {
+	public void weaponTest() {
 		Player player = Mockito.mock(Player.class);
-		player.setHealth(3);
-		assertEquals("Should output 3", 3, player.getHealth());
+		Weapon weapon = Mockito.mock(Weapon.class);
+		player.setWeapon(weapon);
+		assertTrue(player.hasWeapon());
 	}
 
 }

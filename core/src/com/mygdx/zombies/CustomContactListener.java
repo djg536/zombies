@@ -87,7 +87,7 @@ public class CustomContactListener implements ContactListener {
 				else if (bType == InfoContainer.BodyID.WEAPON) {
 					Player player = (Player)a.getObj();
 					PickUp weaponPickUp = (PickUp)b.getObj();
-					player.SetWeapon((Weapon)weaponPickUp.getContainedItem());
+					player.setWeapon((Weapon)weaponPickUp.getContainedItem());
 					weaponPickUp.getInfo().flagForDeletion();
 					System.out.println("Player has picked up weapon");
 				}

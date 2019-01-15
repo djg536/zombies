@@ -90,10 +90,17 @@ public class Player extends Entity {
 		swingDirection = -1;	
 	}
 	
-	public void SetWeapon(Weapon weapon) {
+	public void setWeapon(Weapon weapon) {
 		sprite.setTexture(new Texture(Gdx.files.internal(playerPath+"_equipped_fat.png")));
 		Zombies.soundAmmo.play();
 		this.weapon = weapon;
+	}
+
+	/**
+	 * @return true if player has a weapon, false otherwise
+	 */
+	public boolean hasWeapon() {
+		return weapon != null;
 	}
 	
 	/**
@@ -130,12 +137,6 @@ public class Player extends Entity {
 	public double getNoise() {
 		int stealth = powerUp==null ? 1 : powerUp.getStealthBoost()+1;
 		return body.getLinearVelocity().len() / (stealth*charStealth) * 250;
-	}
-
-	public int health() {
-		if (Gdx.input.isKeyPressed(Keys.SPACE))
-			health -= 1;
-		return health;
 	}
 
 	private void look(Vector3 mouseCoords) {
@@ -191,7 +192,7 @@ public class Player extends Entity {
 		
 		sprite.setPosition(getPositionX() - sprite.getWidth() / 2, getPositionY() - sprite.getHeight() / 2);
 		points();
-		return health();
+		return this.getHealth();
 	}
 	
 	/**
