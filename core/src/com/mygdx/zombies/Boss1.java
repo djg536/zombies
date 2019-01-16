@@ -13,15 +13,19 @@ public class Boss1 extends Enemy {
 	private Sprite armRight;
 	private SpriteBatch spriteBatch;
 	private int attackStep;
+	private int minionSpawnStep;
+	private Level level;
 
 	public Boss1(Level level, int x, int y) {	
 		super(level, x, y, "zombie/boss1_head.png", 50, 1);	
 		
+		this.level = level;
 		spriteBatch = level.worldBatch;
 		armLeft = new Sprite(new Texture(Gdx.files.internal("zombie/boss1_armLeft.png")));
 		armRight = new Sprite(new Texture(Gdx.files.internal("zombie/boss1_armRight.png")));
 		
 		attackStep = 0;
+		minionSpawnStep = 0;
 	}
 	
 	@Override
@@ -31,6 +35,13 @@ public class Boss1 extends Enemy {
 		attackStep++;
 		if(attackStep > 100)
 			attackStep = 0;
+		
+		minionSpawnStep++;
+		if(minionSpawnStep > 300) {
+			minionSpawnStep = 0;			
+			Zombie1 minion = new Zombie1(level, getPositionX(), getPositionY());
+			level.getEnemiesList().add(minion);
+		}
 		
 		
 		Vector2 leftHandPos = getLeftHandPosition();

@@ -39,7 +39,7 @@ public class Level extends State {
 
 
 	public Player player;
-	private ArrayList<Enemy> zombiesList;
+	private ArrayList<Enemy> enemiesList;
 	public ArrayList<Projectile> bulletsList;
 
 	private ArrayList<PickUp> pickUpsList;
@@ -66,7 +66,7 @@ public class Level extends State {
 		super(stateManager);	
 		
 		bulletsList = new ArrayList<Projectile>();
-		zombiesList = new ArrayList<Enemy>();
+		enemiesList = new ArrayList<Enemy>();
 		pickUpsList = new ArrayList<PickUp>();
 		npcsList = new ArrayList<NPC>();
 		gatesList = new ArrayList<Gate>();
@@ -94,6 +94,10 @@ public class Level extends State {
 		catch (Exception e) {
 				e.printStackTrace();
 		}
+	}
+	
+	public ArrayList<Enemy> getEnemiesList() {
+		return enemiesList;
 	}
 	
 	public static boolean gunFire() {
@@ -186,15 +190,15 @@ public class Level extends State {
 				break;
 				
 				case "zombie1":
-					zombiesList.add(new Zombie1(this, x, y));
+					enemiesList.add(new Zombie1(this, x, y));
 				break;
 				
 				case "zombie2":
-					zombiesList.add(new Zombie2(this, x, y));
+					enemiesList.add(new Zombie2(this, x, y));
 				break;
 				
 				case "zombie3":
-					zombiesList.add(new Zombie3(this, x, y));
+					enemiesList.add(new Zombie3(this, x, y));
 				break;
 				
 				case "NPC":
@@ -202,7 +206,7 @@ public class Level extends State {
 				break;
 				
 				case "boss1":
-					zombiesList.add(new Boss1(this, x, y));
+					enemiesList.add(new Boss1(this, x, y));
 				break;
 				
 				default:
@@ -294,7 +298,7 @@ public class Level extends State {
 		worldBatch.setProjectionMatrix(camera.combined);
 		worldBatch.begin();		
 		player.render();	
-		for (Enemy zombie : zombiesList)
+		for (Enemy zombie : enemiesList)
 			zombie.render();
 		for (Projectile bullet : bulletsList)
 			bullet.render();
@@ -318,12 +322,14 @@ public class Level extends State {
 		camera.update();
 		box2dWorld.step(1 / 60f, 6, 2);
 		
-		for(Enemy zombie : zombiesList)
-			zombie.update(this.inLights());
+		for(int i = 0; i < enemiesList.size(); i++)
+			enemiesList.get(i).update(this.inLights());
+		
+		
 		for(NPC npc : npcsList)
 			npc.update();
 		
-		Entity.removeDeletionFlagged(zombiesList);
+		Entity.removeDeletionFlagged(enemiesList);
 		Entity.removeDeletionFlagged(bulletsList);
 		Entity.removeDeletionFlagged(pickUpsList);
 		Entity.removeDeletionFlagged(npcsList);
