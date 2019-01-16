@@ -1,10 +1,6 @@
 package com.mygdx.zombies.items;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.zombies.states.Level;
 
@@ -12,7 +8,6 @@ public class RangedWeapon implements Weapon {
 
 	private int shootDelay;
 	private int timerTicks;
-	private SpriteBatch spriteBatch;
 	private Level level;
 	private String bulletSpritePath;
 	private Sound shootSound;
@@ -21,9 +16,7 @@ public class RangedWeapon implements Weapon {
 	
 	public RangedWeapon(Level level, int shootDelay, String bulletSpritePath, float bulletSpeed, Sound shootSound) {
 		
-		this.level = level;
-		spriteBatch = level.worldBatch;	
-		
+		this.level = level;		
 		this.shootDelay = shootDelay;
 		this.bulletSpritePath = bulletSpritePath;
 		this.shootSound = shootSound;

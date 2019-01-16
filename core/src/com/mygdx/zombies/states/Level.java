@@ -9,7 +9,9 @@ import com.mygdx.zombies.CustomContactListener;
 import com.mygdx.zombies.Entity;
 import com.mygdx.zombies.Gate;
 import com.mygdx.zombies.Player;
-import com.mygdx.zombies.Zombie;
+import com.mygdx.zombies.Zombie1;
+import com.mygdx.zombies.Zombie2;
+import com.mygdx.zombies.Zombie3;
 import com.mygdx.zombies.Enemy;
 import com.mygdx.zombies.Zombies;
 import com.mygdx.zombies.items.MeleeWeapon;
@@ -184,7 +186,15 @@ public class Level extends State {
 				break;
 				
 				case "zombie1":
-					zombiesList.add(new Zombie(this, x, y, 3));
+					zombiesList.add(new Zombie1(this, x, y));
+				break;
+				
+				case "zombie2":
+					zombiesList.add(new Zombie2(this, x, y));
+				break;
+				
+				case "zombie3":
+					zombiesList.add(new Zombie3(this, x, y));
 				break;
 				
 				case "NPC":
@@ -251,7 +261,7 @@ public class Level extends State {
 							throw new IllegalArgumentException();
 					}		
 					
-					lightsList.add(new PointLight(rayHandler, 128, color, distance, x, y));
+					lightsList.add(new PointLight(rayHandler, 20, color, distance, x, y));
 				}
 	}
 

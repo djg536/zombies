@@ -24,13 +24,13 @@ public class PlayerSelectMenu extends State {
 		player1 = new Button(UIBatch, 50, 50, "Comp Sci");
 		player2 = new Button(UIBatch, 500, 50, "Chemistry");
 		player3 = new Button(UIBatch, 950, 50, "Footballer");
-		sprite1 = new Sprite(new Texture(Gdx.files.internal("player/player1_unequipped_fat.png")));
+		sprite1 = new Sprite(new Texture(Gdx.files.internal("player/player1_unequipped.png")));
 		sprite1.setPosition(150, 400);
 		sprite1.scale(3);
-		sprite2 = new Sprite(new Texture(Gdx.files.internal("player/player2_unequipped_fat.png")));
+		sprite2 = new Sprite(new Texture(Gdx.files.internal("player/player2_unequipped.png")));
 		sprite2.setPosition(600, 400);
 		sprite2.scale(3);
-		sprite3 = new Sprite(new Texture(Gdx.files.internal("player/player3_unequipped_fat.png")));
+		sprite3 = new Sprite(new Texture(Gdx.files.internal("player/player3_unequipped.png")));
 		sprite3.setPosition(1000, 400);
 		sprite3.scale(3);
 	}

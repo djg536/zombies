@@ -11,7 +11,6 @@ import com.mygdx.zombies.states.Level;
 public class Enemy extends Entity {
 	
 	private float speed;
-	private int strength;
 	private int health;
 	protected Sprite sprite;
 	protected double angleRads;
@@ -27,7 +26,7 @@ public class Enemy extends Entity {
 	boolean inLights;
 	private int noiseTimer;
 
-	public Enemy(Level level, int x, int y, int h, String spritePath) {
+	public Enemy(Level level, int x, int y, String spritePath, int speed, int health) {
 		
 		//Add sprite
 		spriteBatch = level.worldBatch;
@@ -45,9 +44,11 @@ public class Enemy extends Entity {
 		body.setTransform(x * Zombies.WorldScale / Zombies.PhysicsDensity, y * Zombies.WorldScale / Zombies.PhysicsDensity, 0);
 		body.setLinearDamping(4);
 		body.setFixedRotation(true);
+
+		this.speed = speed;
+		this.health = health;
 		
-		health = h;
-		speed = 2;
+		
 		this.player = level.getPlayer();
 		noiseTimer = 300;
 	}
@@ -63,7 +64,7 @@ public class Enemy extends Entity {
 		
 		if (player.getNoise() > distance || this.sight() == true || Level.gunFire() == true) {
 			
-			body.applyLinearImpulse(new Vector2(2*((float) Math.cos(angleRads) * -speed), 2*((float) Math.sin(angleRads) * -speed)),
+			body.applyLinearImpulse(new Vector2((float) Math.cos(angleRads) * -speed, (float) Math.sin(angleRads) * -speed),
 					body.getPosition(), true);
 			
 			
