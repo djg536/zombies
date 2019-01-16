@@ -73,7 +73,7 @@ public class Enemy extends Entity {
 			totAngle = (float) angleDegrees; 
 			
 		} else {
-			if ((player.points() % 4 == 0 || player.points() == 0) && player.points() != last) {
+			if ((player.updatePoints() % 4 == 0 || player.updatePoints() == 0) && player.updatePoints() != last) {
 				
 				// Generates random number that correlates to one of NINE movement states
 				// N, NE, E, SE, S, SW, W, NW, Stationary
@@ -127,7 +127,7 @@ public class Enemy extends Entity {
 					randomY = 0;
 				}
 						
-				last = player.points();
+				last = player.updatePoints();
 			}
 		
 			body.applyLinearImpulse(new Vector2((float) randomX, (float) randomY), body.getPosition(), true);

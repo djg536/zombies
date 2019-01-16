@@ -10,8 +10,8 @@ public class EndScreen extends State {
 
 	private Texture banner;
 	
-	public EndScreen(StateManager stageManager) {
-		super(stageManager);
+	public EndScreen() {
+		super();
 		banner = new Texture("win.png");
 		Zombies.soundEndMusic.loop();
 	}
@@ -19,7 +19,7 @@ public class EndScreen extends State {
 	@Override
 	public void update() {
 		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Gdx.input.justTouched()) {
-			stateManager.loadState(StateID.MAINMENU);
+			StateManager.loadState(StateID.MAINMENU);
 		}
 	}
 	

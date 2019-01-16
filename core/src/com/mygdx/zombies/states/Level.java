@@ -9,9 +9,6 @@ import com.mygdx.zombies.CustomContactListener;
 import com.mygdx.zombies.Entity;
 import com.mygdx.zombies.Gate;
 import com.mygdx.zombies.Player;
-import com.mygdx.zombies.Zombie1;
-import com.mygdx.zombies.Zombie2;
-import com.mygdx.zombies.Zombie3;
 import com.mygdx.zombies.Enemy;
 import com.mygdx.zombies.Zombies;
 import com.mygdx.zombies.items.MeleeWeapon;
@@ -41,20 +38,16 @@ public class Level extends State {
 	public Player player;
 	private ArrayList<Enemy> enemiesList;
 	public ArrayList<Projectile> bulletsList;
-
 	private ArrayList<PickUp> pickUpsList;
 	public World box2dWorld;
 	private Box2DDebugRenderer box2dDebugRenderer;
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
-
 	private RayHandler rayHandler;
 	private ArrayList<PointLight> lightsList;
 	private ArrayList<NPC> npcsList;
 	private ArrayList<Gate> gatesList;
-	
-	private int playerNumber;
 
 	/**
 	 * Constructor for the level
@@ -62,8 +55,8 @@ public class Level extends State {
 	 * @param path
 	 * 		- name of .tmx file for tiled grid
 	 */
-	public Level(StateManager stateManager, String path, int spawnEntryID) {
-		super(stateManager);	
+	public Level(String path, int spawnEntryID) {
+		super();	
 		
 		bulletsList = new ArrayList<Projectile>();
 		enemiesList = new ArrayList<Enemy>();
@@ -89,7 +82,7 @@ public class Level extends State {
 								
 			camera = new OrthographicCamera();
 			resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			box2dWorld.setContactListener(new CustomContactListener(stateManager, playerNumber));
+			box2dWorld.setContactListener(new CustomContactListener());
 		}
 		catch (Exception e) {
 				e.printStackTrace();
@@ -127,7 +120,7 @@ public class Level extends State {
 		x*= Zombies.WorldScale;
 		y*= Zombies.WorldScale;
 		
-		player = new Player(this, x, y, 5);
+		player = new Player(this, x, y);
 	}
 	
 	private void loadGates() {
@@ -196,15 +189,15 @@ public class Level extends State {
 				break;
 				
 				case "zombie1":
-					enemiesList.add(new Zombie1(this, x, y));
+					enemiesList.add(new Enemy(this, x, y, "zombie/zombie1.png", 6, 5));
 				break;
 				
 				case "zombie2":
-					enemiesList.add(new Zombie2(this, x, y));
+					enemiesList.add(new Enemy(this, x, y, "zombie/zombie2.png", 5, 15));
 				break;
 				
 				case "zombie3":
-					enemiesList.add(new Zombie3(this, x, y));
+					enemiesList.add(new Enemy(this, x, y, "zombie/zombie3.png", 10, 5));
 				break;
 				
 				case "NPC":
@@ -345,13 +338,11 @@ public class Level extends State {
 		rayHandler.update();
 
 		// this.inLights()
-		if(player.update(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0))) <= 0) {
-			stateManager.loadState(new Level(stateManager, "teststage", -1));
+		player.update(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0)));
+		
+		if(player.getHealth() <= 0) {
+			StateManager.loadState(new Level("teststage", -1));
 		}
-	}
-	
-	public StateManager getStateManager() {
-		return stateManager;
 	}
 	
 	public Player getPlayer() {

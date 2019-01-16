@@ -19,10 +19,8 @@ import java.lang.Math;
 
 public class Player extends Entity {
 
-	private String name;
-	private int speed;
-	private static float health = 0;
-	private static float points = 18110;
+	private static Float health;
+	private static Float points = 18110.f;
 	private static String pointDisplay = "18110";
 	private Sprite sprite;
 
@@ -40,30 +38,34 @@ public class Player extends Entity {
 	private byte swingDirection;
 	
 	private PowerUp powerUp;
-	private static Weapon weapon = null;
+	private Weapon weapon;
 	private static int playerNumber;
-	private int charStealth = 1;
-	private int charSpeed = 1;
-	private float charDamage = 1;
+	private int charStealth;
+	private int charSpeed;
+	private float charDamage;
 	private Texture equippedTexture;
 	private Texture unequippedTexture;
 
-	public Player(Level level, int x, int y, int health) {
+	public Player(Level level, int x, int y) {
 		spriteBatch = level.worldBatch;
 		UIBatch = level.UIBatch;
+
+		charDamage = charSpeed = charStealth = 1;
 		
-		if(playerNumber == 1) {
-			charDamage = (float) 0.5;
-		}
-		else if(playerNumber == 2) {
-			charStealth = 2;
-		}
-		else if(playerNumber == 3) {
-			charSpeed = 2;
+		switch(playerNumber) {
+			case 1:
+				charDamage = 0.5f;
+				break;
+			case 2:
+				charStealth = 2;
+				break;
+			case 3:
+				charSpeed = 2;
+				break;
 		}
 		
-		if(this.health == 0) {
-			this.health = health;
+		if(Player.health == null) {
+			Player.health = 5.f;
 		}
 
 		equippedTexture = new Texture(Gdx.files.internal("player/player" + String.valueOf(playerNumber) + "_equipped.png"));
@@ -131,7 +133,7 @@ public class Player extends Entity {
 	 * @return the relative position of the player's hands
 	 */
 	public Vector2 getHandsPosition() {				
-		double rot = angleRads-Math.PI/2 + swingStep/3.f;
+		double rot = angleRads+Math.PI/2 + swingStep/3.f;
 		float x = (float)Math.toDegrees(Math.cos(rot))*0.5f;
 		float y = (float)Math.toDegrees(Math.sin(rot))*0.5f;
 		
@@ -142,14 +144,13 @@ public class Player extends Entity {
 	 * @return the time since the beginning of the game 
 	 * 			points = player points, pointDisplay = String format of points
 	 */
-	public int points() {
+	public int updatePoints() {
 		time += Gdx.graphics.getDeltaTime();
 		timer = Math.round(time);
 		
-		System.out.println(time + ", " + timer);
 		if (timer % 2 == 0 && timer != last) {
 			points -= Math.round(Math.random() * 10);
-			pointDisplay = Integer.toString((int) points);
+			pointDisplay = Integer.toString(Math.round(points));
 			
 			last = timer;
 		}
@@ -195,7 +196,7 @@ public class Player extends Entity {
 		return swingStep > 0 && swingStep < 10;
 	}
 
-	public float update(Vector3 mouseCoords) {
+	public void update(Vector3 mouseCoords) {
 		
 		if (weapon != null) {
 			Vector2 h = getHandsPosition();
@@ -215,8 +216,7 @@ public class Player extends Entity {
 		look(mouseCoords);
 		
 		sprite.setPosition(getPositionX() - sprite.getWidth() / 2, getPositionY() - sprite.getHeight() / 2);
-		points();
-		return getHealth();
+		updatePoints();
 	}
 	
 	/**
@@ -282,9 +282,7 @@ public class Player extends Entity {
 	}
 
 	public void setHealth(float health) {
-		this.health = health;
-		if(health <= 0)						
-			getInfo().flagForDeletion();
+		Player.health = health;
 	}
 	
 	public float getDamage() {

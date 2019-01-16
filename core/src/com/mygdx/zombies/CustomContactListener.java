@@ -12,14 +12,6 @@ import com.mygdx.zombies.states.StateManager;
 
 public class CustomContactListener implements ContactListener {
 	
-	private StateManager stateManager;
-	private int playerNumber;
-	
-	public CustomContactListener(StateManager stateManager, int playerNumber) {
-		this.stateManager = stateManager;
-		this.playerNumber = playerNumber;
-	}
-	
 	public void beginContact(Contact contact) {
 		Body bodyA = contact.getFixtureA().getBody();
 		Body bodyB = contact.getFixtureB().getBody();
@@ -54,7 +46,7 @@ public class CustomContactListener implements ContactListener {
 			case GATE:
 				if(bType == InfoContainer.BodyID.PLAYER) {
 					Gate gate = (Gate)a.getObj();
-					stateManager.loadState(gate.getDestination(), gate.getEntryID());
+					StateManager.loadState(gate.getDestination(), gate.getEntryID());
 					System.out.println("Player has contacted gate");
 				}
 				break;

@@ -12,8 +12,8 @@ public class OptionsMenu extends State {
 	private Button back;
 	private Button fullscreen;
 
-	public OptionsMenu(StateManager stateManager) {
-		super(stateManager);
+	public OptionsMenu() {
+		super();
 		background = new Texture("background.jpg");
 		back = new Button(UIBatch, 500, 10, "Back");
 		fullscreen = new Button(UIBatch, 500, 450, new String[] { "Fullscreen", "Windowed" });
@@ -49,7 +49,7 @@ public class OptionsMenu extends State {
 			}
 			else if (back.isHover()) {
 				Zombies.soundSelect.play();
-				stateManager.loadState(StateID.MAINMENU);
+				StateManager.loadState(StateID.MAINMENU);
 			}
 		}
 	}

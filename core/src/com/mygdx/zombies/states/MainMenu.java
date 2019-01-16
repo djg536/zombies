@@ -15,8 +15,8 @@ public class MainMenu extends State {
 	private Texture background;
 	private Texture logo;
 
-	public MainMenu(StateManager stateManager) {
-		super(stateManager);
+	public MainMenu() {
+		super();
 		background = new Texture("background.jpg");
 		play = new Button(UIBatch, 325, 350, "Play");
 		exit = new Button(UIBatch, 675, 150, "Exit");
@@ -45,15 +45,15 @@ public class MainMenu extends State {
 			if (play.isHover()) {
 				Zombies.soundSelect.play();
 				Zombies.soundAmbientWind.loop();
-				stateManager.loadState(StateID.BRIEFINGSCREEN);
+				StateManager.loadState(StateID.BRIEFINGSCREEN);
 			}
 			else if (credits.isHover()) {
 				Zombies.soundSelect.play();
-				stateManager.loadState(StateID.CREDITSMENU);
+				StateManager.loadState(StateID.CREDITSMENU);
 			}
 			else if (options.isHover()) {
 				Zombies.soundSelect.play();
-				stateManager.loadState(StateID.OPTIONSMENU);
+				StateManager.loadState(StateID.OPTIONSMENU);
 			}
 			else if (exit.isHover()) {
 				Gdx.app.exit();

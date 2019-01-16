@@ -17,9 +17,9 @@ public class PlayerSelectMenu extends State {
 	private Sprite sprite2; 
 	private Sprite sprite3; 
 	
-	public PlayerSelectMenu(StateManager stateManager)
+	public PlayerSelectMenu()
 	{
-		super(stateManager);
+		super();
 		
 		player1 = new Button(UIBatch, 50, 50, "Comp Sci");
 		player2 = new Button(UIBatch, 500, 50, "Chemistry");
@@ -54,17 +54,17 @@ public class PlayerSelectMenu extends State {
 				if (player1.isHover()) {
 					Zombies.soundSelect.play();
 					Player.setPlayerNumber(1);
-					stateManager.loadState(StateID.STAGE1, 0);
+					StateManager.loadState(StateID.STAGE1, 0);
 				}
 				else if (player2.isHover()) {
 					Zombies.soundSelect.play();
 					Player.setPlayerNumber(2);
-					stateManager.loadState(StateID.STAGE1, 0);
+					StateManager.loadState(StateID.STAGE1, 0);
 				}
 				else if (player3.isHover()) {
 					Zombies.soundSelect.play();
 					Player.setPlayerNumber(3);
-					stateManager.loadState(StateID.STAGE1, 0);
+					StateManager.loadState(StateID.STAGE1, 0);
 				}
 		}
 	}
