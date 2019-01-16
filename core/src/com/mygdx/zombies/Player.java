@@ -94,10 +94,10 @@ public class Player extends Entity {
 	
 	public void SetWeapon(Weapon weapon) {
 		if(weapon instanceof MeleeWeapon) {
-			sprite.setTexture(new Texture(Gdx.files.internal(playerPath+"_unequipped_fat.png")));
+			sprite.setTexture(new Texture(Gdx.files.internal(playerPath+"_unequipped.png")));
 		}
 		else {
-			sprite.setTexture(new Texture(Gdx.files.internal(playerPath+"_equipped_fat.png")));
+			sprite.setTexture(new Texture(Gdx.files.internal(playerPath+"_equipped.png")));
 		}
 		Zombies.soundAmmo.play();
 		this.weapon = weapon;
