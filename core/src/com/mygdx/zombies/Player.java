@@ -21,9 +21,9 @@ public class Player extends Entity {
 
 	private String name;
 	private int speed;
-	private float health;
-	private float points = 18110;
-	private String pointDisplay = "18110.0";
+	private static float health = 0;
+	private static float points = 18110;
+	private static String pointDisplay = "18110";
 	private Sprite sprite;
 
 	private double angleRads;
@@ -40,7 +40,7 @@ public class Player extends Entity {
 	private byte swingDirection;
 	
 	private PowerUp powerUp;
-	private Weapon weapon;
+	private static Weapon weapon = null;
 	private static int playerNumber;
 	private int charStealth = 1;
 	private int charSpeed = 1;
@@ -61,6 +61,10 @@ public class Player extends Entity {
 		else if(playerNumber == 3) {
 			charSpeed = 2;
 		}
+		
+		if(this.health == 0) {
+			this.health = health;
+		}
 
 		equippedTexture = new Texture(Gdx.files.internal("player/player" + String.valueOf(playerNumber) + "_equipped.png"));
 		unequippedTexture = new Texture(Gdx.files.internal("player/player" + String.valueOf(playerNumber) + "_unequipped.png"));
@@ -68,8 +72,11 @@ public class Player extends Entity {
 		sprite = new Sprite(unequippedTexture);
 		
 		hud = new Sprite(new Texture(Gdx.files.internal("player/heart.png")));
-		this.health = health;
 		
+		if(weapon != null) {
+			this.SetWeapon(weapon);
+		}
+	
 		FixtureDef fixtureDef = new FixtureDef() {
 			{
 				density = 40;
@@ -129,9 +136,10 @@ public class Player extends Entity {
 	}
 	
 	public int points() {
-		time += Gdx.graphics.getDeltaTime()/10;
+		time += Gdx.graphics.getDeltaTime();
 		timer = Math.round(time);
-	
+		
+		System.out.println(time + ", " + timer);
 		if (timer % 2 == 0 && timer != last) {
 			points -= Math.round(Math.random() * 10);
 			pointDisplay = Integer.toString((int) points);
