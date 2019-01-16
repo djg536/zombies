@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mygdx.zombies.states.Level;
 
 public class Enemy extends Entity {
@@ -26,7 +26,7 @@ public class Enemy extends Entity {
 	boolean inLights;
 	private int noiseTimer;
 
-	public Enemy(Level level, int x, int y, String spritePath, int speed, int health) {
+	public Enemy(Level level, int x, int y, String spritePath, float speed, int health) {
 		
 		//Add sprite
 		spriteBatch = level.worldBatch;

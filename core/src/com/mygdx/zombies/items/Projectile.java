@@ -55,6 +55,7 @@ public class Projectile extends Entity {
 		sprite.draw(spriteBatch);
 	}
 
+	@Override
 	public void dispose() {
 		box2dWorld.destroyBody(body);
 	}

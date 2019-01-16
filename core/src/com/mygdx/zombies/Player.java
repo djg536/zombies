@@ -14,29 +14,24 @@ import com.mygdx.zombies.items.MeleeWeapon;
 import com.mygdx.zombies.items.PowerUp;
 import com.mygdx.zombies.items.Weapon;
 import com.mygdx.zombies.states.Level;
-
-import java.lang.Math;
+import com.mygdx.zombies.states.StateManager;
 
 public class Player extends Entity {
 
 	private static Float health;
-	private static Float points = 18110.f;
-	private static String pointDisplay = "18110";
+	private static Float points;
+	private static String pointDisplay;
 	private Sprite sprite;
-
 	private double angleRads;
 	private float angleDegrees;
-
 	private float time;
 	private int timer;
 	private int last;
-
 	private Sprite hud;
 	private SpriteBatch spriteBatch;
 	private SpriteBatch UIBatch;
 	private byte swingStep;
 	private byte swingDirection;
-	
 	private PowerUp powerUp;
 	private Weapon weapon;
 	private static int playerNumber;
@@ -45,10 +40,12 @@ public class Player extends Entity {
 	private float charDamage;
 	private Texture equippedTexture;
 	private Texture unequippedTexture;
+	private Level level;
 
 	public Player(Level level, int x, int y) {
 		spriteBatch = level.worldBatch;
 		UIBatch = level.UIBatch;
+		this.level = level;
 
 		charDamage = charSpeed = charStealth = 1;
 		
@@ -64,8 +61,13 @@ public class Player extends Entity {
 				break;
 		}
 		
-		if(Player.health == null) {
-			Player.health = 5.f;
+		if(Player.health == null || Player.health <= 0) {
+			Player.health = 10.f;
+		}
+		
+		if(points == null) {
+			points = 18110.f;
+			pointDisplay = "18110";
 		}
 
 		equippedTexture = new Texture(Gdx.files.internal("player/player" + String.valueOf(playerNumber) + "_equipped.png"));
@@ -133,7 +135,7 @@ public class Player extends Entity {
 	 * @return the relative position of the player's hands
 	 */
 	public Vector2 getHandsPosition() {				
-		double rot = angleRads+Math.PI/2 + swingStep/3.f;
+		double rot = angleRads + swingStep/3.f;
 		float x = (float)Math.toDegrees(Math.cos(rot))*0.5f;
 		float y = (float)Math.toDegrees(Math.sin(rot))*0.5f;
 		
@@ -201,12 +203,12 @@ public class Player extends Entity {
 		if (weapon != null) {
 			Vector2 h = getHandsPosition();
 			Vector2 pos = new Vector2(getPositionX() + h.x, getPositionY() + h.y);
-			float rot = angleDegrees;
 			if(weapon instanceof MeleeWeapon)
 				swingUpdate();
-			rot += getHandsRotation();
+			else
+				swingStep=5;
 			weapon.update((int)(pos.x),
-					(int)(pos.y), rot);
+					(int)(pos.y), angleDegrees+getHandsRotation());
 			if (Gdx.input.isButtonPressed(Buttons.LEFT))
 				weapon.use();
 		}
@@ -283,6 +285,8 @@ public class Player extends Entity {
 
 	public void setHealth(float health) {
 		Player.health = health;
+		if(health <= 0)
+			StateManager.loadState(new Level(level.getPath(), level.getSpawnEntryID()));
 	}
 	
 	public float getDamage() {

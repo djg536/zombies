@@ -1,36 +1,37 @@
 package com.mygdx.zombies.states;
 
-import box2dLight.PointLight;
-import box2dLight.RayHandler;
+import java.util.ArrayList;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.zombies.Boss1;
 import com.mygdx.zombies.CustomContactListener;
+import com.mygdx.zombies.Enemy;
 import com.mygdx.zombies.Entity;
 import com.mygdx.zombies.Gate;
+import com.mygdx.zombies.InfoContainer;
+import com.mygdx.zombies.NPC;
+import com.mygdx.zombies.PickUp;
 import com.mygdx.zombies.Player;
-import com.mygdx.zombies.Enemy;
 import com.mygdx.zombies.Zombies;
 import com.mygdx.zombies.items.MeleeWeapon;
 import com.mygdx.zombies.items.PowerUp;
 import com.mygdx.zombies.items.Projectile;
 import com.mygdx.zombies.items.RangedWeapon;
 import com.mygdx.zombies.states.StateManager.StateID;
-import com.mygdx.zombies.InfoContainer;
-import com.mygdx.zombies.NPC;
-import com.mygdx.zombies.PickUp;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.MapProperties;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import java.util.ArrayList;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
 
 public class Level extends State {
 
@@ -40,7 +41,6 @@ public class Level extends State {
 	public ArrayList<Projectile> bulletsList;
 	private ArrayList<PickUp> pickUpsList;
 	public World box2dWorld;
-	private Box2DDebugRenderer box2dDebugRenderer;
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
@@ -48,6 +48,9 @@ public class Level extends State {
 	private ArrayList<PointLight> lightsList;
 	private ArrayList<NPC> npcsList;
 	private ArrayList<Gate> gatesList;
+	private String path;
+	private int spawnEntryID;
+	private Box2DDebugRenderer box2DDebugRenderer;
 
 	/**
 	 * Constructor for the level
@@ -58,35 +61,42 @@ public class Level extends State {
 	public Level(String path, int spawnEntryID) {
 		super();	
 		
+		this.path = path;
+		this.spawnEntryID = spawnEntryID;
+		
 		bulletsList = new ArrayList<Projectile>();
 		enemiesList = new ArrayList<Enemy>();
 		pickUpsList = new ArrayList<PickUp>();
 		npcsList = new ArrayList<NPC>();
 		gatesList = new ArrayList<Gate>();
 			
-		try {
-			String mapFile = String.format("stages/%s.tmx", path);
 
-			map = new TmxMapLoader().load(mapFile);
-			renderer = new OrthogonalTiledMapRenderer(map, Zombies.WorldScale);
+		String mapFile = String.format("stages/%s.tmx", path);
 
-			box2dWorld = new World(new Vector2(0, 0), true);
-			box2dDebugRenderer = new Box2DDebugRenderer();
+		map = new TmxMapLoader().load(mapFile);
+		renderer = new OrthogonalTiledMapRenderer(map, Zombies.WorldScale);
 
-			MapBodyBuilder.buildShapes(map, Zombies.PhysicsDensity / Zombies.WorldScale, box2dWorld);
+		box2dWorld = new World(new Vector2(0, 0), true);
+		box2DDebugRenderer = new Box2DDebugRenderer();
+
+		MapBodyBuilder.buildShapes(map, Zombies.PhysicsDensity / Zombies.WorldScale, box2dWorld);
 					
-			loadGates();
-			loadPlayer(spawnEntryID);
-			loadObjects();		
-			initLights();			
+		loadGates();
+		loadPlayer(spawnEntryID);
+		loadObjects();		
+		initLights();			
 								
-			camera = new OrthographicCamera();
-			resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			box2dWorld.setContactListener(new CustomContactListener());
-		}
-		catch (Exception e) {
-				e.printStackTrace();
-		}
+		camera = new OrthographicCamera();
+		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		box2dWorld.setContactListener(new CustomContactListener());
+	}
+	
+	public String getPath() {
+		return path;
+	}
+	
+	public int getSpawnEntryID() {
+		return spawnEntryID;
 	}
 	
 	public ArrayList<Enemy> getEnemiesList() {
@@ -223,10 +233,9 @@ public class Level extends State {
 	}
 
 	private void initLights() {
-		//set up lights in corners of the screen
 		rayHandler = new RayHandler(box2dWorld);
+		rayHandler.setShadows(true);
 		rayHandler.setAmbientLight(.2f);
-		//rayHandler.useDiffuseLight(true);
 		lightsList = new ArrayList<PointLight>();
 		
 		MapObjects objects = map.getLayers().get("Lights").getObjects();
@@ -267,11 +276,7 @@ public class Level extends State {
 					lightsList.add(new PointLight(rayHandler, 20, color, distance, x, y));
 				}
 	}
-
-	public ArrayList<PointLight> getLights() {
-		return lightsList;
-	}
-
+	
 	public boolean inLights() {
 		/*
 		check if the player is within the radius of any of the lights
@@ -312,7 +317,8 @@ public class Level extends State {
 		player.hudRender();
 		UIBatch.end();
 
-		box2dDebugRenderer.render(box2dWorld, camera.combined.scl(Zombies.PhysicsDensity));
+		//Enable this line to show Box2D physics debug info
+		//box2dDebugRenderer.render(box2dWorld, camera.combined.scl(Zombies.PhysicsDensity));
 	}
 
 	@Override
@@ -339,10 +345,6 @@ public class Level extends State {
 
 		// this.inLights()
 		player.update(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0)));
-		
-		if(player.getHealth() <= 0) {
-			StateManager.loadState(new Level("teststage", -1));
-		}
 	}
 	
 	public Player getPlayer() {

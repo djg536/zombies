@@ -19,7 +19,7 @@ public class Boss1 extends Enemy {
 	private Level level;
 
 	public Boss1(Level level, int x, int y) {	
-		super(level, x, y, "zombie/boss1_head.png", 200, 1);	
+		super(level, x, y, "zombie/boss1_head.png", 2, 200);	
 		
 		this.level = level;
 		spriteBatch = level.worldBatch;
@@ -34,15 +34,15 @@ public class Boss1 extends Enemy {
 	public void update(boolean inLights) {
 		super.update(inLights);
 		
-		attackStep++;
+		attackStep+=3;
 		if(attackStep > 100)
 			attackStep = 0;
 		
 		minionSpawnStep++;
-		if(minionSpawnStep > 300) {
+		if(minionSpawnStep > 160) {
 			minionSpawnStep = 0;			
 			Enemy minion =
-					new Enemy(level, getPositionX(), getPositionY(),"zombie/zombie1.png", 6, 5);
+					new Enemy(level, getPositionX(), getPositionY(),"zombie/zombie1.png", 12, 5);
 			level.getEnemiesList().add(minion);
 		}
 		
@@ -72,6 +72,7 @@ public class Boss1 extends Enemy {
 		return new Vector2(x-sprite.getWidth()/2, y);
 	}
 	
+	@Override
 	public void dispose() {
 		StateManager.loadState(StateID.ENDSCREEN);
 	}

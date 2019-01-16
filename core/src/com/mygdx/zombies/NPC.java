@@ -60,10 +60,8 @@ public class NPC extends Entity {
 			body.applyLinearImpulse((float) Math.cos(angleDegrees)*0.8f, (float) Math.sin(angleDegrees)*0.8f,
 					bodyPosition.x, bodyPosition.y, true);
 		
-		sprite.setPosition(bodyPosition.x - sprite.getWidth()/2, bodyPosition.y - sprite.getHeight()/2);
-		
+		sprite.setPosition(bodyPosition.x - sprite.getWidth()/2, bodyPosition.y - sprite.getHeight()/2);		
 		sprite.setRotation(angleDegrees);
-		sprite.setPosition(bodyPosition.x, bodyPosition.y);
 	}
 	
 	public void render() {
