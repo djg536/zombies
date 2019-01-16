@@ -11,7 +11,6 @@ import com.mygdx.zombies.states.Level;
 public class Enemy extends Entity {
 	
 	private float speed;
-	private int strength;
 	private int health;
 	protected Sprite sprite;
 	protected double angleRads;
@@ -27,7 +26,7 @@ public class Enemy extends Entity {
 	boolean inLights;
 	private int noiseTimer;
 
-	public Enemy(Level level, int x, int y, int h, String spritePath) {
+	public Enemy(Level level, int x, int y, String spritePath, int speed, int health) {
 		
 		//Add sprite
 		spriteBatch = level.worldBatch;
@@ -45,9 +44,11 @@ public class Enemy extends Entity {
 		body.setTransform(x / Zombies.PhysicsDensity, y / Zombies.PhysicsDensity, 0);
 		body.setLinearDamping(4);
 		body.setFixedRotation(true);
+
+		this.speed = speed;
+		this.health = health;
 		
-		health = h;
-		speed = 2;
+		
 		this.player = level.getPlayer();
 		noiseTimer = 300;
 	}
@@ -63,7 +64,7 @@ public class Enemy extends Entity {
 		
 		if (player.getNoise() > distance || this.sight() == true || Level.gunFire() == true) {
 			
-			body.applyLinearImpulse(new Vector2(2*((float) Math.cos(angleRads) * -speed), 2*((float) Math.sin(angleRads) * -speed)),
+			body.applyLinearImpulse(new Vector2((float) Math.cos(angleRads) * -speed, (float) Math.sin(angleRads) * -speed),
 					body.getPosition(), true);
 			
 			
@@ -82,43 +83,43 @@ public class Enemy extends Entity {
 				double rand = Math.random();
 				
 				if(rand > 0 && rand < 0.1) {
-					randomX = 0.2f;
-					randomY = 0.2f;
+					randomX = 1.2f;
+					randomY = 1.2f;
 					wanderAngle = -45;
 				}
 				if(rand > 0.1 && rand < 0.2) {
-					randomX = 0.2f;
+					randomX = 1.2f;
 					randomY = 0;
 					wanderAngle = -90;
 				}
 				if(rand > 0.2 && rand < 0.3) {
-					randomX = 0.2f;
-					randomY = -0.2f;
+					randomX = 1.2f;
+					randomY = -1.2f;
 					wanderAngle = -135;
 				}
 				if(rand > 0.3 && rand < 0.4) {
 					randomX = 0;
-					randomY = -0.2f;
+					randomY = -1.2f;
 					wanderAngle = -180;
 				}
 				if(rand > 0.4 && rand < 0.5) {
-					randomX = -0.2f;
-					randomY = -0.2f;
+					randomX = -1.2f;
+					randomY = -1.2f;
 					wanderAngle = -225;
 				}
 				if(rand > 0.5 && rand < 0.6) {
-					randomX = -0.2f;
+					randomX = -1.2f;
 					randomY = 0;
 					wanderAngle = -270;
 				}
 				if(rand > 0.6 && rand < 0.7) {
-					randomX = -0.2f;
-					randomY = 0.2f;
+					randomX = -1.2f;
+					randomY = 1.2f;
 					wanderAngle = -315;
 				}
 				if(rand > 0.7 && rand < 0.8) {
 					randomX = 0;
-					randomY = 0.2f;
+					randomY = 1.2f;
 					wanderAngle = 0;
 				}
 				if(rand > 0.8) {

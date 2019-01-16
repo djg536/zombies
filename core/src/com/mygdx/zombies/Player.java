@@ -41,33 +41,31 @@ public class Player extends Entity {
 	
 	private PowerUp powerUp;
 	private Weapon weapon;
-	private int playerNumber;
-	private String playerPath;
+	private static int playerNumber;
 	private int charStealth = 1;
 	private int charSpeed = 1;
 	private float charDamage = 1;
+	private Texture equippedTexture;
+	private Texture unequippedTexture;
 
-	public Player(Level level, int x, int y, int health, int playerNumber) {
+	public Player(Level level, int x, int y, int health) {
 		spriteBatch = level.worldBatch;
 		UIBatch = level.UIBatch;
 		
-		this.playerNumber = playerNumber;
-		
 		if(playerNumber == 1) {
-			playerPath = "player/player1";
-			sprite = new Sprite(new Texture(Gdx.files.internal(playerPath+"_unequipped_fat.png")));
 			charDamage = (float) 0.5;
 		}
 		else if(playerNumber == 2) {
-			playerPath = "player/player2";
-			sprite = new Sprite(new Texture(Gdx.files.internal(playerPath+"_unequipped_fat.png")));
 			charStealth = 2;
 		}
 		else if(playerNumber == 3) {
-			playerPath = "player/player3";
-			sprite = new Sprite(new Texture(Gdx.files.internal(playerPath+"_unequipped_fat.png")));
 			charSpeed = 2;
 		}
+
+		equippedTexture = new Texture(Gdx.files.internal("player/player" + String.valueOf(playerNumber) + "_equipped.png"));
+		unequippedTexture = new Texture(Gdx.files.internal("player/player" + String.valueOf(playerNumber) + "_unequipped.png"));
+		
+		sprite = new Sprite(unequippedTexture);
 		
 		hud = new Sprite(new Texture(Gdx.files.internal("player/heart.png")));
 		this.health = health;
@@ -89,14 +87,29 @@ public class Player extends Entity {
 		swingStep = 0;
 		swingDirection = -1;	
 	}
+<<<<<<< HEAD
 
+=======
+	
+	public static void setPlayerNumber(int playerNumber) {
+		Player.playerNumber = playerNumber;
+	}
+	
+	private void setEquippedTexture() {
+		sprite.setTexture(equippedTexture);
+	}
+	
+	private void setUnequippedTexture() {
+		sprite.setTexture(unequippedTexture);
+	}
+	
+>>>>>>> 3cf0a23dd861084dacecf81d013749d85dc7009a
 	public void SetWeapon(Weapon weapon) {
-		if(weapon instanceof MeleeWeapon) {
-			sprite.setTexture(new Texture(Gdx.files.internal(playerPath+"_unequipped_fat.png")));
-		}
-		else {
-			sprite.setTexture(new Texture(Gdx.files.internal(playerPath+"_equipped_fat.png")));
-		}
+		if(weapon instanceof MeleeWeapon)
+			setUnequippedTexture();
+		else
+			setEquippedTexture();
+
 		Zombies.soundAmmo.play();
 		this.weapon = weapon;
 	}
@@ -118,11 +131,12 @@ public class Player extends Entity {
 	/**
 	 * @return the relative position of the player's hands
 	 */
-	public Vector2 getHandsPosition() {						
-		float x = (float)Math.toDegrees(Math.cos(angleRads + swingStep/3.f))*0.5f;
-		float y = (float)Math.toDegrees(Math.sin(angleRads + swingStep/3.f))*0.5f;
+	public Vector2 getHandsPosition() {				
+		double rot = angleRads-Math.PI/2 + swingStep/3.f;
+		float x = (float)Math.toDegrees(Math.cos(rot))*0.5f;
+		float y = (float)Math.toDegrees(Math.sin(rot))*0.5f;
 		
-		return new Vector2(x-sprite.getWidth()/2, y);
+		return new Vector2(x, y);
 	}
 	
 	public int points() {
@@ -182,8 +196,6 @@ public class Player extends Entity {
 			float rot = angleDegrees;
 			if(weapon instanceof MeleeWeapon)
 				swingUpdate();
-			else
-				swingStep=6;
 			rot += getHandsRotation();
 			weapon.update((int)(pos.x),
 					(int)(pos.y), rot);

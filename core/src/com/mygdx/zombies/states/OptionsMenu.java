@@ -49,7 +49,7 @@ public class OptionsMenu extends State {
 			}
 			else if (back.isHover()) {
 				Zombies.soundSelect.play();
-				stateManager.loadState(StateID.MAINMENU, 0);
+				stateManager.loadState(StateID.MAINMENU);
 			}
 		}
 	}

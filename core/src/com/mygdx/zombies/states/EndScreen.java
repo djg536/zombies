@@ -13,26 +13,27 @@ public class EndScreen extends State {
 	public EndScreen(StateManager stageManager) {
 		super(stageManager);
 		banner = new Texture("win.png");
+		Zombies.soundEndMusic.loop();
 	}
 	
 	@Override
 	public void update() {
 		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Gdx.input.justTouched()) {
-			stateManager.loadState(StateID.MAINMENU, 0);
+			stateManager.loadState(StateID.MAINMENU);
 		}
 	}
 	
 	@Override
 	public void render() {
 		UIBatch.begin();
-		UIBatch.draw(banner, Gdx.graphics.getWidth()/2-banner.getWidth()/2, Gdx.graphics.getHeight()-banner.getHeight()-20);
-		Zombies.mainFont.draw(UIBatch, "[Insert Monty Python Intermission Here]", 160, 200);
+		UIBatch.draw(banner, Zombies.InitialWindowWidth/2-banner.getWidth()/2, Zombies.InitialWindowHeight-banner.getHeight()-20);
 		Zombies.mainFont.draw(UIBatch, "Click to continue", 424, 140);
 		UIBatch.end();
 	}
 	
 	@Override
 	public void dispose() {
+		Zombies.soundEndMusic.stop();
 		banner.dispose();
 	}
 }

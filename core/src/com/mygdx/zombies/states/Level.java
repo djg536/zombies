@@ -9,7 +9,9 @@ import com.mygdx.zombies.CustomContactListener;
 import com.mygdx.zombies.Entity;
 import com.mygdx.zombies.Gate;
 import com.mygdx.zombies.Player;
-import com.mygdx.zombies.Zombie;
+import com.mygdx.zombies.Zombie1;
+import com.mygdx.zombies.Zombie2;
+import com.mygdx.zombies.Zombie3;
 import com.mygdx.zombies.Enemy;
 import com.mygdx.zombies.Zombies;
 import com.mygdx.zombies.items.MeleeWeapon;
@@ -37,7 +39,7 @@ public class Level extends State {
 
 
 	public Player player;
-	private ArrayList<Enemy> zombiesList;
+	private ArrayList<Enemy> enemiesList;
 	public ArrayList<Projectile> bulletsList;
 
 	private ArrayList<PickUp> pickUpsList;
@@ -60,15 +62,14 @@ public class Level extends State {
 	 * @param path
 	 * 		- name of .tmx file for tiled grid
 	 */
-	public Level(StateManager stateManager, String path, int spawnEntryID, int playerNumber) {
+	public Level(StateManager stateManager, String path, int spawnEntryID) {
 		super(stateManager);	
 		
 		bulletsList = new ArrayList<Projectile>();
-		zombiesList = new ArrayList<Enemy>();
+		enemiesList = new ArrayList<Enemy>();
 		pickUpsList = new ArrayList<PickUp>();
 		npcsList = new ArrayList<NPC>();
 		gatesList = new ArrayList<Gate>();
-		this.playerNumber = playerNumber;
 			
 		try {
 			String mapFile = String.format("stages/%s.tmx", path);
@@ -95,6 +96,10 @@ public class Level extends State {
 		}
 	}
 	
+	public ArrayList<Enemy> getEnemiesList() {
+		return enemiesList;
+	}
+	
 	public static boolean gunFire() {
 		return RangedWeapon.isFiring();
 	}
@@ -118,7 +123,11 @@ public class Level extends State {
 				}
 			}
 		}	
-		player = new Player(this, x, y, 5, playerNumber);
+		
+		x*= Zombies.WorldScale;
+		y*= Zombies.WorldScale;
+		
+		player = new Player(this, x, y, 5);
 	}
 	
 	private void loadGates() {
@@ -134,6 +143,9 @@ public class Level extends State {
 			String destination = (String) p.get("Destination");
 			int entryID = (Integer) p.get("EntryID");
 			
+			x*= Zombies.WorldScale;
+			y*= Zombies.WorldScale;
+			
 			Gate gate = new Gate(box2dWorld, new Rectangle(x, y, width, height),
 					StateID.valueOf(destination), entryID);
 			gatesList.add(gate);
@@ -148,6 +160,9 @@ public class Level extends State {
 			MapProperties p = object.getProperties();
 			int x = ((Float) p.get("x")).intValue();
 			int y = ((Float) p.get("y")).intValue();
+			
+			x*= Zombies.WorldScale;
+			y*= Zombies.WorldScale;
 
 			switch(object.getName()) {
 				case "powerUpHealth":
@@ -181,7 +196,15 @@ public class Level extends State {
 				break;
 				
 				case "zombie1":
-					zombiesList.add(new Zombie(this, x, y, 3));
+					enemiesList.add(new Zombie1(this, x, y));
+				break;
+				
+				case "zombie2":
+					enemiesList.add(new Zombie2(this, x, y));
+				break;
+				
+				case "zombie3":
+					enemiesList.add(new Zombie3(this, x, y));
 				break;
 				
 				case "NPC":
@@ -189,7 +212,7 @@ public class Level extends State {
 				break;
 				
 				case "boss1":
-					zombiesList.add(new Boss1(this, x, y));
+					enemiesList.add(new Boss1(this, x, y));
 				break;
 				
 				default:
@@ -248,7 +271,7 @@ public class Level extends State {
 							throw new IllegalArgumentException();
 					}		
 					
-					lightsList.add(new PointLight(rayHandler, 128, color, distance, x, y));
+					lightsList.add(new PointLight(rayHandler, 20, color, distance, x, y));
 				}
 	}
 
@@ -281,8 +304,8 @@ public class Level extends State {
 		worldBatch.setProjectionMatrix(camera.combined);
 		worldBatch.begin();		
 		player.render();	
-		for (Enemy zombie : zombiesList)
-			zombie.render();
+		for (int i = 0; i < enemiesList.size(); i++)
+			enemiesList.get(i).render();
 		for (Projectile bullet : bulletsList)
 			bullet.render();
 		for(PickUp pickUp : pickUpsList)
@@ -296,7 +319,7 @@ public class Level extends State {
 		player.hudRender();
 		UIBatch.end();
 
-		//box2dDebugRenderer.render(box2dWorld, camera.combined.scl(Zombies.PhysicsDensity));
+		box2dDebugRenderer.render(box2dWorld, camera.combined.scl(Zombies.PhysicsDensity));
 	}
 
 	@Override
@@ -305,12 +328,14 @@ public class Level extends State {
 		camera.update();
 		box2dWorld.step(1 / 60f, 6, 2);
 		
-		for(Enemy zombie : zombiesList)
-			zombie.update(this.inLights());
+		for(int i = 0; i < enemiesList.size(); i++)
+			enemiesList.get(i).update(this.inLights());
+		
+		
 		for(NPC npc : npcsList)
 			npc.update();
 		
-		Entity.removeDeletionFlagged(zombiesList);
+		Entity.removeDeletionFlagged(enemiesList);
 		Entity.removeDeletionFlagged(bulletsList);
 		Entity.removeDeletionFlagged(pickUpsList);
 		Entity.removeDeletionFlagged(npcsList);
@@ -321,8 +346,12 @@ public class Level extends State {
 
 		// this.inLights()
 		if(player.update(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0))) <= 0) {
-			stateManager.loadState(new Level(stateManager, "teststage", -1, playerNumber));
+			stateManager.loadState(new Level(stateManager, "teststage", -1));
 		}
+	}
+	
+	public StateManager getStateManager() {
+		return stateManager;
 	}
 	
 	public Player getPlayer() {
