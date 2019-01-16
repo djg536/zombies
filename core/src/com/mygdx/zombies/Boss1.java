@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.zombies.states.Level;
+import com.mygdx.zombies.states.StateManager.StateID;
 
 public class Boss1 extends Enemy {
 	
@@ -67,6 +68,10 @@ public class Boss1 extends Enemy {
 		float y = (float)Math.toDegrees(Math.sin(rightHandAngle))*+(attackStep-60)/60;
 		
 		return new Vector2(x-sprite.getWidth()/2, y);
+	}
+	
+	public void dispose() {
+		level.getStateManager().loadState(StateID.ENDSCREEN);
 	}
 		
 	@Override

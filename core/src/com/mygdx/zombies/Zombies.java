@@ -31,6 +31,7 @@ public class Zombies extends Game {
 	public static Sound soundAmmo;
 	public static Sound soundPowerUp;
 	public static Sound soundAmbientWind;
+	public static Sound soundEndMusic;
 	public static Sound[] soundArrayZombie;
 	public static Random random;
 	private StateManager sm;
@@ -78,6 +79,7 @@ public class Zombies extends Game {
 		soundAmmo = Gdx.audio.newSound(Gdx.files.internal("sounds/ammo.wav"));
 		soundPowerUp = Gdx.audio.newSound(Gdx.files.internal("sounds/powerup.wav"));
 		soundAmbientWind = Gdx.audio.newSound(Gdx.files.internal("sounds/wind.mp3"));
+		soundEndMusic = Gdx.audio.newSound(Gdx.files.internal("sounds/alligator_crawl.mp3"));
 		
 		soundArrayZombie = new Sound[8];
 		for(int i = 0; i<soundArrayZombie.length; i++)

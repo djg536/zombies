@@ -304,8 +304,8 @@ public class Level extends State {
 		worldBatch.setProjectionMatrix(camera.combined);
 		worldBatch.begin();		
 		player.render();	
-		for (Enemy zombie : enemiesList)
-			zombie.render();
+		for (int i = 0; i < enemiesList.size(); i++)
+			enemiesList.get(i).render();
 		for (Projectile bullet : bulletsList)
 			bullet.render();
 		for(PickUp pickUp : pickUpsList)
@@ -348,6 +348,10 @@ public class Level extends State {
 		if(player.update(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0))) <= 0) {
 			stateManager.loadState(new Level(stateManager, "teststage", -1));
 		}
+	}
+	
+	public StateManager getStateManager() {
+		return stateManager;
 	}
 	
 	public Player getPlayer() {

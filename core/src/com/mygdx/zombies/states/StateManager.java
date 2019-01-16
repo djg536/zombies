@@ -5,7 +5,8 @@ public class StateManager {
 	private State currentState;
 	
 	public static enum StateID {
-		MAINMENU, CREDITSMENU, OPTIONSMENU, ENDSCREEN, PLAYERSELECTMENU, STAGE1, STAGE2, STAGE3, TESTSTAGE1, TESTSTAGE2
+		MAINMENU, CREDITSMENU, OPTIONSMENU, ENDSCREEN, BRIEFINGSCREEN,
+		PLAYERSELECTMENU, STAGE1, STAGE2, STAGE3, TESTSTAGE1, TESTSTAGE2
 	}
 
 	public StateManager() {
@@ -42,6 +43,9 @@ public class StateManager {
 				break;
 			case PLAYERSELECTMENU:
 				tempState = new PlayerSelectMenu(this);
+				break;
+			case BRIEFINGSCREEN:
+				tempState = new BriefingScreen(this);
 				break;
 			case TESTSTAGE1:
 				tempState = new Level(this, "teststage", entryID);
