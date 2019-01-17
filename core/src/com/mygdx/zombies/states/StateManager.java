@@ -1,5 +1,8 @@
 package com.mygdx.zombies.states;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.TimeUtils;
+
 public class StateManager {
 
 	private static State currentState;
@@ -77,6 +80,7 @@ public class StateManager {
 
 	public void render() {
 		currentState.render();
+		System.out.println("fps: " + Gdx.graphics.getFramesPerSecond());
 	}
 
 	public void dispose() {

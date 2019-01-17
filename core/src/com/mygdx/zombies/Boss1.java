@@ -19,7 +19,7 @@ public class Boss1 extends Enemy {
 	private Level level;
 
 	public Boss1(Level level, int x, int y) {	
-		super(level, x, y, "zombie/boss1_head.png", 2, 50);
+		super(level, x, y, "zombie/boss1_head.png", 2, 30);
 		
 		this.level = level;
 		spriteBatch = level.worldBatch;
