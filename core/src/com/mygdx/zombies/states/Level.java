@@ -235,7 +235,7 @@ public class Level extends State {
 	private void initLights() {
 		rayHandler = new RayHandler(box2dWorld);
 		rayHandler.setShadows(true);
-		rayHandler.setAmbientLight(.5f);
+		rayHandler.setAmbientLight(.4f);
 		lightsList = new ArrayList<PointLight>();
 		
 		MapObjects objects = map.getLayers().get("Lights").getObjects();
