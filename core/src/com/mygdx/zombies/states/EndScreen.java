@@ -13,6 +13,7 @@ public class EndScreen extends State {
 	public EndScreen(StateManager stageManager) {
 		super(stageManager);
 		banner = new Texture("win.png");
+		Zombies.soundAmbientWind.stop();
 		Zombies.soundEndMusic.loop();
 	}
 	

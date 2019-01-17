@@ -87,9 +87,6 @@ public class Player extends Entity {
 		swingStep = 0;
 		swingDirection = -1;	
 	}
-<<<<<<< HEAD
-
-=======
 	
 	public static void setPlayerNumber(int playerNumber) {
 		Player.playerNumber = playerNumber;
@@ -102,9 +99,8 @@ public class Player extends Entity {
 	private void setUnequippedTexture() {
 		sprite.setTexture(unequippedTexture);
 	}
-	
->>>>>>> 3cf0a23dd861084dacecf81d013749d85dc7009a
-	public void SetWeapon(Weapon weapon) {
+
+	public void setWeapon(Weapon weapon) {
 		if(weapon instanceof MeleeWeapon)
 			setUnequippedTexture();
 		else
