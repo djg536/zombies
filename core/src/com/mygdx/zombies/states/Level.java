@@ -363,7 +363,7 @@ public class Level extends State {
 		UIBatch.end();
 
 		//Enable this line to show Box2D physics debug info
-		//box2dDebugRenderer.render(box2dWorld, camera.combined.scl(Zombies.PhysicsDensity));
+		//box2DDebugRenderer.render(box2dWorld, camera.combined.scl(Zombies.PhysicsDensity));
 	}
 		
 	public World getBox2dWorld() {
@@ -413,6 +413,6 @@ public class Level extends State {
 		rayHandler.dispose();
 		renderer.dispose();
 		map.dispose();
-		//box2dDebugRenderer.dispose();
+		//box2DDebugRenderer.dispose();
 	}
 }

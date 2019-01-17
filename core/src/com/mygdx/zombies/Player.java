@@ -51,8 +51,8 @@ public class Player extends Entity {
 	 * @param y - the y spawn coordinate
 	 */
 	public Player(Level level, int x, int y) {
-		spriteBatch = level.worldBatch;
-		UIBatch = level.UIBatch;
+		spriteBatch = level.getWorldBatch();
+		UIBatch = level.getUIBatch();
 		this.level = level;
 
 		//Initialise player attributes to default values
@@ -358,9 +358,9 @@ public class Player extends Entity {
 	 * Dispose of the player instance, clearing the memory
 	 */
 	public void dispose() {
+		super.dispose();
 		hud.getTexture().dispose();
 		equippedTexture.dispose();
 		unequippedTexture.dispose();
-		weapon.dispose();
 	}
 }

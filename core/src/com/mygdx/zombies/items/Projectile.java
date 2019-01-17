@@ -33,7 +33,7 @@ public class Projectile extends Entity {
 		angle += Zombies.random.nextFloat()*0.2f-0.1f;
 		
 		//Add sprite
-		this.spriteBatch = level.worldBatch;
+		this.spriteBatch = level.getWorldBatch();
 		sprite = new Sprite(new Texture(Gdx.files.internal(spritePath)));
 		sprite.setRotation((float)Math.toDegrees(angle));
 
@@ -71,7 +71,7 @@ public class Projectile extends Entity {
 	 */
 	@Override
 	public void dispose() {
+		super.dispose();
 		sprite.getTexture().dispose();
-		box2dWorld.destroyBody(body);
 	}
 }

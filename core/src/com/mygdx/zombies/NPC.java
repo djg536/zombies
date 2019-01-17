@@ -26,7 +26,7 @@ public class NPC extends Entity {
 	public NPC(Level level, int x, int y) {
 		
 		//Add sprite
-		spriteBatch = level.worldBatch;
+		spriteBatch = level.getWorldBatch();
 		sprite = new Sprite(new Texture(Gdx.files.internal("npc.png")));
 		
 		//Add box2d body
@@ -84,6 +84,7 @@ public class NPC extends Entity {
 	}
 	
 	public void dispose() {
+		super.dispose();
 		sprite.getTexture().dispose();
 	}
 }

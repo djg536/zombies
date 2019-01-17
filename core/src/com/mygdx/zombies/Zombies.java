@@ -21,6 +21,7 @@ public class Zombies extends Game {
 	public static int InitialWindowHeight = 720;
 	public static int InitialViewportWidth = 1280;
 	public static int InitialViewportHeight = 720;
+	public static String windowTitle = "Silence of the Lamberts";
 	public static float WorldScale = 1.5f;
 	public static float PhysicsDensity = 100;
 	public static BitmapFont mainFont;

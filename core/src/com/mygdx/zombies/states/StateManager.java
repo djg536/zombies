@@ -1,7 +1,7 @@
 package com.mygdx.zombies.states;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.TimeUtils;
+import com.mygdx.zombies.Zombies;
 
 /**
  * Class for managing and switching game states
@@ -115,7 +115,7 @@ public class StateManager {
 	 */
 	public void render() {
 		currentState.render();
-		System.out.println("fps: " + Gdx.graphics.getFramesPerSecond());
+		Gdx.graphics.setTitle(Zombies.windowTitle+" ["+Gdx.graphics.getFramesPerSecond() + "]");
 	}
 
 	/**

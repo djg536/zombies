@@ -30,7 +30,7 @@ public class Boss1 extends Enemy {
 		super(level, x, y, "zombie/boss1_head.png", 2, 30);
 		
 		this.level = level;
-		spriteBatch = level.worldBatch;
+		spriteBatch = level.getWorldBatch();
 		
 		//Initialise arm sprites
 		armLeft = new Sprite(new Texture(Gdx.files.internal("zombie/boss1_armLeft.png")));
@@ -98,6 +98,7 @@ public class Boss1 extends Enemy {
 	@Override
 	public void dispose() {
 		//Clean up memory and dispose of entity
+		super.dispose();
 		armLeft.getTexture().dispose();
 		armRight.getTexture().dispose();
 		//Load win screen now this enemy is killed

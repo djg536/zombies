@@ -8,8 +8,8 @@ import com.mygdx.zombies.Zombies;
  */
 public class State {
 
-	public SpriteBatch worldBatch;
-	public SpriteBatch UIBatch;
+	protected SpriteBatch worldBatch;
+	protected SpriteBatch UIBatch;
 
 	/**
 	 * Constructor for the state class
@@ -20,13 +20,26 @@ public class State {
 		//Resize to account for window dimensions
 		resize();
 	}
-
-	public void render() {
-
+	
+	public SpriteBatch getWorldBatch() {
+		return worldBatch;
+	}
+	
+	public SpriteBatch getUIBatch() {
+		return UIBatch;
 	}
 
-	public void update() {
-		
+	/**
+	 * Virtual render method
+	 */
+	public void render() {
+	}
+
+	
+	/**
+	 * Virtual update method
+	 */
+	public void update() {	
 	}
 	
 	/**

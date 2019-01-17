@@ -26,7 +26,7 @@ public class PickUp extends Entity {
 	 * @param type - the type identifier, to determine type in collisions
 	 */
 	public PickUp(Level level, int x, int y, String pickUpSpritePath, Object containedItem, InfoContainer.BodyID type) {
-		spriteBatch = level.worldBatch;
+		spriteBatch = level.getWorldBatch();
 		sprite = new Sprite(new Texture(Gdx.files.internal(pickUpSpritePath)));
 		sprite.setPosition(x, y);
 	
@@ -55,10 +55,11 @@ public class PickUp extends Entity {
 		sprite.draw(spriteBatch);
 	}
 	
-	/*
+	/**
 	 * Dispose of the object, clearing the memory
 	 */
 	public void dispose() {
+		super.dispose();
 		sprite.getTexture().dispose();
 	}
 }

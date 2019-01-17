@@ -9,9 +9,8 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.width = Zombies.InitialWindowWidth;
         config.height = Zombies.InitialWindowHeight;
-        config.title = "Silence of the Lamberts";
+        config.title = Zombies.windowTitle;
         config.vSyncEnabled = true;
-        //config.fullscreen = true;
         new LwjglApplication(new Zombies(), config);
 	}
 }
