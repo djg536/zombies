@@ -40,7 +40,7 @@ public class Enemy extends Entity {
 	public Enemy(Level level, int x, int y, String spritePath, float speed, int health) {
 		
 		//Add sprite
-		spriteBatch = level.worldBatch;
+		spriteBatch = level.getWorldBatch();
 		sprite = new Sprite(new Texture(Gdx.files.internal(spritePath)));
 
 		//Add box2d body

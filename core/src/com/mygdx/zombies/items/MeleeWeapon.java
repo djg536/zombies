@@ -23,7 +23,7 @@ public class MeleeWeapon implements Weapon {
 	}
 	
 	public void setLevel(Level level) {
-		spriteBatch = level.worldBatch;
+		spriteBatch = level.getWorldBatch();
 		
 	}
 
