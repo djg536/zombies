@@ -33,14 +33,16 @@ import com.mygdx.zombies.states.StateManager.StateID;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 
+/**
+ * Level class to handle the main gameplay
+ */
 public class Level extends State {
 
-
-	public Player player;
+	private Player player;
 	private ArrayList<Enemy> enemiesList;
-	public ArrayList<Projectile> bulletsList;
+	private ArrayList<Projectile> bulletsList;
 	private ArrayList<PickUp> pickUpsList;
-	public World box2dWorld;
+	private World box2dWorld;
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
@@ -55,8 +57,8 @@ public class Level extends State {
 	/**
 	 * Constructor for the level
 	 * 
-	 * @param path
-	 * 		- name of .tmx file for tiled grid
+	 * @param path - filename of .tmx file for tiled grid
+	 * @param spawnEntryID - the id of an entry to spawn the player at
 	 */
 	public Level(String path, int spawnEntryID) {
 		super();	
@@ -107,6 +109,14 @@ public class Level extends State {
 		return RangedWeapon.isFiring();
 	}
 	
+	public ArrayList<Projectile> getBulletsList() {
+		return bulletsList;
+	}
+	
+	/**
+	 * Load the player in the position associated with spawnEntryID
+	 * @param spawnEntryID - the id of the entry to spawn the player at
+	 */
 	private void loadPlayer(int spawnEntryID) {
 		int x, y;
 		x = y = 300;
@@ -114,7 +124,7 @@ public class Level extends State {
 		if(spawnEntryID != -1)
 		{
 			MapObjects objects = map.getLayers().get("Entries").getObjects();
-			//Parse entries until one with the correct ID is found
+			//Parse entries until an entry with the correct ID is found
 			//Then get x and y coordinates and supply to player
 			for(MapObject object : objects) {	
 				MapProperties p = object.getProperties();
@@ -133,11 +143,17 @@ public class Level extends State {
 		player = new Player(this, x, y);
 	}
 	
+	/**
+	 * Method to parse map gates
+	 */
 	private void loadGates() {
+		
+		//Gte gates layer
 		MapObjects objects = map.getLayers().get("Gates").getObjects();
 		
 		for(MapObject object : objects) {
 			
+			//Get object properties
 			MapProperties p = object.getProperties();
 			int x = ((Float) p.get("x")).intValue();
 			int y = ((Float) p.get("y")).intValue();
@@ -146,27 +162,38 @@ public class Level extends State {
 			String destination = (String) p.get("Destination");
 			int entryID = (Integer) p.get("EntryID");
 			
+			//Scale coordinates
 			x*= Zombies.WorldScale;
 			y*= Zombies.WorldScale;
 			
+			//Add the gate to the world
 			Gate gate = new Gate(box2dWorld, new Rectangle(x, y, width, height),
 					StateID.valueOf(destination), entryID);
 			gatesList.add(gate);
 		}
 	}
 
+	/**
+	 * Method to parse map objects, such as power ups, weapons, enemies and NPCs
+	 */
 	private void loadObjects() {
+		
+		//Get objects layer
 		MapObjects objects = map.getLayers().get("Objects").getObjects();
 		
+		//Iterate objects
 		for(MapObject object : objects) {
 			
+			//Retrieve properties
 			MapProperties p = object.getProperties();
 			int x = ((Float) p.get("x")).intValue();
 			int y = ((Float) p.get("y")).intValue();
 			
+			//Scale coordinates
 			x*= Zombies.WorldScale;
 			y*= Zombies.WorldScale;
 
+			//Added the object, using the name as an identifier
 			switch(object.getName()) {
 				case "powerUpHealth":
 					pickUpsList.add(new PickUp(this, x, y, "pickups/heart.png",
@@ -232,16 +259,23 @@ public class Level extends State {
 		camera.update();
 	}
 
+	/**
+	 * Initialise lighting, loading from the map
+	 */
 	private void initLights() {
+		
+		//Set up rayhandler
 		rayHandler = new RayHandler(box2dWorld);
 		rayHandler.setShadows(true);
 		rayHandler.setAmbientLight(.4f);
 		lightsList = new ArrayList<PointLight>();
 		
+		//Parse tiled map light objects
 		MapObjects objects = map.getLayers().get("Lights").getObjects();
 				
 				for(MapObject object : objects) {
 					
+					//Get object properties
 					MapProperties p = object.getProperties();
 					int x = ((Float) p.get("x")).intValue();
 					int y = ((Float) p.get("y")).intValue();
@@ -249,9 +283,11 @@ public class Level extends State {
 					x *=  Zombies.WorldScale;
 					y *=  Zombies.WorldScale;
 					
+					
 					Color color;
 					int distance;
 					
+					//Set attributes based on light type
 					switch(object.getName()) {
 						case "street":
 							color = Color.ORANGE;
@@ -273,35 +309,41 @@ public class Level extends State {
 							throw new IllegalArgumentException();
 					}		
 					
+					//Add light to list
 					lightsList.add(new PointLight(rayHandler, 20, color, distance, x, y));
 				}
 	}
 	
+	/**
+	 * @return true if the player is within the radius of any of the lights
+	 */
 	public boolean inLights() {
-		/*
-		check if the player is within the radius of any of the lights
-		if so, return true
-		*/
-		for (PointLight light : lightsList) {
-			if (Math.pow((player.getPositionX() - light.getX()),2) + Math.pow((player.getPositionY() - light.getY()),2)
-					< Math.pow(light.getDistance(),2)) {
+		//Iterate through lights
+		for (PointLight light : lightsList)
+			//Calculate distance between each light and player
+			if (Zombies.distanceBetween(new Vector2(player.getPositionX(), player.getPositionY()), new Vector2(light.getX(), light.getY()))
+					< light.getDistance())
 				return true;
-			}
-		}
 		return false;
 	}
 
 	/**
-	 * Call to draw stage to screen
+	 * Call to draw level to screen
 	 */
 	@Override
 	public void render() {
+		
+		//Render map
 		renderer.setView(camera);
 		renderer.render();
 
+
+		//Render world
 		worldBatch.setProjectionMatrix(camera.combined);
-		worldBatch.begin();		
-		player.render();	
+		worldBatch.begin();				
+		//Draw player
+		player.render();			
+		//Draw mobs and game objects
 		for (int i = 0; i < enemiesList.size(); i++)
 			enemiesList.get(i).render();
 		for (Projectile bullet : bulletsList)
@@ -309,10 +351,13 @@ public class Level extends State {
 		for(PickUp pickUp : pickUpsList)
 			pickUp.render();
 		for(NPC npc : npcsList)
-			npc.render();
-		
+			npc.render();	
 		worldBatch.end();
+		
+		//Render lighting
 		rayHandler.render();
+		
+		//Render HUD
 		UIBatch.begin();
 		player.hudRender();
 		UIBatch.end();
@@ -320,30 +365,40 @@ public class Level extends State {
 		//Enable this line to show Box2D physics debug info
 		//box2dDebugRenderer.render(box2dWorld, camera.combined.scl(Zombies.PhysicsDensity));
 	}
+		
+	public World getBox2dWorld() {
+		return box2dWorld;
+	}
 
 	@Override
 	public void update() {
+		//Method to update everything in the state
+		
+		//Update the camera position
 		camera.position.set(player.getPositionX(), player.getPositionY(), 0);
 		camera.update();
+		
+		//Update Box2D physics
 		box2dWorld.step(1 / 60f, 6, 2);
 		
+		//Update mobs
 		for(int i = 0; i < enemiesList.size(); i++)
-			enemiesList.get(i).update(this.inLights());
-		
-		
+			enemiesList.get(i).update(this.inLights());			
 		for(NPC npc : npcsList)
 			npc.update();
 		
+		//Remove deletion flagged objects
 		Entity.removeDeletionFlagged(enemiesList);
 		Entity.removeDeletionFlagged(bulletsList);
 		Entity.removeDeletionFlagged(pickUpsList);
 		Entity.removeDeletionFlagged(npcsList);
-		//Entity.removeDeletionFlagged(player);
+		Entity.removeDeletionFlagged(gatesList);
 
+		//Update Box2D lighting
 		rayHandler.setCombinedMatrix(camera);
 		rayHandler.update();
 
-		// this.inLights()
+		//Update player
 		player.update(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0)));
 	}
 	
@@ -354,12 +409,10 @@ public class Level extends State {
 	@Override
 	public void dispose() {
 		super.dispose();
-		//rayHandler.dispose();
-		// box2dDebugRenderer.dispose();
-		// box2dWorld.dispose();
-		// renderer.dispose();
-		// player.dispose();
-		// zombie.dispose();
-		// map.dispose();
+		//Clean up memory
+		rayHandler.dispose();
+		renderer.dispose();
+		map.dispose();
+		//box2dDebugRenderer.dispose();
 	}
 }

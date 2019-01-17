@@ -10,12 +10,21 @@ import com.mygdx.zombies.items.Projectile;
 import com.mygdx.zombies.items.Weapon;
 import com.mygdx.zombies.states.StateManager;
 
+/**
+ * Class for handling Box2D collisions and collision events
+ */
 public class CustomContactListener implements ContactListener {
 	
+	/*
+	 * Collision event method called when Box2D objects collide
+	 */
 	@Override
 	public void beginContact(Contact contact) {
+		
+		//Get the Box2D bodies that collided
 		Body bodyA = contact.getFixtureA().getBody();
 		Body bodyB = contact.getFixtureB().getBody();
+		//Extract extra data from the bodies
 		InfoContainer a = (InfoContainer)bodyA.getUserData();
 		InfoContainer b = (InfoContainer)bodyB.getUserData();
 			
@@ -34,12 +43,14 @@ public class CustomContactListener implements ContactListener {
 			b = tempInfoContainer;
 		}
 		
+		//Switch statement to allow different collision events for different object collisions.
+		//Remember that a has been sorted to be before b alphabetically, so objects will only occur in a specific order
 		switch(aType) {
 		
 			case WALL:
 				if (bType == InfoContainer.BodyID.ZOMBIE) {
 					Enemy zombie = (Enemy)b.getObj();
-					zombie.reverseVelocity();
+					//zombie.reverseVelocity();
 					System.out.println("Collision between zombie and wall");
 				}
 				break;

@@ -12,6 +12,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.mygdx.zombies.states.StateManager;
 
+/**
+ * Base class for the game
+ */
 public class Zombies extends Game {
 
 	public static int InitialWindowWidth = 1280;
@@ -34,7 +37,7 @@ public class Zombies extends Game {
 	public static Sound soundEndMusic;
 	public static Sound[] soundArrayZombie;
 	public static Random random;
-	private StateManager sm;
+	private StateManager stateManager;
 
 	// Collision masks. Can OR these together to combine.
 	// Use categoryBits (1 default) and mask bits (-1 default)
@@ -43,6 +46,11 @@ public class Zombies extends Game {
 	public static short projectileFilter = 1;
 	
 
+	/** Generate a BitmapFont using the given parameters
+	 * @param name - the filename of the true type font
+	 * @param size - the font size
+	 * @return - the generated BitmapFont
+	 */
 	public static BitmapFont generateFont(String name, int size) {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(name));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -52,26 +60,46 @@ public class Zombies extends Game {
 		return font;
 	}
 	
+	/** Calculate the angle between two points
+	 * @param p1 - the first point
+	 * @param p2 - the second point
+	 * @return - the angle in radians
+	 */
 	public static double angleBetweenRads(Vector2 p1, Vector2 p2) {
 		double diffx = p1.x - p2.x;
 		double diffy = p1.y - p2.y;
 		return Math.atan2(diffy, diffx);
 	}
 	
+	/** Pythagorean algorithm to calculate the distance between two points
+	 * @param p1 - the first point
+	 * @param p2 - the second point
+	 * @return - the distance between the two points
+	 */
 	public static double distanceBetween(Vector2 p1, Vector2 p2) {
 		return Math.sqrt(Math.pow(p1.x-p2.x, 2) + Math.pow(p1.y-p2.y, 2));
 	}
 
+	/*
+	 * Method called on game start
+	 */
 	@Override
 	public void create() {
+		//Initialise Box2D physics enginw
 		Box2D.init();
+		//Create new random number generator
 		random = new Random();
 		
-		sm = new StateManager();
+		//Create statemanager
+		stateManager = new StateManager();
+		
+		//Generate fonts and store in memory
 		mainFont = Zombies.generateFont("NESCyrillic.ttf", 55);
 		titleFont = Zombies.generateFont("Amatic-Bold.ttf", 150);
 		pointsFont = Zombies.generateFont("KaushanScript-Regular.otf", 50);
 		creditsFont = Zombies.generateFont("SourceSansPro-Regular.otf", 50);
+		
+		//Load sounds into memory
 		soundShoot = Gdx.audio.newSound(Gdx.files.internal("sounds/gun.wav"));
 		soundSwing = Gdx.audio.newSound(Gdx.files.internal("sounds/swing.wav"));
 		soundSelect = Gdx.audio.newSound(Gdx.files.internal("sounds/select.wav"));
@@ -86,17 +114,26 @@ public class Zombies extends Game {
 			soundArrayZombie[i] = Gdx.audio.newSound(Gdx.files.internal(String.format("sounds/zombie%d.wav", i+1)));
 	}
 
+	/*
+	 * Method to perform a single render call
+	 */
 	@Override
 	public void render() {
-		sm.gameLoop();
+		//Update current state of StateManager
+		stateManager.gameLoop();
+		//Set default background colour
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		sm.render();
+		//Render current state of StateManager
+		stateManager.render();
 	}
 
+	/*
+	 * Run when the game is closed, clearing the memory
+	 */
 	@Override
 	public void dispose() {
-		sm.dispose();
+		stateManager.dispose();
 		mainFont.dispose();
 		titleFont.dispose();
 		pointsFont.dispose();
@@ -110,8 +147,11 @@ public class Zombies extends Game {
 		soundAmbientWind.dispose();
 	}
 
+	/*
+	 * Run when the game menu is resized
+	 */
 	@Override
 	public void resize(int width, int height) {
-		sm.resize(width, height);
+		stateManager.resize(width, height);
 	}
 }
