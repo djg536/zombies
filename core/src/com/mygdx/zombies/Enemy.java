@@ -40,7 +40,7 @@ public class Enemy extends Entity {
 	public Enemy(Level level, int x, int y, String spritePath, float speed, int health) {
 		
 		//Add sprite
-		spriteBatch = level.getWorldBatch();
+		spriteBatch = level.worldBatch;
 		sprite = new Sprite(new Texture(Gdx.files.internal(spritePath)));
 
 		//Add box2d body
@@ -71,8 +71,8 @@ public class Enemy extends Entity {
 	 */
 	private void move() {
 					
-		angleToPlayerRadians = Math.toDegrees(Zombies.angleBetweenRads(new Vector2(getPositionX(), getPositionY()),
-			     new Vector2(player.getPositionX(), player.getPositionY())));
+		angleToPlayerRadians = Zombies.angleBetweenRads(new Vector2(getPositionX(), getPositionY()),
+			     new Vector2(player.getPositionX(), player.getPositionY()));
 		
 		if(alertTimer <= -1) {
 			//Wandering state
@@ -155,10 +155,5 @@ public class Enemy extends Entity {
 		//Remove enemy if health below zero
 		if(health <= 0)					
 			getInfo().flagForDeletion();
-	}
-	
-	public void dispose() {
-		super.dispose();
-		sprite.getTexture().dispose();
 	}
 }
