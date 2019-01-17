@@ -7,10 +7,8 @@ public class State {
 
 	public SpriteBatch worldBatch;
 	public SpriteBatch UIBatch;
-	protected StateManager stateManager;
 
-	public State(StateManager stateManager) {
-		this.stateManager = stateManager;
+	public State() {
 		worldBatch = new SpriteBatch();
 		UIBatch = new SpriteBatch();
 		resize();

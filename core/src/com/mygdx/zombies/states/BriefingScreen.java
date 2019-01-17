@@ -11,8 +11,8 @@ public class BriefingScreen extends State {
 
 	private Sprite banner;
 	
-	public BriefingScreen(StateManager stateManager) {
-		super(stateManager);
+	public BriefingScreen() {
+		super();
 		banner = new Sprite(new Texture("header.jpg"));
 		banner.setScale(4.3f);		
 		banner.setPosition(0, Zombies.InitialWindowHeight-banner.getHeight());
@@ -21,7 +21,7 @@ public class BriefingScreen extends State {
 	@Override
 	public void update() {
 		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Gdx.input.justTouched()) {
-			stateManager.loadState(StateID.PLAYERSELECTMENU);
+			StateManager.loadState(StateID.PLAYERSELECTMENU);
 		}
 	}
 	

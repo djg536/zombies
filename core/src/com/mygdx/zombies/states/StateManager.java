@@ -2,7 +2,7 @@ package com.mygdx.zombies.states;
 
 public class StateManager {
 
-	private State currentState;
+	private static State currentState;
 	
 	public static enum StateID {
 		MAINMENU, CREDITSMENU, OPTIONSMENU, ENDSCREEN, BRIEFINGSCREEN,
@@ -10,57 +10,57 @@ public class StateManager {
 	}
 
 	public StateManager() {
-		currentState = new MainMenu(this);
+		currentState = new MainMenu();
 	}
 
 	public void resize(int width, int height) {
 		currentState.resize(width, height);
 	}
 
-	public void loadState(State newState) {
+	public static void loadState(State newState) {
 		currentState.dispose();
 		currentState = newState;
 	}
 	
-	public void loadState(StateID stateID) {
+	public static void loadState(StateID stateID) {
 		loadState(stateID, -1);
 	}
 	
-	public void loadState(StateID stateID, int entryID) {
+	public static void loadState(StateID stateID, int entryID) {
 		State tempState = null;
 		switch(stateID) {
 			case MAINMENU:
-				tempState = new MainMenu(this);
+				tempState = new MainMenu();
 				break;
 			case CREDITSMENU:
-				tempState = new CreditsMenu(this);
+				tempState = new CreditsMenu();
 				break;
 			case OPTIONSMENU:
-				tempState = new OptionsMenu(this);
+				tempState = new OptionsMenu();
 				break;
 			case ENDSCREEN:
-				tempState = new EndScreen(this);
+				tempState = new EndScreen();
 				break;
 			case PLAYERSELECTMENU:
-				tempState = new PlayerSelectMenu(this);
+				tempState = new PlayerSelectMenu();
 				break;
 			case BRIEFINGSCREEN:
-				tempState = new BriefingScreen(this);
+				tempState = new BriefingScreen();
 				break;
 			case TESTSTAGE1:
-				tempState = new Level(this, "teststage", entryID);
+				tempState = new Level("teststage", entryID);
 				break;
 			case TESTSTAGE2:
-				tempState = new Level(this, "teststage2", entryID);
+				tempState = new Level("teststage2", entryID);
 				break;
 			case STAGE1:
-				tempState = new Level(this, "World_One", entryID);
+				tempState = new Level("World_One", entryID);
 				break;
 			case STAGE2:
-				tempState = new Level(this, "World_Two", entryID);
+				tempState = new Level("World_Two", entryID);
 				break;
 			case STAGE3:
-				tempState = new Level(this, "World_Three", entryID);
+				tempState = new Level("World_Three", entryID);
 				break;
 			default:
 				System.err.println("Error: Unrecognised gate destination");

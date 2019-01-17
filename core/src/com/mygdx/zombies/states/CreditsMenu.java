@@ -10,8 +10,8 @@ public class CreditsMenu extends State {
 	private Texture background;
 	private Button back;
 
-	public CreditsMenu(StateManager stateManager) {
-		super(stateManager);
+	public CreditsMenu() {
+		super();
 		background = new Texture("background.jpg");
 		back = new Button(UIBatch, 500, 10, "Back");
 	}
@@ -35,7 +35,7 @@ public class CreditsMenu extends State {
 		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Gdx.input.justTouched()) {
 			if (back.isHover()) {
 				Zombies.soundSelect.play();
-				stateManager.loadState(StateID.MAINMENU);
+				StateManager.loadState(StateID.MAINMENU);
 			}
 		}
 	}

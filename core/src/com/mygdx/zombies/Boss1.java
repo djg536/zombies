@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.zombies.states.Level;
+import com.mygdx.zombies.states.StateManager;
 import com.mygdx.zombies.states.StateManager.StateID;
 
 public class Boss1 extends Enemy {
@@ -18,7 +19,7 @@ public class Boss1 extends Enemy {
 	private Level level;
 
 	public Boss1(Level level, int x, int y) {	
-		super(level, x, y, "zombie/boss1_head.png", 50, 1);	
+		super(level, x, y, "zombie/boss1_head.png", 2, 100);
 		
 		this.level = level;
 		spriteBatch = level.worldBatch;
@@ -33,14 +34,15 @@ public class Boss1 extends Enemy {
 	public void update(boolean inLights) {
 		super.update(inLights);
 		
-		attackStep++;
+		attackStep+=3;
 		if(attackStep > 100)
 			attackStep = 0;
 		
 		minionSpawnStep++;
-		if(minionSpawnStep > 300) {
+		if(minionSpawnStep > 160) {
 			minionSpawnStep = 0;			
-			Zombie1 minion = new Zombie1(level, getPositionX(), getPositionY());
+			Enemy minion =
+					new Enemy(level, getPositionX(), getPositionY(),"zombie/zombie1.png", 12, 5);
 			level.getEnemiesList().add(minion);
 		}
 		
@@ -70,8 +72,9 @@ public class Boss1 extends Enemy {
 		return new Vector2(x-sprite.getWidth()/2, y);
 	}
 	
+	@Override
 	public void dispose() {
-		level.getStateManager().loadState(StateID.ENDSCREEN);
+		StateManager.loadState(StateID.ENDSCREEN);
 	}
 		
 	@Override

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mygdx.zombies.states.Level;
 
 public class Enemy extends Entity {
@@ -26,7 +26,7 @@ public class Enemy extends Entity {
 	boolean inLights;
 	private int noiseTimer;
 
-	public Enemy(Level level, int x, int y, String spritePath, int speed, int health) {
+	public Enemy(Level level, int x, int y, String spritePath, float speed, int health) {
 		
 		//Add sprite
 		spriteBatch = level.worldBatch;
@@ -73,7 +73,7 @@ public class Enemy extends Entity {
 			totAngle = (float) angleDegrees; 
 			
 		} else {
-			if ((player.points() % 4 == 0 || player.points() == 0) && player.points() != last) {
+			if ((player.updatePoints() % 4 == 0 || player.updatePoints() == 0) && player.updatePoints() != last) {
 				
 				// Generates random number that correlates to one of NINE movement states
 				// N, NE, E, SE, S, SW, W, NW, Stationary
@@ -127,7 +127,7 @@ public class Enemy extends Entity {
 					randomY = 0;
 				}
 						
-				last = player.points();
+				last = player.updatePoints();
 			}
 		
 			body.applyLinearImpulse(new Vector2((float) randomX, (float) randomY), body.getPosition(), true);

@@ -12,14 +12,7 @@ import com.mygdx.zombies.states.StateManager;
 
 public class CustomContactListener implements ContactListener {
 	
-	private StateManager stateManager;
-	private int playerNumber;
-	
-	public CustomContactListener(StateManager stateManager, int playerNumber) {
-		this.stateManager = stateManager;
-		this.playerNumber = playerNumber;
-	}
-	
+	@Override
 	public void beginContact(Contact contact) {
 		Body bodyA = contact.getFixtureA().getBody();
 		Body bodyB = contact.getFixtureB().getBody();
@@ -54,15 +47,17 @@ public class CustomContactListener implements ContactListener {
 			case GATE:
 				if(bType == InfoContainer.BodyID.PLAYER) {
 					Gate gate = (Gate)a.getObj();
-					stateManager.loadState(gate.getDestination(), gate.getEntryID());
+					StateManager.loadState(gate.getDestination(), gate.getEntryID());
 					System.out.println("Player has contacted gate");
 				}
 				break;
 				
 			case PROJECTILE:
 				if (bType == InfoContainer.BodyID.ZOMBIE) {
+					Projectile projectile = (Projectile)a.getObj();
+					projectile.getInfo().flagForDeletion();
 					Enemy zombie = (Enemy)b.getObj();
-					zombie.setHealth(zombie.getHealth()-1);
+					zombie.setHealth(zombie.getHealth()-1);			
 					System.out.println("Zombie has been damaged");
 				}
 				else if (bType == InfoContainer.BodyID.WALL) {
@@ -81,7 +76,7 @@ public class CustomContactListener implements ContactListener {
 						zombie.setHealth(zombie.getHealth()-1);
 					}
 					else
-					player.setHealth(player.getHealth()-(player.getDamage()));			
+						player.setHealth(player.getHealth()-(player.getDamage()));			
 					System.out.println("Player has contacted zombie");
 				}
 				else if (bType == InfoContainer.BodyID.WEAPON) {
