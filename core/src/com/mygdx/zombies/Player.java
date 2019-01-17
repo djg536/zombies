@@ -102,7 +102,7 @@ public class Player extends Entity {
 				filter.categoryBits = Zombies.playerFilter;
 			}
 		};		
-		GenerateBodyFromSprite(level.box2dWorld, sprite, InfoContainer.BodyID.PLAYER, fixtureDef);
+		GenerateBodyFromSprite(level.getBox2dWorld(), sprite, InfoContainer.BodyID.PLAYER, fixtureDef);
 		body.setTransform(x / Zombies.PhysicsDensity, y / Zombies.PhysicsDensity, 0);
 		body.setLinearDamping(20);
 		body.setFixedRotation(true);

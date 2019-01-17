@@ -1,7 +1,6 @@
 package com.mygdx.zombies.items;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -48,7 +47,7 @@ public class Projectile extends Entity {
 				isSensor = true;
 			}
 		};
-		GenerateBodyFromSprite(level.box2dWorld, sprite, InfoContainer.BodyID.PROJECTILE, fixtureDef);
+		GenerateBodyFromSprite(level.getBox2dWorld(), sprite, InfoContainer.BodyID.PROJECTILE, fixtureDef);
 		body.setTransform(x / Zombies.PhysicsDensity, y / Zombies.PhysicsDensity, angle);
 		body.setBullet(true);
 		body.setFixedRotation(true);

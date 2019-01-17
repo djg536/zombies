@@ -38,7 +38,7 @@ public class PickUp extends Entity {
 			}
 		};
 		//Generate Box2D detection area from sprite
-		GenerateBodyFromSprite(level.box2dWorld, sprite, type, fixtureDef);
+		GenerateBodyFromSprite(level.getBox2dWorld(), sprite, type, fixtureDef);
 		
 		body.setTransform((x+sprite.getWidth()/2) / Zombies.PhysicsDensity,
 				(y+sprite.getHeight()/2) / Zombies.PhysicsDensity, 0);

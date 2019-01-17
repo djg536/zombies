@@ -51,7 +51,7 @@ public class Enemy extends Entity {
 				restitution = 1f;
 			}
 		};
-		GenerateBodyFromSprite(level.box2dWorld, sprite, InfoContainer.BodyID.ZOMBIE, fixtureDef);
+		GenerateBodyFromSprite(level.getBox2dWorld(), sprite, InfoContainer.BodyID.ZOMBIE, fixtureDef);
 		body.setTransform(x / Zombies.PhysicsDensity, y / Zombies.PhysicsDensity, 0);
 		body.setLinearDamping(4);
 		body.setFixedRotation(true);
@@ -87,7 +87,7 @@ public class Enemy extends Entity {
 			alertTimer --;
 		}
 		
-		int noise = (int)((double) level.player.getNoise()/(distanceToPlayer+1));
+		int noise = (int)((double) level.getPlayer().getNoise()/(distanceToPlayer+1));
 		if(noise>=2||isPlayerInSight()) {
 			alertTimer = noise*200;
 		}

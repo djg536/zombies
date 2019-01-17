@@ -38,11 +38,11 @@ import box2dLight.RayHandler;
  */
 public class Level extends State {
 
-	public Player player;
+	private Player player;
 	private ArrayList<Enemy> enemiesList;
-	public ArrayList<Projectile> bulletsList;
+	private ArrayList<Projectile> bulletsList;
 	private ArrayList<PickUp> pickUpsList;
-	public World box2dWorld;
+	private World box2dWorld;
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
@@ -107,6 +107,10 @@ public class Level extends State {
 	
 	public static boolean gunFire() {
 		return RangedWeapon.isFiring();
+	}
+	
+	public ArrayList<Projectile> getBulletsList() {
+		return bulletsList;
 	}
 	
 	/**
@@ -361,6 +365,10 @@ public class Level extends State {
 		//Enable this line to show Box2D physics debug info
 		//box2dDebugRenderer.render(box2dWorld, camera.combined.scl(Zombies.PhysicsDensity));
 	}
+		
+	public World getBox2dWorld() {
+		return box2dWorld;
+	}
 
 	@Override
 	public void update() {
@@ -384,7 +392,7 @@ public class Level extends State {
 		Entity.removeDeletionFlagged(bulletsList);
 		Entity.removeDeletionFlagged(pickUpsList);
 		Entity.removeDeletionFlagged(npcsList);
-		//Entity.removeDeletionFlagged(player);
+		Entity.removeDeletionFlagged(gatesList);
 
 		//Update Box2D lighting
 		rayHandler.setCombinedMatrix(camera);
@@ -402,12 +410,9 @@ public class Level extends State {
 	public void dispose() {
 		super.dispose();
 		//Clean up memory
-		//rayHandler.dispose();
-		// box2dDebugRenderer.dispose();
-		// box2dWorld.dispose();
-		// renderer.dispose();
-		// player.dispose();
-		// zombie.dispose();
-		// map.dispose();
+		rayHandler.dispose();
+		renderer.dispose();
+		map.dispose();
+		//box2dDebugRenderer.dispose();
 	}
 }

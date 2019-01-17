@@ -37,7 +37,7 @@ public class NPC extends Entity {
 				restitution = 0f;
 			}
 		};
-		GenerateBodyFromSprite(level.box2dWorld, sprite, InfoContainer.BodyID.NPC, fixtureDef);
+		GenerateBodyFromSprite(level.getBox2dWorld(), sprite, InfoContainer.BodyID.NPC, fixtureDef);
 		body.setTransform(x / Zombies.PhysicsDensity, y / Zombies.PhysicsDensity, 0);
 		body.setLinearDamping(4);
 		body.setFixedRotation(true);
