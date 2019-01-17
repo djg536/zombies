@@ -4,42 +4,65 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.zombies.states.Level;
 
+/**
+ * Ranged weapon class which fires projectiles
+ */
 public class RangedWeapon implements Weapon {
 
 	private int shootDelay;
 	private int timerTicks;
 	private Level level;
-	private String bulletSpritePath;
+	private String projectileSpritePath;
 	private Sound shootSound;
 	private float bulletSpeed;
-	public static boolean firing = false;
+	private static boolean firing;
 	
-	public RangedWeapon(Level level, int shootDelay, String bulletSpritePath, float bulletSpeed, Sound shootSound) {
+	/**
+	 * Constructor for the ranged weapon
+	 * @param level - the level to create the weapon in
+	 * @param shootDelay - the reload delay between firing projectiles
+	 * @param projectileSpritePath - the file name of the fired projectile sprite
+	 * @param bulletSpeed - the speed of the fired projectile
+	 * @param shootSound - the shooting sound
+	 */
+	public RangedWeapon(Level level, int shootDelay, String projectileSpritePath, float bulletSpeed, Sound shootSound) {
 		
 		this.level = level;		
 		this.shootDelay = shootDelay;
-		this.bulletSpritePath = bulletSpritePath;
+		this.projectileSpritePath = projectileSpritePath;
 		this.shootSound = shootSound;
 		this.bulletSpeed = bulletSpeed;
 		
+		//Initialise shoot timing values
 		timerTicks = 0;
+		firing = false;
 	}
 	
+	/** Method to check whether the weapon is firing
+	 * @return true if the weapon is firing
+	 */
 	public static boolean isFiring() {
 		return firing;
 	}
 	
+	/**
+	 * Fires a projectile, if the weapon is loaded
+	 */
 	@Override
 	public void use() {
 		if(timerTicks == 0) {
 			timerTicks++;
 			Vector2 pos = level.player.getHandsPosition();
 			level.bulletsList.add(new Projectile(level, (int)pos.x + level.player.getPositionX(), (int)pos.y + level.player.getPositionY(),
-					(float)(level.player.getAngleRadians() + Math.PI/2), bulletSpritePath, bulletSpeed, shootSound));
+					(float)(level.player.getAngleRadians() + Math.PI/2), projectileSpritePath, bulletSpeed));
 			firing = true;
+			shootSound.play();
 		}
 	}
 	
+	/**
+	 * Method to update shoot timer
+	 */
 	@Override
 	public void update(int x, int y, float rotation) {
 		
@@ -53,5 +76,9 @@ public class RangedWeapon implements Weapon {
 
 	@Override
 	public void render() {
+	}
+	
+	@Override
+	public void dispose() {		
 	}
 }

@@ -11,12 +11,24 @@ import com.mygdx.zombies.InfoContainer;
 import com.mygdx.zombies.Zombies;
 import com.mygdx.zombies.states.Level;
 
+/**
+ * Projectile class for moving bullets, missiles, arrows etc. which inflict damage on enemies
+ */
 public class Projectile extends Entity {
 
 	private SpriteBatch spriteBatch;
 	private Sprite sprite;
 
-	public Projectile(Level level, int x, int y, float angle, String spritePath, float speed, Sound sound) {
+	/**
+	 * Constructor for the projectile
+	 * @param level - the level instance to spawn the bullet in
+	 * @param x - the x spawn coordinate
+	 * @param y - the y spawn coordinate
+	 * @param angle - the angle to move
+	 * @param spritePath - the file name of the sprite to use
+	 * @param speed - the speed that the projectile moves
+	 */
+	public Projectile(Level level, int x, int y, float angle, String spritePath, float speed) {
 		
 		//Apply bullet spray
 		angle += Zombies.random.nextFloat()*0.2f-0.1f;
@@ -44,19 +56,23 @@ public class Projectile extends Entity {
 		//Apply movement
 		body.applyLinearImpulse((float) Math.cos(angle) * speed, (float) Math.sin(angle) * speed,
 				x / Zombies.PhysicsDensity, y / Zombies.PhysicsDensity, true);
-	
-		//Play sound effect
-		sound.play();
 	}
 
+	/**
+	 * Render method to draw projectile sprite to screen
+	 */
 	public void render() {
 		sprite.setPosition(body.getPosition().x * Zombies.PhysicsDensity - sprite.getWidth() / 2,
 				body.getPosition().y * Zombies.PhysicsDensity - sprite.getWidth() / 2);
 		sprite.draw(spriteBatch);
 	}
 
+	/**
+	 * Dispose method to clear memory
+	 */
 	@Override
 	public void dispose() {
+		sprite.getTexture().dispose();
 		box2dWorld.destroyBody(body);
 	}
 }

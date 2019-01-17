@@ -8,24 +8,35 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mygdx.zombies.states.Level;
 
+/**
+ * Generic enemy class. Has hearing and sight player detection mechanisms.
+ * Has passive mode and an aggressive following mode for when player is detected
+ */
 public class Enemy extends Entity {
 	
 	private float speed;
 	private int health;
 	protected Sprite sprite;
-	protected double angleRads;
-	private float totAngle;
-	private float wanderAngle;
+	protected double angleRadians;
 	protected double angleDegrees;
-	private double randomX;
-	private double randomY;	
-	private int last;
-	private double distance;
+	private double angleToPlayerRadians;
 	private Player player;
 	private SpriteBatch spriteBatch;	
-	boolean inLights;
+	private boolean inLights;
 	private int noiseTimer;
+	private int alertTimer;
+	private Level level;
+	private double distanceToPlayer;
 
+	/**
+	 * Constructor for generic enemy class
+	 * @param level - the level instance to spawn the enemy mob in
+	 * @param x - the x spawn coordinate
+	 * @param y - the y spawn coordinate
+	 * @param spritePath - the file path of the sprite file to use
+	 * @param speed - the speed that this enemy will move
+	 * @param health - the amount of health that this enemy spawns with
+	 */
 	public Enemy(Level level, int x, int y, String spritePath, float speed, int health) {
 		
 		//Add sprite
@@ -45,133 +56,81 @@ public class Enemy extends Entity {
 		body.setLinearDamping(4);
 		body.setFixedRotation(true);
 
+		this.level = level;
 		this.speed = speed;
-		this.health = health;
-		
-		
+		this.health = health;	
 		this.player = level.getPlayer();
+		
+		//Initialise timer values
 		noiseTimer = 300;
+		alertTimer = -1;
 	}
 
-	protected void move() {
+	/**
+	 * Updates position based on whether player has been detected
+	 */
+	private void move() {
+					
+		angleToPlayerRadians = Math.toDegrees(Zombies.angleBetweenRads(new Vector2(getPositionX(), getPositionY()),
+			     new Vector2(player.getPositionX(), player.getPositionY())));
 		
-		angleRads = Zombies.angleBetweenRads(new Vector2(getPositionX(), getPositionY()),
-									     new Vector2(player.getPositionX(), player.getPositionY()));
-		distance = Zombies.distanceBetween(new Vector2(getPositionX(), getPositionY()),
-									new Vector2(player.getPositionX(), player.getPositionY()));
-
-		angleDegrees = Math.toDegrees(angleRads);
-		
-		if (player.getNoise() > distance || this.sight() == true || Level.gunFire() == true) {
-			
-			body.applyLinearImpulse(new Vector2((float) Math.cos(angleRads) * -speed, (float) Math.sin(angleRads) * -speed),
-					body.getPosition(), true);
-			
-			
-			sprite.setRotation((float) angleDegrees+90);
-			
-			totAngle = (float) angleDegrees; 
-			
-		} else {
-			if ((player.updatePoints() % 4 == 0 || player.updatePoints() == 0) && player.updatePoints() != last) {
-				
-				// Generates random number that correlates to one of NINE movement states
-				// N, NE, E, SE, S, SW, W, NW, Stationary
-				// 
-				// Messy: To be revised
-				
-				double rand = Math.random();
-				
-				if(rand > 0 && rand < 0.1) {
-					randomX = 1.2f;
-					randomY = 1.2f;
-					wanderAngle = -45;
-				}
-				if(rand > 0.1 && rand < 0.2) {
-					randomX = 1.2f;
-					randomY = 0;
-					wanderAngle = -90;
-				}
-				if(rand > 0.2 && rand < 0.3) {
-					randomX = 1.2f;
-					randomY = -1.2f;
-					wanderAngle = -135;
-				}
-				if(rand > 0.3 && rand < 0.4) {
-					randomX = 0;
-					randomY = -1.2f;
-					wanderAngle = -180;
-				}
-				if(rand > 0.4 && rand < 0.5) {
-					randomX = -1.2f;
-					randomY = -1.2f;
-					wanderAngle = -225;
-				}
-				if(rand > 0.5 && rand < 0.6) {
-					randomX = -1.2f;
-					randomY = 0;
-					wanderAngle = -270;
-				}
-				if(rand > 0.6 && rand < 0.7) {
-					randomX = -1.2f;
-					randomY = 1.2f;
-					wanderAngle = -315;
-				}
-				if(rand > 0.7 && rand < 0.8) {
-					randomX = 0;
-					randomY = 1.2f;
-					wanderAngle = 0;
-				}
-				if(rand > 0.8) {
-					randomX = 0;
-					randomY = 0;
-				}
-						
-				last = player.updatePoints();
-			}
-		
-			body.applyLinearImpulse(new Vector2((float) randomX, (float) randomY), body.getPosition(), true);
-			sprite.setRotation(wanderAngle);
-			
-			totAngle = wanderAngle;
-		}		
-	}
-	
-	private boolean sight() {
-		
-		// Returns true if the player is within distance < 200 of the zombie
-		// and and player is within 90 degrees of the zombie's angle
-		
-		if(((angleDegrees <= totAngle + 45) || (angleDegrees >= totAngle - 45)) && ((distance < 200) || (inLights == true && distance < 5000))) {
-			return true;
+		if(alertTimer <= -1) {
+			//Wandering state
+			if (noiseTimer == 0)
+				angleRadians = Math.random()*Math.PI*2;
 		}
 		else {
-			return false;
-		}	
-	}
-
-	public void reverseVelocity() {	
-		randomX = -randomX;
-		randomY = -randomY;
+			//Alert state
+			angleRadians = angleToPlayerRadians;
+			distanceToPlayer = Zombies.distanceBetween(new Vector2(getPositionX(), getPositionY()),
+									new Vector2(player.getPositionX(), player.getPositionY()));		
+			alertTimer --;
+		}
 		
-		wanderAngle = wanderAngle - 180;
+		int noise = (int)((double) level.player.getNoise()/(distanceToPlayer+1));
+		if(noise>=2||isPlayerInSight()) {
+			alertTimer = noise*200;
+		}
 		
+		//Move Box2D body
+		body.applyLinearImpulse(new Vector2((float) Math.cos(angleRadians) * -speed,
+				(float) Math.sin(angleRadians) * -speed), body.getPosition(), true);
+			
+		//Update sprite transformation
+		angleDegrees = Math.toDegrees(angleRadians);
+		sprite.setRotation((float) angleDegrees);		
+		sprite.setPosition(getPositionX() - sprite.getWidth() / 2, getPositionY() - sprite.getHeight() / 2);
 	}
 	
-	//Method to update zombie sound effects timer
-	public void noiseStep() {
+	/**
+	 * @return true if the player is within 40 degrees of the zombie's line of sight
+	 * and close enough, considering how well lit player is
+	 */
+	private boolean isPlayerInSight() {				
+		return (Math.abs(angleDegrees-Math.toDegrees(angleToPlayerRadians))<40) &&
+				(distanceToPlayer < 100 || (inLights && distanceToPlayer < 8000));
+	}
+	
+	/**
+	 * Method to update zombie sound effects timer
+	 */
+	private void noiseStep() {
 		noiseTimer--;
+		//If timer reaches zero...
 		if(noiseTimer <= 0) {
 			noiseTimer = Zombies.random.nextInt(2000) + 1000;
+			//Play a random sound, adjusting volume based on distance to player
 			Zombies.soundArrayZombie[1+Zombies.random.nextInt(Zombies.soundArrayZombie.length-1)]
-					.play(distance < 500 ? 500-(float)distance : 0);
+					.play(distanceToPlayer < 500 ? 500-(float)distanceToPlayer : 0);
 		}
 	}
 
+	/** Update all aspects of enemy
+	 * @param inLights - whether the player is lit by light sources
+	 */
 	public void update(boolean inLights) {
 		this.inLights = inLights;
 		move();
-		sprite.setPosition(getPositionX() - sprite.getWidth() / 2, getPositionY() - sprite.getHeight() / 2);
 		noiseStep();
 	}
 
@@ -193,6 +152,7 @@ public class Enemy extends Entity {
 
 	public void setHealth(int health) {
 		this.health = health;
+		//Remove enemy if health below zero
 		if(health <= 0)					
 			getInfo().flagForDeletion();
 	}
