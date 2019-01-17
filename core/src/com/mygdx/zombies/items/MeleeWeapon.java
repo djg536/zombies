@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.zombies.states.Level;
 
 /**
  * Class for a melee weapon
@@ -19,6 +20,11 @@ public class MeleeWeapon implements Weapon {
 	public MeleeWeapon(SpriteBatch spriteBatch) {
 		this.spriteBatch = spriteBatch;
 		sprite = new Sprite(new Texture(Gdx.files.internal("sword.png")));
+	}
+	
+	public void setLevel(Level level) {
+		spriteBatch = level.worldBatch;
+		
 	}
 
 	@Override

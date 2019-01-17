@@ -1,10 +1,13 @@
 package com.mygdx.zombies.items;
 
+import com.mygdx.zombies.states.Level;
+
 /**
  * Abstract weapon interface for both ranged and melee weapons
  */
 public interface Weapon {
 	
+
 	public abstract void use();
 	
 	/**
@@ -14,6 +17,8 @@ public interface Weapon {
 	 * @param rotation - the rotation to set
 	 */
 	public abstract void update(int x, int y, float rotation);
+	
+	public abstract void setLevel(Level level);
 	
 	/**
 	 * Draw the weapon to the screen

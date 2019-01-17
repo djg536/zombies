@@ -2,6 +2,7 @@ package com.mygdx.zombies.items;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.zombies.Player;
 import com.mygdx.zombies.states.Level;
 
 /**
@@ -43,6 +44,10 @@ public class RangedWeapon implements Weapon {
 	 */
 	public static boolean isFiring() {
 		return firing;
+	}
+	
+	public void setLevel(Level level) {
+		this.level = level;
 	}
 	
 	/**

@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mygdx.zombies.items.MeleeWeapon;
 import com.mygdx.zombies.items.PowerUp;
+import com.mygdx.zombies.items.RangedWeapon;
 import com.mygdx.zombies.items.Weapon;
 import com.mygdx.zombies.states.Level;
 import com.mygdx.zombies.states.StateManager;
@@ -27,23 +28,22 @@ public class Player extends Entity {
 	private Sprite sprite;
 	private double angleRads;
 	private float angleDegrees;
-	private float time;
-	private int timer;
-	private int last;
+	private long timer;
+	private long last;
 	private Sprite hud;
 	private SpriteBatch spriteBatch;
 	private SpriteBatch UIBatch;
 	private byte swingStep;
 	private byte swingDirection;
 	private PowerUp powerUp;
-	private Weapon weapon;
+	private static Weapon weapon;
 	private static int playerNumber;
 	private int charStealth;
 	private int charSpeed;
 	private float charDamage;
 	private static Texture equippedTexture;
 	private static Texture unequippedTexture;
-	private Level level;
+	private static Level level;
 
 	/** Constructor for the player class
 	 * @param level - the level instance to spawn the player in
@@ -87,9 +87,13 @@ public class Player extends Entity {
 		hud = new Sprite(new Texture(Gdx.files.internal("player/heart.png")));
 		sprite = new Sprite(unequippedTexture);
 		
+	
 		//Update texture if set
-		if(weapon != null && weapon instanceof MeleeWeapon) {
-			setUnequippedTexture();
+		if(weapon != null) {
+			weapon.setLevel(level);
+			if(weapon instanceof RangedWeapon) {
+				setEquippedTexture();
+			}		
 		}
 	
 		//Generate Box2D object
@@ -185,14 +189,17 @@ public class Player extends Entity {
 	 * Update the number of points and the display value
 	 * The points should gradually decrease at a varying speed
 	 */
-	private void updatePoints() {
-		time += Gdx.graphics.getDeltaTime();
-		timer = Math.round(time);
+	private void updatePoints() {		
+		timer = System.nanoTime()/1000000000;	
 		
-		if (timer % 2 == 0 && timer != last) {
-			points -= Math.round(Math.random() * 10);
-			pointDisplay = Integer.toString(Math.round(points));
+		if (timer % 2 == 0 && timer != last) {							
+			points -= Math.round(Math.random() * 100);		
 			
+			if(points <= 0) {
+				points = (float) 0;
+			}	
+			
+			pointDisplay = Integer.toString(Math.round(points));		
 			last = timer;
 		}
 	}	
@@ -268,7 +275,7 @@ public class Player extends Entity {
 		sprite.setPosition(getPositionX() - sprite.getWidth() / 2, getPositionY() - sprite.getHeight() / 2);
 		updatePoints();
 	}
-	
+
 	/**
 	 * Method to deal with hand movement update
 	 */
