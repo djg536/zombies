@@ -146,6 +146,9 @@ public class Zombies extends Game {
 		soundAmmo.dispose();
 		soundPowerUp.dispose();
 		soundAmbientWind.dispose();
+		soundEndMusic.dispose();
+		for(Sound sound : soundArrayZombie)
+			sound.dispose();
 	}
 
 	/*

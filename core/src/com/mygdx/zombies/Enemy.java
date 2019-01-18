@@ -24,7 +24,9 @@ public class Enemy extends Entity {
 	private SpriteBatch spriteBatch;	
 	private boolean inLights;
 	private int noiseTimer;
+	private int wanderTimer;
 	private int alertTimer;
+	private float alertSpeed;
 	private Level level;
 	private double distanceToPlayer;
 
@@ -63,7 +65,10 @@ public class Enemy extends Entity {
 		
 		//Initialise timer values
 		noiseTimer = 300;
+		wanderTimer = 100;
 		alertTimer = -1;
+		//Initialise variable which affects speed depending on alert status
+		alertSpeed = 0.2f;
 	}
 
 	/**
@@ -74,27 +79,35 @@ public class Enemy extends Entity {
 		angleToPlayerRadians = Zombies.angleBetweenRads(new Vector2(getPositionX(), getPositionY()),
 			     new Vector2(player.getPositionX(), player.getPositionY()));
 		
-		if(alertTimer <= -1) {
+		distanceToPlayer = Zombies.distanceBetween(new Vector2(getPositionX(), getPositionY()),
+				new Vector2(player.getPositionX(), player.getPositionY()));	
+		
+		if(alertTimer <= 0) {
 			//Wandering state
-			if (noiseTimer == 0)
+			wanderTimer--;
+			if (wanderTimer == 0) {
+				//Walk in random direction
 				angleRadians = Math.random()*Math.PI*2;
+				wanderTimer = 150;
+				alertSpeed = 0.2f;
+			}
 		}
 		else {
 			//Alert state
-			angleRadians = angleToPlayerRadians;
-			distanceToPlayer = Zombies.distanceBetween(new Vector2(getPositionX(), getPositionY()),
-									new Vector2(player.getPositionX(), player.getPositionY()));		
+			angleRadians = angleToPlayerRadians;			
 			alertTimer --;
 		}
 		
 		int noise = (int)((double) level.getPlayer().getNoise()/(distanceToPlayer+1));
-		if(noise>=2||isPlayerInSight()) {
-			alertTimer = noise*200;
+		if(noise>=3||isPlayerInSight()) {
+			//If player detected, increase movement speed and set time alerted for
+			alertTimer = noise*100;
+			alertSpeed = 1;
 		}
 		
-		//Move Box2D body
-		body.applyLinearImpulse(new Vector2((float) Math.cos(angleRadians) * -speed,
-				(float) Math.sin(angleRadians) * -speed), body.getPosition(), true);
+		//Move Box2D body in angleRadians, accounting for speed attributes
+		body.applyLinearImpulse(new Vector2((float) Math.cos(angleRadians) * -speed * alertSpeed,
+				(float) Math.sin(angleRadians) * -speed * alertSpeed), body.getPosition(), true);
 			
 		//Update sprite transformation
 		angleDegrees = Math.toDegrees(angleRadians);
@@ -107,8 +120,8 @@ public class Enemy extends Entity {
 	 * and close enough, considering how well lit player is
 	 */
 	private boolean isPlayerInSight() {				
-		return (Math.abs(angleDegrees-Math.toDegrees(angleToPlayerRadians))<40) &&
-				(distanceToPlayer < 100 || (inLights && distanceToPlayer < 8000));
+		return (Math.abs(angleDegrees-Math.toDegrees(angleRadians))<40) &&
+				(distanceToPlayer < 200 || (inLights && distanceToPlayer < 1000));
 	}
 	
 	/**
@@ -118,7 +131,7 @@ public class Enemy extends Entity {
 		noiseTimer--;
 		//If timer reaches zero...
 		if(noiseTimer <= 0) {
-			noiseTimer = Zombies.random.nextInt(2000) + 1000;
+			noiseTimer = Zombies.random.nextInt(1000) + 500;
 			//Play a random sound, adjusting volume based on distance to player
 			Zombies.soundArrayZombie[1+Zombies.random.nextInt(Zombies.soundArrayZombie.length-1)]
 					.play(distanceToPlayer < 500 ? 500-(float)distanceToPlayer : 0);

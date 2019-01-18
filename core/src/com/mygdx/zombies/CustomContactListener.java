@@ -84,7 +84,7 @@ public class CustomContactListener implements ContactListener {
 					if (player.isSwinging()) {
 						player.setHealth(player.getHealth()-player.getDamage());
 						Enemy zombie = (Enemy)b.getObj();
-						zombie.setHealth(zombie.getHealth()-1);
+						zombie.setHealth(zombie.getHealth()-3);
 					}
 					else
 						player.setHealth(player.getHealth()-(player.getDamage()));			

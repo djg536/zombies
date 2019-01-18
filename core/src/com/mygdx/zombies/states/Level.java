@@ -105,10 +105,6 @@ public class Level extends State {
 		return enemiesList;
 	}
 	
-	public static boolean gunFire() {
-		return RangedWeapon.isFiring();
-	}
-	
 	public ArrayList<Projectile> getBulletsList() {
 		return bulletsList;
 	}

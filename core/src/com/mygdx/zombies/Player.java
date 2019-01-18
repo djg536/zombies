@@ -53,7 +53,7 @@ public class Player extends Entity {
 	public Player(Level level, int x, int y) {
 		spriteBatch = level.getWorldBatch();
 		UIBatch = level.getUIBatch();
-		this.level = level;
+		Player.level = level;
 
 		//Initialise player attributes to default values
 		charDamage = charSpeed = charStealth = 1;
@@ -157,7 +157,7 @@ public class Player extends Entity {
 			setEquippedTexture();
 		//Play equip sound
 		Zombies.soundAmmo.play();
-		this.weapon = weapon;
+		Player.weapon = weapon;
 	}
 
 	/**
@@ -209,7 +209,17 @@ public class Player extends Entity {
 	 */
 	public double getNoise() {
 		int stealth = powerUp==null ? 1 : powerUp.getStealthBoost()+1;
-		return body.getLinearVelocity().len() / (stealth*charStealth) * 250;
+		double noise = body.getLinearVelocity().len() / (stealth*charStealth) * 250;
+		
+		//If current weapon is a ranged weapon and is firing, make a lot of noise
+		if(weapon instanceof RangedWeapon) {
+			RangedWeapon rweapon = (RangedWeapon)weapon;
+			if(rweapon.isFiring()) {
+				noise += 2000;
+			}
+		}
+		
+		return noise;
 	}
 
 	/**

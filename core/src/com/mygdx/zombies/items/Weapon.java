@@ -18,6 +18,10 @@ public interface Weapon {
 	 */
 	public abstract void update(int x, int y, float rotation);
 	
+	/**
+	 * Set the weapon level reference
+	 * @param level - the level reference to change to
+	 */
 	public abstract void setLevel(Level level);
 	
 	/**
