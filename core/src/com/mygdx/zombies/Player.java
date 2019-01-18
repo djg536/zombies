@@ -257,7 +257,7 @@ public class Player extends Entity {
 	 * @return true if hands are moving
 	 */
 	public boolean isSwinging() {
-		return swingStep > 0 && swingStep < 10;
+		return weapon instanceof MeleeWeapon && swingStep > 0 && swingStep < 10;
 	}
 
 	/** Updates player position, rotation, score and weaponry
