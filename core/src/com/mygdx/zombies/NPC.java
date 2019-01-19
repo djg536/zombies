@@ -27,7 +27,7 @@ public class NPC extends Entity {
 		
 		//Add sprite
 		spriteBatch = level.getWorldBatch();
-		sprite = new Sprite(new Texture(Gdx.files.internal("npc.png")));
+		sprite = new Sprite(new Texture(Gdx.files.internal("player/NPC.png")));
 		
 		//Add box2d body
 		FixtureDef fixtureDef = new FixtureDef() {
