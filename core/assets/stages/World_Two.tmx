@@ -812,7 +812,7 @@
   <object id="37" name="lasergun" x="656" y="728">
    <point/>
   </object>
-  <object id="39" name="powerUpStealth" x="1286" y="1335">
+  <object id="39" name="powerUpStealth" x="583" y="841">
    <point/>
   </object>
   <object id="60" name="zombie1" x="1049" y="1468">
